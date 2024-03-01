@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain } from "electron"
+import { app, shell, BrowserWindow, ipcMain, Menu, Tray } from "electron"
 import { join } from "path"
 import { electronApp, optimizer, is } from "@electron-toolkit/utils"
 import { spawn } from "child_process"
@@ -73,6 +73,26 @@ app.whenReady().then(() => {
     const message = data.toString().trim()
     console.log(message)
   })
+
+  const tray = new Tray(path.join(appRoot, "resources", "tray_tmp.ico"))
+  const contextMenu = Menu.buildFromTemplate([
+    { type: "normal", label: "🥇Username1   ⌨️12,345   🖱️5,555" },
+    { type: "normal", label: "🥈Username2   ⌨️12,345   🖱️5,555" },
+    { type: "normal", label: "🥉Username3   ⌨️12,345   🖱️5,555" },
+    {
+      type: "submenu",
+      label: "もっと見る",
+      submenu: [
+        { label: "Username4   ⌨️12,345   🖱️5,555" },
+        { label: "Username5   ⌨️12,345   🖱️5,555" },
+        { label: "Username6   ⌨️12,345   🖱️5,555" }
+      ]
+    },
+    { type: "separator" },
+    { label: "終了", click: (): void => app.quit() }
+  ])
+  tray.setToolTip("LazyBox")
+  tray.setContextMenu(contextMenu)
 })
 
 app.on("window-all-closed", () => {
