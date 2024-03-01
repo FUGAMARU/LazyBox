@@ -42,12 +42,6 @@ const createWindow = (): void => {
   }
 
   if (childProcess.stdout === null || childProcess.stderr === null) return
-
-  // C++プロセスからの出力を受け取る
-  childProcess.stdout.on("data", data => {
-    const message = data.toString().trim()
-    console.log(message)
-  })
 }
 
 // このメソッドはElectronの初期化が終了し、ブラウザウィンドウを作成する準備ができたときに呼び出されます。
@@ -72,6 +66,12 @@ app.whenReady().then(() => {
   app.on("activate", () => {
     // macOSでは、ドックアイコンがクリックされ、他に開いているウィンドウがない場合、アプリでウィンドウを再作成するのが一般的だ。
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
+  })
+
+  // C++プロセスからの出力を受け取る
+  childProcess.stdout.on("data", data => {
+    const message = data.toString().trim()
+    console.log(message)
   })
 })
 
