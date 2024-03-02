@@ -21,9 +21,19 @@
   --parts-gap: 0.8rem;
 }
 
-html,
+html {
+  margin: 0;
+  padding: 0;
+}
+
 body {
-  margin: 0.5rem;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
 
   color: var(--color-text-black);
   font-family: "NotoSansJP", sans-serif;
@@ -38,6 +48,7 @@ body {
 }
 
 .lazy-box {
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: var(--parts-gap);
