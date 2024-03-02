@@ -2,11 +2,12 @@ import ElectronStore from "electron-store"
 import { generateUUID } from "./utils/generateUUID"
 
 type ElectronStoreType = {
-  uuid: string
-  nickname: string
-  keycount: number
-  clickcount: number
-  udpAddresses: string[]
+  uuid: string // UUID
+  nickname: string // ニックネーム
+  keycount: number // キーボード打鍵数
+  clickcount: number // マウスクリック数
+  udpAddresses: string[] // UDP送信先アドレス一覧
+  lastUpdated: number // 最終更新日時 (Unixタイムスタンプ)
 }
 
 const electronStore = new ElectronStore<ElectronStoreType>({
