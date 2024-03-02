@@ -1,18 +1,18 @@
 function init(): void {
-  window.addEventListener('DOMContentLoaded', () => {
+  window.addEventListener("DOMContentLoaded", () => {
     doAThing()
   })
 }
 
 function doAThing(): void {
   const versions = window.electron.process.versions
-  replaceText('.electron-version', `Electron v${versions.electron}`)
-  replaceText('.chrome-version', `Chromium v${versions.chrome}`)
-  replaceText('.node-version', `Node v${versions.node}`)
+  replaceText(".electron-version", `Electron v${versions.electron}`)
+  replaceText(".chrome-version", `Chromium v${versions.chrome}`)
+  replaceText(".node-version", `Node v${versions.node}`)
 
-  const ipcHandlerBtn = document.getElementById('ipcHandler')
-  ipcHandlerBtn?.addEventListener('click', () => {
-    window.electron.ipcRenderer.send('ping')
+  const ipcHandlerBtn = document.getElementById("ipcHandler")
+  ipcHandlerBtn?.addEventListener("click", () => {
+    window.electron.ipcRenderer.send("ping")
   })
 }
 

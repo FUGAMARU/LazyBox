@@ -13,8 +13,8 @@ const childProcess = spawn(path.join(appRoot, "resources", "input_monitoring", "
 const createWindow = (): void => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    width: 430,
+    height: 280,
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === "linux" ? { icon } : {}),
@@ -71,7 +71,7 @@ app.whenReady().then(() => {
   // C++プロセスからの出力を受け取る
   childProcess.stdout.on("data", data => {
     const message = data.toString().trim()
-    console.log(message)
+    message
   })
 
   const tray = new Tray(path.join(appRoot, "resources", "tray_tmp.ico"))
