@@ -1,9 +1,9 @@
-import { app, shell, BrowserWindow, ipcMain, Menu, Tray } from "electron"
-import { join } from "path"
+import { app, shell, BrowserWindow, Menu, Tray } from "electron"
 import { electronApp, optimizer, is } from "@electron-toolkit/utils"
 import { spawn } from "child_process"
-import * as path from "path"
+import path from "path"
 import icon from "../../resources/icon.png?asset"
+import { store } from "./store"
 
 const appRoot = path.resolve(".")
 const childProcess = spawn(path.join(appRoot, "resources", "input_monitoring", "windows.exe"), [], {
@@ -13,13 +13,13 @@ const childProcess = spawn(path.join(appRoot, "resources", "input_monitoring", "
 const createWindow = (): void => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 430,
-    height: 280,
+    width: 450,
+    height: 300,
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === "linux" ? { icon } : {}),
     webPreferences: {
-      preload: join(__dirname, "../preload/index.js"),
+      preload: path.join(__dirname, "../preload/index.js"),
       sandbox: false
     }
   })
@@ -38,10 +38,8 @@ const createWindow = (): void => {
   if (is.dev && process.env["ELECTRON_RENDERER_URL"]) {
     mainWindow.loadURL(process.env["ELECTRON_RENDERER_URL"])
   } else {
-    mainWindow.loadFile(join(__dirname, "../renderer/index.html"))
+    mainWindow.loadFile(path.join(__dirname, "../renderer/index.html"))
   }
-
-  if (childProcess.stdout === null || childProcess.stderr === null) return
 }
 
 // このメソッドはElectronの初期化が終了し、ブラウザウィンドウを作成する準備ができたときに呼び出されます。
@@ -58,10 +56,12 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  // IPC test
-  ipcMain.on("ping", () => console.log("pong"))
+  const { hasInitialized } = store()
 
-  createWindow()
+  if (!hasInitialized) {
+    // 初期設定(UUID自動生成 & ニックネーム手動設定)が完了していない場合は、設定画面を表示する
+    createWindow()
+  }
 
   app.on("activate", () => {
     // macOSでは、ドックアイコンがクリックされ、他に開いているウィンドウがない場合、アプリでウィンドウを再作成するのが一般的だ。
@@ -76,6 +76,8 @@ app.whenReady().then(() => {
 
   const tray = new Tray(path.join(appRoot, "resources", "tray_tmp.ico"))
   const contextMenu = Menu.buildFromTemplate([
+    { type: "normal", label: "LazyBoxを開く", click: (): void => createWindow() },
+    { type: "separator" },
     { type: "normal", label: "🥇Username1   ⌨️12,345   🖱️5,555" },
     { type: "normal", label: "🥈Username2   ⌨️12,345   🖱️5,555" },
     { type: "normal", label: "🥉Username3   ⌨️12,345   🖱️5,555" },
@@ -89,23 +91,22 @@ app.whenReady().then(() => {
       ]
     },
     { type: "separator" },
-    { label: "終了", click: (): void => app.quit() }
+    {
+      label: "終了",
+      click: (): void => {
+        childProcess.kill()
+        console.log("PROCESS KILLED")
+        app.quit()
+      }
+    }
   ])
   tray.setToolTip("LazyBox")
   tray.setContextMenu(contextMenu)
+  tray.on("click", () => createWindow())
 })
 
 app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    // macOS以外においては、ウィンドウが全て閉じられたらアプリケーションを終了する
-    // macOSではウィンドウを全て閉じてもCmd + Qを押すまでアプリケーションを終了したと見なさないため
-    app.quit()
-  }
-
-  if (childProcess.pid) {
-    process.kill(childProcess.pid)
-    console.log("PROCESS KILLED")
-  }
+  // app.quit() バックグラウンド常駐させたいのでウィンドウを全て閉じても終了しない (window-all-closedハンドラーを削除すると終了してしまうようになるので注意)
 })
 
 // このファイルには、アプリ固有のメイン・プロセス・コードを含めることができる。

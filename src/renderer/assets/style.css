@@ -17,6 +17,7 @@
   --color-light-gray: #b0b0b0;
   --color-text-black: #424242;
   --color-text-gray: #727473;
+  --color-text-error: #ff3d1f;
   --parts-gap: 0.8rem;
 }
 
@@ -81,6 +82,12 @@ body {
     padding: 0 0.5rem;
     font-size: 0.7rem;
   }
+}
+
+.nickname-warning {
+  display: none;
+  color: var(--color-text-error);
+  font-size: 0.6rem;
 }
 
 .uuid-label {

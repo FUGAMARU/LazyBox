@@ -1,8 +1,15 @@
 import { contextBridge } from "electron"
 import { electronAPI } from "@electron-toolkit/preload"
+import { store } from "../main/store"
+
+const { uuid, nickname, setNickname } = store()
 
 // Custom APIs for renderer
-const api = {}
+export const api = {
+  uuid,
+  nickname,
+  setNickname
+}
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise
