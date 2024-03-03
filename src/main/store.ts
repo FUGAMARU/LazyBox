@@ -21,6 +21,7 @@ type StoreType = {
   setNickname: (nickname: string) => void
 }
 
+/** 永続化データーの管理 (複数箇所からこの関数を呼び出してOK) */
 export const store = (): StoreType => {
   if (!electronStore.has("uuid") || electronStore.get("uuid") === "") {
     electronStore.set("uuid", generateUUID())
@@ -39,5 +40,5 @@ export const store = (): StoreType => {
     uuid,
     nickname,
     setNickname
-  }
+  } as const
 }

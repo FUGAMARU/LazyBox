@@ -1,14 +1,11 @@
 import { app, shell, BrowserWindow, Menu, Tray } from "electron"
 import { electronApp, optimizer, is } from "@electron-toolkit/utils"
-import { spawn } from "child_process"
 import path from "path"
 import icon from "../../resources/icon.png?asset"
 import { store } from "./store"
+import { io } from "./io"
 
-const appRoot = path.resolve(".")
-const childProcess = spawn(path.join(appRoot, "resources", "input_monitoring", "windows.exe"), [], {
-  shell: true
-})
+export const appRoot = path.resolve(".")
 
 const createWindow = (): void => {
   // Create the browser window.
@@ -56,23 +53,28 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  const { hasInitialized } = store()
-
-  if (!hasInitialized) {
-    // 初期設定(UUID自動生成 & ニックネーム手動設定)が完了していない場合は、設定画面を表示する
-    createWindow()
-  }
-
   app.on("activate", () => {
     // macOSでは、ドックアイコンがクリックされ、他に開いているウィンドウがない場合、アプリでウィンドウを再作成するのが一般的だ。
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
 
-  // C++プロセスからの出力を受け取る
-  childProcess.stdout.on("data", data => {
-    const message = data.toString().trim()
-    message
-  })
+  main()
+})
+
+app.on("window-all-closed", () => {
+  // app.quit() バックグラウンド常駐させたいのでウィンドウを全て閉じても終了しない (window-all-closedハンドラーを削除すると終了してしまうようになるので注意)
+})
+
+// このファイルには、アプリ固有のメイン・プロセス・コードを含めることができる。
+// 別のファイルにして、ここで require することもできます。
+const main = (): void => {
+  const { hasInitialized } = store()
+  const { killInputMonitoringProcess } = io()
+
+  if (!hasInitialized) {
+    // 初期設定(UUID自動生成 & ニックネーム手動設定)が完了していない場合は、設定画面を表示する
+    createWindow()
+  }
 
   const tray = new Tray(path.join(appRoot, "resources", "tray_tmp.ico"))
   const contextMenu = Menu.buildFromTemplate([
@@ -94,7 +96,7 @@ app.whenReady().then(() => {
     {
       label: "終了",
       click: (): void => {
-        childProcess.kill()
+        killInputMonitoringProcess()
         console.log("PROCESS KILLED")
         app.quit()
       }
@@ -103,11 +105,4 @@ app.whenReady().then(() => {
   tray.setToolTip("LazyBox")
   tray.setContextMenu(contextMenu)
   tray.on("click", () => createWindow())
-})
-
-app.on("window-all-closed", () => {
-  // app.quit() バックグラウンド常駐させたいのでウィンドウを全て閉じても終了しない (window-all-closedハンドラーを削除すると終了してしまうようになるので注意)
-})
-
-// このファイルには、アプリ固有のメイン・プロセス・コードを含めることができる。
-// 別のファイルにして、ここで require することもできます。
+}
