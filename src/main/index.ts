@@ -1,9 +1,10 @@
-import { app, shell, BrowserWindow, Menu, Tray } from "electron"
+import { app, shell, BrowserWindow } from "electron"
 import { electronApp, optimizer, is } from "@electron-toolkit/utils"
 import path from "path"
 import icon from "../../resources/icon.png?asset"
 import { store } from "./store"
 import { io } from "./io"
+import { tray } from "./tray"
 
 export const appRoot = path.resolve(".")
 
@@ -70,39 +71,10 @@ app.on("window-all-closed", () => {
 const main = (): void => {
   const { hasInitialized } = store()
   const { killInputMonitoringProcess } = io()
+  tray({ createWindow, killInputMonitoringProcess })
 
   if (!hasInitialized) {
     // 初期設定(UUID自動生成 & ニックネーム手動設定)が完了していない場合は、設定画面を表示する
     createWindow()
   }
-
-  const tray = new Tray(path.join(appRoot, "resources", "tray_tmp.ico"))
-  const contextMenu = Menu.buildFromTemplate([
-    { type: "normal", label: "LazyBoxを開く", click: (): void => createWindow() },
-    { type: "separator" },
-    { type: "normal", label: "🥇Username1   ⌨️12,345   🖱️5,555" },
-    { type: "normal", label: "🥈Username2   ⌨️12,345   🖱️5,555" },
-    { type: "normal", label: "🥉Username3   ⌨️12,345   🖱️5,555" },
-    {
-      type: "submenu",
-      label: "もっと見る",
-      submenu: [
-        { label: "Username4   ⌨️12,345   🖱️5,555" },
-        { label: "Username5   ⌨️12,345   🖱️5,555" },
-        { label: "Username6   ⌨️12,345   🖱️5,555" }
-      ]
-    },
-    { type: "separator" },
-    {
-      label: "終了",
-      click: (): void => {
-        killInputMonitoringProcess()
-        console.log("PROCESS KILLED")
-        app.quit()
-      }
-    }
-  ])
-  tray.setToolTip("LazyBox")
-  tray.setContextMenu(contextMenu)
-  tray.on("click", () => createWindow())
 }
