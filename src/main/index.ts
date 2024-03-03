@@ -90,7 +90,7 @@ const main = (): void => {
     clickCount,
     setClickCount
   })
-  // const { initializeUdpCommunication } = udpCommunication()
+  const { initializeUdpCommunication } = udpCommunication()
   tray({ showWindow: () => mainWindow.show(), killInputMonitoringProcess })
 
   if (!hasInitialized) {
@@ -99,5 +99,5 @@ const main = (): void => {
   }
 
   initializeInputMonitoringIpc()
-  // initializeUdpCommunication()
+  initializeUdpCommunication()
 }
