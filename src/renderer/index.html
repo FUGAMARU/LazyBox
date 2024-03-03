@@ -15,28 +15,28 @@
   <body>
     <div class="lazy-box">
       <div class="score-board">
-        <score-card label="順位" score="100" unit="/ 300"></score-card>
+        <score-card label="順位" count="100" unit="/ 300"></score-card>
 
         <div class="count">
-          <score-card label="打鍵数" score="123,451" unit="回"></score-card>
+          <score-card id="key-count" label="打鍵数" count="0" unit="回"></score-card>
         </div>
 
         <div class="count">
-          <score-card label="クリック数" score="75,001" unit="回"></score-card>
+          <score-card id="click-count" label="クリック数" count="0" unit="回"></score-card>
         </div>
       </div>
 
       <parts-container label="あなたのニックネーム">
         <div class="input-area">
-          <input class="nickname" maxlength="15" placeholder="最大15文字" />
-          <button class="button">保存</button>
+          <input class="nickname" id="nickname-input" maxlength="15" placeholder="最大15文字" />
+          <button class="button" id="nickname-save-button">保存</button>
         </div>
 
-        <span class="nickname-warning"></span>
+        <span class="nickname-warning" id="nickname-input-warning"></span>
       </parts-container>
 
       <parts-container label="あなたのUUID">
-        <span class="uuid-label"></span>
+        <span class="uuid-label" id="uuid"></span>
       </parts-container>
     </div>
 

@@ -9,7 +9,7 @@ import { udpCommunication } from "./udp-communication"
 
 export const appRoot = path.resolve(".")
 
-const createWindow = (): void => {
+const createWindow = (): BrowserWindow => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 450,
@@ -23,8 +23,13 @@ const createWindow = (): void => {
     }
   })
 
-  mainWindow.on("ready-to-show", () => {
-    mainWindow.show()
+  mainWindow.on("close", event => {
+    // preventDefaultを呼ぶとapp.quit()できなくなるので、完全終了したい場合はcanQuitを事前にtrueにしておく
+    if (global.canQuit) return
+
+    // 1度ウィンドウを閉じた後、タスクトレイから再度表示できるようにするためにhide()しておく
+    event.preventDefault()
+    mainWindow?.hide()
   })
 
   mainWindow.webContents.setWindowOpenHandler(details => {
@@ -39,6 +44,8 @@ const createWindow = (): void => {
   } else {
     mainWindow.loadFile(path.join(__dirname, "../renderer/index.html"))
   }
+
+  return mainWindow
 }
 
 // このメソッドはElectronの初期化が終了し、ブラウザウィンドウを作成する準備ができたときに呼び出されます。
@@ -70,16 +77,24 @@ app.on("window-all-closed", () => {
 // このファイルには、アプリ固有のメイン・プロセス・コードを含めることができる。
 // 別のファイルにして、ここで require することもできます。
 const main = (): void => {
-  const { hasInitialized } = storeManager()
-  const { initializeInputMonitoringIpc, killInputMonitoringProcess } = inputMonitoringIpc()
-  const { initializeUdpCommunication } = udpCommunication()
-  tray({ createWindow, killInputMonitoringProcess })
+  const mainWindow = createWindow()
+
+  const { hasInitialized, keyCount, setKeyCount, clickCount, setClickCount } = storeManager()
+  const { initializeInputMonitoringIpc, killInputMonitoringProcess } = inputMonitoringIpc({
+    mainWindow,
+    keyCount,
+    setKeyCount,
+    clickCount,
+    setClickCount
+  })
+  // const { initializeUdpCommunication } = udpCommunication()
+  tray({ showWindow: () => mainWindow.show(), killInputMonitoringProcess })
 
   if (!hasInitialized) {
     // 初期設定(UUID自動生成 & ニックネーム手動設定)が完了していない場合は、設定画面を表示する
-    createWindow()
+    mainWindow.show()
   }
 
   initializeInputMonitoringIpc()
-  initializeUdpCommunication()
+  // initializeUdpCommunication()
 }

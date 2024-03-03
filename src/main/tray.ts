@@ -3,14 +3,14 @@ import path from "path"
 import { appRoot } from "."
 
 type Args = {
-  createWindow: () => void
+  showWindow: () => void
   killInputMonitoringProcess: () => void
 }
 
-export const tray = ({ createWindow, killInputMonitoringProcess }: Args): void => {
+export const tray = ({ showWindow, killInputMonitoringProcess }: Args): void => {
   const tray = new Tray(path.join(appRoot, "resources", "tray_tmp.ico"))
   const contextMenu = Menu.buildFromTemplate([
-    { type: "normal", label: "LazyBoxを開く", click: (): void => createWindow() },
+    { type: "normal", label: "LazyBoxを開く", click: () => showWindow() },
     { type: "separator" },
     { type: "normal", label: "🥇Username1   ⌨️12,345   🖱️5,555" },
     { type: "normal", label: "🥈Username2   ⌨️12,345   🖱️5,555" },
@@ -30,11 +30,12 @@ export const tray = ({ createWindow, killInputMonitoringProcess }: Args): void =
       click: (): void => {
         killInputMonitoringProcess()
         console.log("PROCESS KILLED")
+        global.canQuit = true
         app.quit()
       }
     }
   ])
   tray.setToolTip("LazyBox")
   tray.setContextMenu(contextMenu)
-  tray.on("click", () => createWindow())
+  tray.on("click", () => showWindow())
 }

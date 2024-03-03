@@ -1,10 +1,10 @@
 class ScoreCard extends HTMLElement {
   label: string
-  score: string
+  count: string
   unit: string
 
   static get observedAttributes(): string[] {
-    return ["label", "score", "unit"]
+    return ["label", "count", "unit"]
   }
 
   constructor() {
@@ -12,7 +12,7 @@ class ScoreCard extends HTMLElement {
     this.attachShadow({ mode: "open" })
 
     this.label = ""
-    this.score = ""
+    this.count = ""
     this.unit = ""
   }
 
@@ -44,7 +44,7 @@ class ScoreCard extends HTMLElement {
 
         <parts-container label=${this.label}>
           <div class="score-card">
-            <span class="score">${this.score}</span><span class="unit"> ${this.unit}</span>
+            <span class="score">${this.count}</span><span class="unit"> ${this.unit}</span>
           </div>
         </parts-container>
       `

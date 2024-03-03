@@ -5,10 +5,12 @@ const init = (): void => {
 }
 
 const doAThing = (): void => {
-  replaceText(".uuid-label", window.api.uuid)
+  replaceText("#uuid", window.api.uuid ?? "UUIDが取得できませんでした")
+  replaceAttribute("#key-count", "count", window.api.keyCount?.toLocaleString() ?? "0")
+  replaceAttribute("#click-count", "count", window.api.clickCount?.toLocaleString() ?? "0")
 
-  const nicknameInput = document.querySelector(".input-area .nickname") as HTMLInputElement
-  const nicknameWarning = document.querySelector(".nickname-warning") as HTMLSpanElement
+  const nicknameInput = document.querySelector("#nickname-input") as HTMLInputElement
+  const nicknameWarning = document.querySelector("#nickname-input-warning") as HTMLSpanElement
   const nickname = window.api.nickname
   if (nickname === undefined) {
     nicknameWarning.innerText = "ニックネームが設定されるまで他ユーザーにスコアは共有されません"
@@ -17,7 +19,7 @@ const doAThing = (): void => {
     nicknameInput.value = nickname
   }
 
-  const nicknameSaveButton = document.querySelector(".input-area .button") as HTMLButtonElement
+  const nicknameSaveButton = document.querySelector("#nickname-save-button") as HTMLButtonElement
   nicknameSaveButton?.addEventListener("click", () => {
     const value = nicknameInput.value
 
@@ -30,12 +32,27 @@ const doAThing = (): void => {
     nicknameWarning.style.display = "none"
     window.api.setNickname(value)
   })
+
+  window.electron.ipcRenderer.on("update-key-count", (_, newCount) => {
+    replaceAttribute("#key-count", "count", newCount.toLocaleString())
+  })
+
+  window.electron.ipcRenderer.on("update-click-count", (_, newCount) => {
+    replaceAttribute("#click-count", "count", newCount.toLocaleString())
+  })
 }
 
 const replaceText = (selector: string, text: string): void => {
   const element = document.querySelector<HTMLElement>(selector)
   if (element) {
     element.innerText = text
+  }
+}
+
+const replaceAttribute = (selector: string, attribute: string, value: string): void => {
+  const element = document.querySelector<HTMLElement>(selector)
+  if (element) {
+    element.setAttribute(attribute, value)
   }
 }
 
