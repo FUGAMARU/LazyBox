@@ -3,11 +3,14 @@ import path from "path"
 import { appRoot } from "."
 import {
   COUNT_SAVE_INTERVAL,
+  INPUT_MONITORING_PROCESS_PATH_LINUX,
+  INPUT_MONITORING_PROCESS_PATH_MACOS,
   INPUT_MONITORING_PROCESS_PATH_WINDOWS,
   INPUT_MONITORING_PROCESS_SIGNALS_PATH
 } from "./constants"
 import { readFileSync } from "fs"
 import { BrowserWindow } from "electron"
+import { isMatchingOS } from "./utils/isMatchingOS"
 
 type Args = {
   mainWindow: BrowserWindow
@@ -41,13 +44,14 @@ export const inputMonitoringIpc = ({
       readFileSync(path.join(appRoot, ...INPUT_MONITORING_PROCESS_SIGNALS_PATH), "utf-8")
     )
 
-    inputMonitoringProcess = spawn(
-      path.join(appRoot, ...INPUT_MONITORING_PROCESS_PATH_WINDOWS),
-      [],
-      {
-        shell: true
-      }
-    )
+    const inputMonitoringProcessPath = isMatchingOS("windows")
+      ? INPUT_MONITORING_PROCESS_PATH_WINDOWS
+      : isMatchingOS("macos")
+        ? INPUT_MONITORING_PROCESS_PATH_MACOS
+        : INPUT_MONITORING_PROCESS_PATH_LINUX
+    inputMonitoringProcess = spawn(path.join(appRoot, ...inputMonitoringProcessPath), [], {
+      shell: true
+    })
 
     inputMonitoringProcess.stdout.on("data", data => {
       const message = data.toString().trim()

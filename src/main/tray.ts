@@ -1,6 +1,8 @@
 import { Tray, Menu, app } from "electron"
 import path from "path"
 import { appRoot } from "."
+import { isMatchingOS } from "./utils/isMatchingOS"
+import { TRAY_ICON_MACOS, TRAY_ICON_WINDOWS } from "./constants"
 
 type Args = {
   showWindow: () => void
@@ -8,7 +10,8 @@ type Args = {
 }
 
 export const tray = ({ showWindow, killInputMonitoringProcess }: Args): void => {
-  const tray = new Tray(path.join(appRoot, "resources", "tray_tmp.ico"))
+  const trayIcon = isMatchingOS("windows") ? TRAY_ICON_WINDOWS : TRAY_ICON_MACOS
+  const tray = new Tray(path.join(appRoot, ...trayIcon))
   const contextMenu = Menu.buildFromTemplate([
     { type: "normal", label: "LazyBoxを開く", click: () => showWindow() },
     { type: "separator" },
@@ -37,5 +40,7 @@ export const tray = ({ showWindow, killInputMonitoringProcess }: Args): void => 
   ])
   tray.setToolTip("LazyBox")
   tray.setContextMenu(contextMenu)
-  tray.on("click", () => showWindow())
+  tray.on("click", () => {
+    if (isMatchingOS("windows")) showWindow()
+  })
 }

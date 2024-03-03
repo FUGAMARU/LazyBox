@@ -67,6 +67,9 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
 
+  // macOSのDockにアイコンを表示しない
+  app.dock.hide()
+
   main()
 })
 

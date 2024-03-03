@@ -25,3 +25,8 @@ export const UDP_BROADCAST_INTERVAL = 60
 
 /** キーボード打鍵数・マウスクリック数を保存する間隔 (秒) */
 export const COUNT_SAVE_INTERVAL = 5
+
+/** トレイアイコン */
+const TRAY_ICON_BASE_PATH = ["resources", "icons"]
+export const TRAY_ICON_WINDOWS = [...TRAY_ICON_BASE_PATH, "tray_tmp.ico"]
+export const TRAY_ICON_MACOS = [...TRAY_ICON_BASE_PATH, "tray.png"]
