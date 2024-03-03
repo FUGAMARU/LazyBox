@@ -1,8 +1,8 @@
 import { contextBridge } from "electron"
 import { electronAPI } from "@electron-toolkit/preload"
-import { store } from "../main/store"
+import { storeManager } from "../main/store-manager"
 
-const { uuid, nickname, setNickname } = store()
+const { uuid, nickname, setNickname } = storeManager()
 
 // Custom APIs for renderer
 export const api = {

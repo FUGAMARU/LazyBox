@@ -2,7 +2,7 @@ import os from "os"
 import ip from "ip"
 import dgram from "dgram"
 import { UDP_BROADCAST_INTERVAL, UDP_BROADCAST_MESSAGE, UDP_PORT } from "./constants"
-import { store } from "./store"
+import { storeManager } from "./store-manager"
 
 // https://qiita.com/niusounds/items/712770e79888f4235637
 const getBroadcastAddresses = (): string[] => {
@@ -22,15 +22,15 @@ const getBroadcastAddresses = (): string[] => {
   return results
 }
 
-type UDPType = {
-  initializeUdp: () => void
+type UdpCommunication = {
+  initializeUdpCommunication: () => void
 }
 
 /** UDP通信の管理・実行 */
-export const udp = (): UDPType => {
-  const { addUdpAddress } = store()
+export const udpCommunication = (): UdpCommunication => {
+  const { addUdpAddress } = storeManager()
 
-  const initializeUdp = (): void => {
+  const initializeUdpCommunication = (): void => {
     /** データー受信部 */
     const server = dgram.createSocket("udp4")
 
@@ -65,6 +65,6 @@ export const udp = (): UDPType => {
   }
 
   return {
-    initializeUdp
+    initializeUdpCommunication
   } as const
 }

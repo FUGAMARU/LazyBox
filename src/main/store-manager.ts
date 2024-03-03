@@ -1,7 +1,7 @@
 import ElectronStore from "electron-store"
 import { generateUUID } from "./utils/generateUUID"
 
-type ElectronStoreType = {
+type Store = {
   uuid: string // UUID
   nickname: string // ニックネーム
   keycount: number // キーボード打鍵数
@@ -10,11 +10,11 @@ type ElectronStoreType = {
   lastUpdated: number // 最終更新日時 (Unixタイムスタンプ)
 }
 
-const electronStore = new ElectronStore<ElectronStoreType>({
+const electronStore = new ElectronStore<Store>({
   encryptionKey: "ENCRYPTION_KEY"
 })
 
-type StoreType = {
+type StoreManager = {
   hasInitialized: boolean
   uuid: string
   nickname: string
@@ -23,7 +23,7 @@ type StoreType = {
 }
 
 /** 永続化データーの管理 (複数箇所からこの関数を呼び出してOK) */
-export const store = (): StoreType => {
+export const storeManager = (): StoreManager => {
   if (!electronStore.has("uuid") || electronStore.get("uuid") === "") {
     electronStore.set("uuid", generateUUID())
   }

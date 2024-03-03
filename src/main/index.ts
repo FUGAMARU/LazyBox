@@ -2,9 +2,10 @@ import { app, shell, BrowserWindow } from "electron"
 import { electronApp, optimizer, is } from "@electron-toolkit/utils"
 import path from "path"
 import icon from "../../resources/icon.png?asset"
-import { store } from "./store"
-import { io } from "./io"
+import { storeManager } from "./store-manager"
+import { inputMonitoringIpc } from "./input-monitoring-ipc"
 import { tray } from "./tray"
+import { udpCommunication } from "./udp-communication"
 
 export const appRoot = path.resolve(".")
 
@@ -69,12 +70,16 @@ app.on("window-all-closed", () => {
 // このファイルには、アプリ固有のメイン・プロセス・コードを含めることができる。
 // 別のファイルにして、ここで require することもできます。
 const main = (): void => {
-  const { hasInitialized } = store()
-  const { killInputMonitoringProcess } = io()
+  const { hasInitialized } = storeManager()
+  const { initializeInputMonitoringIpc, killInputMonitoringProcess } = inputMonitoringIpc()
+  const { initializeUdpCommunication } = udpCommunication()
   tray({ createWindow, killInputMonitoringProcess })
 
   if (!hasInitialized) {
     // 初期設定(UUID自動生成 & ニックネーム手動設定)が完了していない場合は、設定画面を表示する
     createWindow()
   }
+
+  initializeInputMonitoringIpc()
+  initializeUdpCommunication()
 }
