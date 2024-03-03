@@ -18,7 +18,7 @@ export const io = (): IOType => {
   )
 
   const killInputMonitoringProcess = (): void => {
-    inputMonitoringProcess.kill()
+    inputMonitoringProcess.stdin.write("SHUTDOWN\n")
   }
 
   inputMonitoringProcess.stdout.on("data", data => {

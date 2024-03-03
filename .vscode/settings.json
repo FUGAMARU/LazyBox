@@ -8,5 +8,8 @@
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "C_Cpp.default.compilerPath": "c:\\PortablePrograms\\mingw64\\bin\\g++.exe"
+  "C_Cpp.default.compilerPath": "c:\\PortablePrograms\\mingw64\\bin\\g++.exe",
+  "files.associations": {
+    "ostream": "cpp"
+  }
 }
