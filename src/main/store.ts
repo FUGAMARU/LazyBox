@@ -19,6 +19,7 @@ type StoreType = {
   uuid: string
   nickname: string
   setNickname: (nickname: string) => void
+  addUdpAddress: (address: string) => void
 }
 
 /** 永続化データーの管理 (複数箇所からこの関数を呼び出してOK) */
@@ -30,15 +31,25 @@ export const store = (): StoreType => {
   const hasInitialized = electronStore.has("uuid") && electronStore.has("nickname")
 
   const uuid = electronStore.get("uuid")
+
   const nickname = electronStore.get("nickname")
   const setNickname = (nickname: string): void => {
     electronStore.set("nickname", nickname)
+  }
+
+  const addUdpAddress = (address: string): void => {
+    const udpAddresses = electronStore.get("udpAddresses")
+    if (!udpAddresses.includes(address)) {
+      udpAddresses.push(address)
+      electronStore.set("udpAddresses", udpAddresses)
+    }
   }
 
   return {
     hasInitialized,
     uuid,
     nickname,
-    setNickname
+    setNickname,
+    addUdpAddress
   } as const
 }
