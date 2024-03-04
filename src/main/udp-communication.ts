@@ -62,13 +62,15 @@ export const udpCommunication = (): UdpCommunication => {
     const client = dgram.createSocket("udp4")
 
     client.bind(() => {
-      client.setBroadcast(true)
-
       const broadcastMessage = (): void => {
+        client.setBroadcast(true)
+
         const broadcastAddresses = getBroadcastAddresses()
         broadcastAddresses.forEach(address => {
           client.send(UDP_BROADCAST_MESSAGE, UDP_PORT, address)
         })
+
+        client.setBroadcast(false)
       }
 
       // 最初の送信
