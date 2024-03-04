@@ -71,14 +71,13 @@ export const storeManager = (): StoreManager => {
   }
 
   const setScoreBoard = (scoreBoard: ScoreBoard): void => {
-    const scoreBoards = electronStore.get("scoreBoard")
-    if (scoreBoards !== undefined && scoreBoards.length > 0) {
-      const newScoreBoards = scoreBoards.filter(board => board.uuid !== scoreBoard.uuid)
-      newScoreBoards.push(scoreBoard)
-      electronStore.set("scoreBoard", newScoreBoards)
-      return
-    }
-    electronStore.set("scoreBoard", [scoreBoard])
+    const { uuid } = scoreBoard
+    const currentScoreBoard = electronStore.get("scoreBoard")
+    const updatedScoreBoard = currentScoreBoard.map(board => {
+      if (board.uuid === uuid) return scoreBoard
+      return board
+    })
+    electronStore.set("scoreBoard", updatedScoreBoard)
   }
 
   return {
