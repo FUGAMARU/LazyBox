@@ -9,28 +9,25 @@ export type ScoreBoard = {
 }
 
 type Store = {
-  uuid: string // UUID
-  nickname: string // ニックネーム
-  keyCount: number // キーボード打鍵数
-  clickCount: number // マウスクリック数
-  udpAddresses: string[] // UDP送信先アドレス一覧
-  lastUpdated: number // 最終更新日時 (Unixタイムスタンプ)
-  scoreBoard: ScoreBoard[] // スコアボード
+  uuid: string | undefined // UUID
+  nickname: string | undefined // ニックネーム
+  keyCount: number | undefined // キーボード打鍵数
+  clickCount: number | undefined // マウスクリック数
+  udpAddresses: string[] | undefined // UDP送信先アドレス一覧
+  lastUpdated: number | undefined // 最終更新日時 (Unixタイムスタンプ)
+  scoreBoardList: ScoreBoard[] | undefined // スコアボード
 }
 
 type StoreManager = {
   hasInitialized: boolean
-  uuid: string | undefined
-  nickname: string | undefined
   setNickname: (nickname: string) => void
-  udpAddresses: string[] | undefined
   addUdpAddress: (address: string) => void
-  keyCount: number | undefined
   setKeyCount: (keyCount: number) => void
-  clickCount: number | undefined
   setClickCount: (clickCount: number) => void
-  setScoreBoard: (scoreBoard: ScoreBoard) => void
-}
+  updateScoreBoardList: (receivedScoreBoard: ScoreBoard) => void
+  lastUpdated: number | undefined
+  resetDynamicData: () => void
+} & Store
 
 /** 永続化データーの管理 (複数箇所からこの関数を呼び出してOK) */
 export const storeManager = (): StoreManager => {
@@ -70,14 +67,37 @@ export const storeManager = (): StoreManager => {
     electronStore.set("clickCount", clickCount)
   }
 
-  const setScoreBoard = (scoreBoard: ScoreBoard): void => {
-    const { uuid } = scoreBoard
-    const currentScoreBoard = electronStore.get("scoreBoard")
-    const updatedScoreBoard = currentScoreBoard.map(board => {
-      if (board.uuid === uuid) return scoreBoard
-      return board
+  const scoreBoardList = electronStore.get("scoreBoardList")
+  const updateScoreBoardList = (receivedScoreBoard: ScoreBoard): void => {
+    const { uuid } = receivedScoreBoard
+
+    // ここでundefinedチェックしなくても下の処理で吸収できるが、オプショナルチェイニングを使わないために明示的にチェック
+    if (scoreBoardList === undefined) {
+      electronStore.set("scoreBoardList", [receivedScoreBoard])
+      return
+    }
+
+    // scoreBoardListに既に同じUUIDのデーターが存在する場合は更新する、存在しない場合は追加する
+    const newScoreBoardList = scoreBoardList.map(scoreBoard => {
+      if (scoreBoard.uuid === uuid) {
+        return receivedScoreBoard
+      }
+      return scoreBoard
     })
-    electronStore.set("scoreBoard", updatedScoreBoard)
+
+    if (!newScoreBoardList.some(scoreBoard => scoreBoard.uuid === uuid)) {
+      newScoreBoardList.push(receivedScoreBoard)
+    }
+
+    electronStore.set("scoreBoardList", newScoreBoardList)
+  }
+
+  const lastUpdated = electronStore.get("lastUpdated")
+
+  const resetDynamicData = (): void => {
+    electronStore.set("keyCount", 0)
+    electronStore.set("clickCount", 0)
+    electronStore.set("udpAddresses", [])
   }
 
   return {
@@ -91,6 +111,9 @@ export const storeManager = (): StoreManager => {
     setKeyCount,
     clickCount,
     setClickCount,
-    setScoreBoard
+    scoreBoardList,
+    updateScoreBoardList,
+    lastUpdated,
+    resetDynamicData
   } as const
 }

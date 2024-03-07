@@ -5,11 +5,11 @@ import { UdpMessage } from "."
 
 type Args = {
   addUdpAddress: (address: string) => void
-  setScoreBoard: (scoreBoard: ScoreBoard) => void
+  updateScoreBoardList: (scoreBoard: ScoreBoard) => void
 }
 
 /** データー受信部 */
-export const setupReceiveData = ({ addUdpAddress, setScoreBoard }: Args) => {
+export const setupReceiveData = ({ addUdpAddress, updateScoreBoardList }: Args) => {
   const server = dgram.createSocket("udp4")
 
   // 他のクライアントからプライベートIPの通知を受け取った時
@@ -26,7 +26,7 @@ export const setupReceiveData = ({ addUdpAddress, setScoreBoard }: Args) => {
 
     if (identifier !== "LAZY_BOX_SIGNAL") return
     console.log("Data Received!", data)
-    setScoreBoard(data)
+    updateScoreBoardList(data)
   })
 
   server.bind(UDP_PORT)

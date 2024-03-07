@@ -14,11 +14,18 @@ type UdpCommunication = {
 
 /** UDP通信の管理・実行 */
 export const udpCommunication = (): UdpCommunication => {
-  const { uuid, nickname, keyCount, clickCount, udpAddresses, addUdpAddress, setScoreBoard } =
-    storeManager()
+  const {
+    uuid,
+    nickname,
+    keyCount,
+    clickCount,
+    udpAddresses,
+    addUdpAddress,
+    updateScoreBoardList
+  } = storeManager()
 
   const initializeUdpCommunication = (): void => {
-    setupReceiveData({ addUdpAddress, setScoreBoard })
+    setupReceiveData({ addUdpAddress, updateScoreBoardList })
 
     const client = dgram.createSocket("udp4")
     startBroadcastInterval({ client })
