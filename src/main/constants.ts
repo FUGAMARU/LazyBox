@@ -20,6 +20,9 @@ export const UDP_PORT = 55865
 /** UDPのブロードキャストで送信するメッセージ */
 export const UDP_BROADCAST_MESSAGE = "LAZY_BOX_CLIENT"
 
+/** UDPのデーターを送信する時の識別符号 */
+export const UDP_IDENTIFIER = "LAZY_BOX_SIGNAL"
+
 /** UDPでブロードキャストする間隔 (秒) */
 export const UDP_BROADCAST_INTERVAL = 300
 
@@ -33,3 +36,6 @@ export const COUNT_SAVE_INTERVAL = 5
 const TRAY_ICON_BASE_PATH = ["resources", "icons"]
 export const TRAY_ICON_WINDOWS = [...TRAY_ICON_BASE_PATH, "tray_tmp.ico"]
 export const TRAY_ICON_MACOS = [...TRAY_ICON_BASE_PATH, "tray.png"]
+
+/** キーボード打鍵数・マウスクリック・UDP送信先アドレス一覧をリセットする判定境界時刻 (時・24時間表記) */
+export const RESET_SCORE_BOARD_BOUNDARY_HOUR = 7

@@ -25,7 +25,7 @@ type StoreManager = {
   setKeyCount: (keyCount: number) => void
   setClickCount: (clickCount: number) => void
   updateScoreBoardList: (receivedScoreBoard: ScoreBoard) => void
-  lastUpdated: number | undefined
+  updateLastUpdatedToCurrentTime: (unixTimestamp: number) => void
   resetDynamicData: () => void
 } & Store
 
@@ -93,6 +93,9 @@ export const storeManager = (): StoreManager => {
   }
 
   const lastUpdated = electronStore.get("lastUpdated")
+  const updateLastUpdatedToCurrentTime = (unixTimestamp: number): void => {
+    electronStore.set("lastUpdated", unixTimestamp)
+  }
 
   const resetDynamicData = (): void => {
     electronStore.set("keyCount", 0)
@@ -114,6 +117,7 @@ export const storeManager = (): StoreManager => {
     scoreBoardList,
     updateScoreBoardList,
     lastUpdated,
+    updateLastUpdatedToCurrentTime,
     resetDynamicData
   } as const
 }

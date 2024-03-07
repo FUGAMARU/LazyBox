@@ -6,6 +6,7 @@ import { storeManager } from "./store-manager"
 import { inputMonitoringIpc } from "./input-monitoring-ipc"
 import { tray } from "./tray"
 import { udpCommunication } from "./udp-communication"
+import { scheduler } from "./scheduler"
 
 export const appRoot = path.resolve(".")
 
@@ -83,6 +84,7 @@ const main = (): void => {
   const mainWindow = createWindow()
 
   const { hasInitialized, keyCount, setKeyCount, clickCount, setClickCount } = storeManager()
+  const { initializeScheduler } = scheduler()
   const { initializeInputMonitoringIpc, killInputMonitoringProcess } = inputMonitoringIpc({
     mainWindow,
     keyCount,
@@ -98,6 +100,7 @@ const main = (): void => {
     mainWindow.show()
   }
 
+  initializeScheduler()
   initializeInputMonitoringIpc()
   initializeUdpCommunication()
 }

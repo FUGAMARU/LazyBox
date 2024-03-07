@@ -5,7 +5,7 @@ import { startBroadcastInterval } from "./broadcast-data"
 import { startSendKeyCountAndClickCountInterval } from "./send-key-count-and-click-count"
 
 export type UdpMessage = {
-  identifier: "LAZY_BOX_SIGNAL"
+  identifier: string
 } & ScoreBoard
 
 type UdpCommunication = {
@@ -21,11 +21,12 @@ export const udpCommunication = (): UdpCommunication => {
     clickCount,
     udpAddresses,
     addUdpAddress,
-    updateScoreBoardList
+    updateScoreBoardList,
+    updateLastUpdatedToCurrentTime
   } = storeManager()
 
   const initializeUdpCommunication = (): void => {
-    setupReceiveData({ addUdpAddress, updateScoreBoardList })
+    setupReceiveData({ addUdpAddress, updateScoreBoardList, updateLastUpdatedToCurrentTime })
 
     const client = dgram.createSocket("udp4")
     startBroadcastInterval({ client })

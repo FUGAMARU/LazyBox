@@ -1,6 +1,6 @@
 import { Socket } from "dgram"
 import { UdpMessage } from "."
-import { UDP_PORT, UDP_SEND_COUNT_INTERVAL } from "../constants"
+import { UDP_IDENTIFIER, UDP_PORT, UDP_SEND_COUNT_INTERVAL } from "../constants"
 
 type Args = {
   client: Socket
@@ -32,7 +32,7 @@ export const startSendKeyCountAndClickCountInterval = ({
       return
 
     const data = {
-      identifier: "LAZY_BOX_SIGNAL",
+      identifier: UDP_IDENTIFIER,
       uuid,
       nickname,
       keyCount: keyCount ?? 0,
