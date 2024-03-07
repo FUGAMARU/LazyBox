@@ -21,7 +21,10 @@ export const UDP_PORT = 55865
 export const UDP_BROADCAST_MESSAGE = "LAZY_BOX_CLIENT"
 
 /** UDPでブロードキャストする間隔 (秒) */
-export const UDP_BROADCAST_INTERVAL = 60
+export const UDP_BROADCAST_INTERVAL = 300
+
+/** UDPでキーボード打鍵数・マウスクリック数を送信する間隔 (秒) */
+export const UDP_SEND_COUNT_INTERVAL = 60
 
 /** キーボード打鍵数・マウスクリック数を保存する間隔 (秒) */
 export const COUNT_SAVE_INTERVAL = 5

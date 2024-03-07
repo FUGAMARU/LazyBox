@@ -26,7 +26,7 @@ type Args = {
 }
 
 /** ブロードキャスト部 */
-export const broadcastData = ({ client }: Args) => {
+export const startBroadcastInterval = ({ client }: Args) => {
   client.bind(() => {
     const broadcastMessage = (): void => {
       client.setBroadcast(true)
