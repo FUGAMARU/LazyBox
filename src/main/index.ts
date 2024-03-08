@@ -7,6 +7,7 @@ import { inputMonitoringIpc } from "./input-monitoring-ipc"
 import { tray } from "./tray"
 import { udpCommunication } from "./udp-communication"
 import { scheduler } from "./scheduler"
+import { isMatchingOS } from "./utils/isMatchingOS"
 
 export const appRoot = path.resolve(".")
 
@@ -69,7 +70,7 @@ app.whenReady().then(() => {
   })
 
   // macOSのDockにアイコンを表示しない
-  app.dock.hide()
+  if (isMatchingOS("macos")) app.dock.hide()
 
   main()
 })
