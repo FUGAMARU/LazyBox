@@ -98,7 +98,7 @@ const main = (): void => {
   const { initializeUdpCommunication } = udpCommunication()
   tray({ showWindow: () => mainWindow.show(), killInputMonitoringProcess })
 
-  if (!hasInitialized) {
+  if (!hasInitialized || is.dev) {
     // 初期設定(UUID自動生成 & ニックネーム手動設定)が完了していない場合は、設定画面を表示する
     mainWindow.show()
   }
