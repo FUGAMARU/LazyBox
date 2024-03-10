@@ -44,10 +44,9 @@ body {
   display: grid;
   place-items: center;
 
-  color: var(--color-text-black);
+  color: var(--color-text-white);
   font-family: "NotoSansJP", sans-serif;
   background-color: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(10px);
   overflow: hidden;
   -webkit-app-region: drag;
 }
@@ -62,7 +61,6 @@ body {
   display: flex;
   flex-direction: column;
   gap: var(--parts-gap);
-  backdrop-filter: blur(10px);
 }
 
 .input-area {
@@ -112,11 +110,6 @@ body {
   font-size: 0.6rem;
 }
 
-.uuid-label {
-  font-size: 0.9rem;
-  color: var(--color-text-black);
-}
-
 .score-board {
   display: flex;
   justify-content: space-between;
@@ -125,4 +118,10 @@ body {
   > .count {
     flex: 1;
   }
+}
+
+.footer-text {
+  text-align: center;
+  font-size: 8px;
+  line-height: 12px;
 }

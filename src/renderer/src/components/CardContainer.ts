@@ -1,6 +1,6 @@
 import { html, css, LitElement } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import destyle from "./destyle"
+import destyle from "../../assets/destyle"
 
 @customElement("card-container")
 export class CardContainer extends LitElement {
@@ -8,10 +8,7 @@ export class CardContainer extends LitElement {
   colorTheme = "green"
 
   @property()
-  title = "キーボード"
-
-  @property()
-  score = "123,456"
+  title = "Title"
 
   static styles = [
     destyle,
@@ -67,25 +64,17 @@ export class CardContainer extends LitElement {
           }
         }
 
-        > .labels {
+        > .contents {
           width: 100%;
           display: flex;
           flex-direction: column;
           gap: 2px;
           padding-top: 4px;
-          color: var(--color-text-white);
 
           > .title {
             font-size: 10px;
             line-height: 14px;
             font-weight: 700;
-          }
-
-          > .score {
-            font-size: 24px;
-            line-height: 32px;
-            font-weight: 400;
-            font-family: "MyanmarKhyay";
           }
         }
       }
@@ -95,9 +84,9 @@ export class CardContainer extends LitElement {
   render() {
     return html` <div class="card-container -${this.colorTheme}">
       <div class="bar -${this.colorTheme}"></div>
-      <div class="labels">
-        <p class="title">${this.title}</p>
-        <p class="score">${this.score}</p>
+      <div class="contents">
+        <div class="title">${this.title}</div>
+        <slot></slot>
       </div>
     </div>`
   }

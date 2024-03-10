@@ -9,20 +9,21 @@
       content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:"
     />
 
+    <link href="./assets/destyle.css" type="text/css" rel="stylesheet" />
     <link href="./assets/style.css" type="text/css" rel="stylesheet" />
   </head>
 
   <body>
     <div class="lazy-box">
       <div class="score-board">
-        <score-card label="順位" count="100" unit="/ 300"></score-card>
+        <rank-card currentRank="1" totalUserCount="100"></rank-card>
 
         <div class="count">
-          <score-card id="key-count" label="打鍵数" count="0" unit="回"></score-card>
+          <count-card id="key-count" colorTheme="green" title="キーボード" score="0"></count-card>
         </div>
 
         <div class="count">
-          <score-card id="click-count" label="クリック数" count="0" unit="回"></score-card>
+          <count-card id="click-count" colorTheme="blue" title="クリック数" score="0"></count-card>
         </div>
       </div>
 
@@ -35,16 +36,16 @@
         <span class="nickname-warning" id="nickname-input-warning"></span>
       </parts-container>
 
-      <parts-container label="あなたのUUID">
-        <span class="uuid-label" id="uuid"></span>
-      </parts-container>
-
-      <card-container></card-container>
+      <div class="footer-text">
+        <p>LazyBox v1.0.0</p>
+        <p>UUID: <span id="uuid"></span></p>
+      </div>
     </div>
 
     <script type="module" src="./src/renderer.ts"></script>
     <script type="module" src="./src/components/PartsContainer.ts"></script>
-    <script type="module" src="./src/components/ScoreCard.ts"></script>
     <script type="module" src="./src/components/CardContainer.ts"></script>
+    <script type="module" src="./src/components/CountCard.ts"></script>
+    <script type="module" src="./src/components/RankCard.ts"></script>
   </body>
 </html>
