@@ -18,8 +18,8 @@ const createWindow = (): BrowserWindow => {
     height: 270,
     show: false,
     autoHideMenuBar: true,
-    transparent: true,
-    titleBarStyle: "hidden",
+    vibrancy: "popover",
+    backgroundMaterial: "acrylic",
     ...(process.platform === "linux" ? { icon } : {}),
     webPreferences: {
       preload: path.join(__dirname, "../preload/index.js"),
