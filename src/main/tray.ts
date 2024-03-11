@@ -29,6 +29,11 @@ export const tray = ({ showWindow, killInputMonitoringProcess }: Args): void => 
     },
     { type: "separator" },
     {
+      type: "submenu",
+      label: "アイコンカラーを変更",
+      submenu: [{ label: "カラー" }, { label: "ライト" }, { label: "ダーク" }]
+    },
+    {
       label: "終了",
       click: (): void => {
         killInputMonitoringProcess()
