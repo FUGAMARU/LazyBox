@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow } from "electron"
+import { app, shell, BrowserWindow, nativeTheme } from "electron"
 import { electronApp, optimizer, is } from "@electron-toolkit/utils"
 import path from "path"
 import icon from "../../resources/icon.png?asset"
@@ -26,6 +26,8 @@ const createWindow = (): BrowserWindow => {
       sandbox: false
     }
   })
+
+  nativeTheme.themeSource = "dark"
 
   mainWindow.on("close", event => {
     // preventDefaultを呼ぶとapp.quit()できなくなるので、完全終了したい場合はcanQuitを事前にtrueにしておく
