@@ -5,13 +5,13 @@ import destyle from "../../assets/destyle"
 @customElement("count-card")
 export class CountCard extends LitElement {
   @property()
-  colorTheme = "green"
+  colorTheme: string = "green"
 
   @property()
-  title = "Title"
+  title: string = "Title"
 
   @property()
-  score = "0"
+  score: string = "0"
 
   static styles = [
     destyle,

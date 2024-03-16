@@ -15,7 +15,7 @@
 
   <body>
     <div class="lazy-box">
-      <div class="score-board">
+      <div class="scores">
         <rank-card currentRank="1" totalUserCount="100"></rank-card>
 
         <div class="count">
@@ -27,25 +27,18 @@
         </div>
       </div>
 
-      <parts-container label="あなたのニックネーム">
-        <div class="input-area">
-          <input class="nickname" id="nickname-input" maxlength="15" placeholder="最大15文字" />
-          <button class="button" id="nickname-save-button">保存</button>
-        </div>
+      <input-card id="nickname-input"></input-card>
 
-        <span class="nickname-warning" id="nickname-input-warning"></span>
-      </parts-container>
-
-      <div class="footer-text">
+      <div class="footer">
         <p>LazyBox v1.0.0</p>
         <p>UUID: <span id="uuid"></span></p>
       </div>
     </div>
 
     <script type="module" src="./src/renderer.ts"></script>
-    <script type="module" src="./src/components/PartsContainer.ts"></script>
     <script type="module" src="./src/components/CardContainer.ts"></script>
     <script type="module" src="./src/components/CountCard.ts"></script>
     <script type="module" src="./src/components/RankCard.ts"></script>
+    <script type="module" src="./src/components/InputCard.ts"></script>
   </body>
 </html>

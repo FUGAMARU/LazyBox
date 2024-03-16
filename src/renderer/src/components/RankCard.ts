@@ -5,10 +5,10 @@ import destyle from "../../assets/destyle"
 @customElement("rank-card")
 export class RankCard extends LitElement {
   @property()
-  currentRank = "0"
+  currentRank: string = "0"
 
   @property()
-  totalUserCount = "0"
+  totalUserCount: string = "0"
 
   static styles = [
     destyle,

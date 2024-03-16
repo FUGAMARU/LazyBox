@@ -1,14 +1,26 @@
 import { html, css, LitElement } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import destyle from "../../assets/destyle"
+import { handleSaveButtonClick } from "../renderer"
 
 @customElement("card-container")
 export class CardContainer extends LitElement {
   @property()
-  colorTheme = "green"
+  colorTheme: string = "green"
 
   @property()
-  title = "Title"
+  title: string = "Title"
+
+  /** InputCard用ここから */
+  @property()
+  errorText?: string | undefined = undefined
+
+  @property()
+  buttonText?: string | undefined = undefined
+
+  @property({ attribute: false })
+  onButtonClick?: () => void | undefined = undefined
+  /** InputCard用ここまで */
 
   static styles = [
     destyle,
@@ -71,10 +83,39 @@ export class CardContainer extends LitElement {
           gap: 2px;
           padding-top: 4px;
 
-          > .title {
-            font-size: 10px;
-            line-height: 14px;
-            font-weight: 700;
+          > .upper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            > .title {
+              font-size: 10px;
+              line-height: 14px;
+              font-weight: 700;
+            }
+
+            > .errortext {
+              font-size: 8px;
+              line-height: 12px;
+              background-color: #ff7ef2;
+              border-radius: 2px;
+              padding: 0px 6px;
+            }
+          }
+        }
+
+        .button {
+          font-size: 12px;
+          line-height: 17px;
+          font-weight: bold;
+          flex-shrink: 0;
+          padding: 4px 12px;
+          border-radius: 5px;
+          transition: background-color 0.2s ease-in-out;
+          outline: none;
+
+          &:hover {
+            background-color: rgba(250, 250, 250, 0.2);
           }
         }
       }
@@ -85,9 +126,15 @@ export class CardContainer extends LitElement {
     return html` <div class="card-container -${this.colorTheme}">
       <div class="bar -${this.colorTheme}"></div>
       <div class="contents">
-        <div class="title">${this.title}</div>
+        <div class="upper">
+          <span class="title">${this.title}</span>
+          ${this.errorText ? html`<span class="errortext">${this.errorText}</span>` : ""}
+        </div>
         <slot></slot>
       </div>
+      ${this.buttonText
+        ? html`<button class="button" @click=${handleSaveButtonClick}>${this.buttonText}</button>`
+        : ""}
     </div>`
   }
 }

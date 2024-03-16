@@ -15,7 +15,7 @@ const createWindow = (): BrowserWindow => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 450,
-    height: 270,
+    height: 245,
     show: false,
     autoHideMenuBar: true,
     vibrancy: "popover",
