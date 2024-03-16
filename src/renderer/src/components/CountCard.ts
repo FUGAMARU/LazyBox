@@ -11,12 +11,12 @@ export class CountCard extends LitElement {
   title: string = "Title"
 
   @property()
-  score: string = "0"
+  count: string = "0"
 
   static styles = [
     destyle,
     css`
-      .score-label {
+      .count-label {
         font-size: 24px;
         line-height: 32px;
         font-family: "MyanmarKhyay";
@@ -26,7 +26,7 @@ export class CountCard extends LitElement {
 
   render() {
     return html`<card-container colorTheme="${this.colorTheme}" title="${this.title}">
-      <div class="score-label">${this.score}</div>
+      <div class="count-label">${this.count}</div>
     </card-container>`
   }
 }

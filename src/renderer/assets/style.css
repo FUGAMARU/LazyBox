@@ -60,7 +60,7 @@ body {
   flex-direction: column;
   gap: var(--parts-gap);
 
-  > .scores {
+  > .board {
     display: flex;
     justify-content: space-between;
     gap: var(--parts-gap);

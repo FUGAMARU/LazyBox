@@ -6,8 +6,8 @@ const init = (): void => {
 
 const doAThing = (): void => {
   replaceText("#uuid", window.api.uuid ?? "UUIDが取得できませんでした")
-  replaceAttribute("#key-count", "score", window.api.keyCount?.toLocaleString() ?? "0")
-  replaceAttribute("#click-count", "score", window.api.clickCount?.toLocaleString() ?? "0")
+  replaceAttribute("#key-count", "count", window.api.keyCount?.toLocaleString() ?? "0")
+  replaceAttribute("#click-count", "count", window.api.clickCount?.toLocaleString() ?? "0")
 
   const nickname = window.api.nickname
   if (nickname === undefined) {
