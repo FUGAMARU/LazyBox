@@ -101,6 +101,8 @@ export const storeManager = (): StoreManager => {
     electronStore.set("keyCount", 0)
     electronStore.set("clickCount", 0)
     electronStore.set("udpAddresses", [])
+    global.keyCount = 0
+    global.clickCount = 0
   }
 
   return {
