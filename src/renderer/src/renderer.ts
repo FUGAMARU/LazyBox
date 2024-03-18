@@ -11,11 +11,7 @@ const doAThing = (): void => {
 
   const nickname = window.api.nickname
   if (nickname === undefined) {
-    replaceAttribute(
-      "#nickname-input",
-      "errorText",
-      "ニックネームが設定されるまで他ユーザーにスコアは共有されません"
-    )
+    replaceAttribute("#nickname-input", "errorText", "ニックネームを設定するとスコアが共有されます")
   } else {
     replaceAttribute("#nickname-input", "value", nickname)
   }
