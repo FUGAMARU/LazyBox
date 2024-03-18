@@ -36,10 +36,10 @@ export const inputMonitoringIpc = ({
   let inputMonitoringProcess: ChildProcessWithoutNullStreams | undefined = undefined
   let signals: { KEY_UP: string; MOUSE_UP: string; SHUTDOWN: string } | undefined = undefined
 
-  const initializeInputMonitoringIpc = (): void => {
-    global.keyCount = keyCount ?? 0
-    global.clickCount = clickCount ?? 0
+  let localKeyCount = keyCount ?? 0
+  let localClickCount = clickCount ?? 0
 
+  const initializeInputMonitoringIpc = (): void => {
     signals = JSON.parse(
       readFileSync(path.join(appRoot, ...INPUT_MONITORING_PROCESS_SIGNALS_PATH), "utf-8")
     )
@@ -57,13 +57,13 @@ export const inputMonitoringIpc = ({
       const message = data.toString().trim()
       switch (message) {
         case signals?.KEY_UP:
-          const newKeyCount = global.keyCount + 1
-          global.keyCount = newKeyCount
+          const newKeyCount = localKeyCount + 1
+          localKeyCount = newKeyCount
           mainWindow.webContents.send("update-key-count", newKeyCount)
           break
         case signals?.MOUSE_UP:
-          const newClickCount = global.clickCount + 1
-          global.clickCount = newClickCount
+          const newClickCount = localClickCount + 1
+          localClickCount = newClickCount
           mainWindow.webContents.send("update-click-count", newClickCount)
           break
       }
@@ -71,8 +71,8 @@ export const inputMonitoringIpc = ({
 
     // キーボードを打鍵したりマウスをクリックする度にファイルに書き込むのは気が引けるので一定間隔で保存する
     setInterval(() => {
-      setKeyCount(global.keyCount)
-      setClickCount(global.clickCount)
+      setKeyCount(localKeyCount)
+      setClickCount(localClickCount)
     }, COUNT_SAVE_INTERVAL * 1000)
   }
 
