@@ -21,12 +21,11 @@ export const udpCommunication = (): UdpCommunication => {
     clickCount,
     udpAddresses,
     addUdpAddress,
-    updateScoreBoardList,
-    updateLastUpdatedToCurrentTime
+    updateScoreBoardList
   } = storeManager()
 
   const initializeUdpCommunication = (): void => {
-    setupReceiveData({ addUdpAddress, updateScoreBoardList, updateLastUpdatedToCurrentTime })
+    setupReceiveData({ addUdpAddress, updateScoreBoardList })
 
     const client = dgram.createSocket("udp4")
     startBroadcastInterval({ client })

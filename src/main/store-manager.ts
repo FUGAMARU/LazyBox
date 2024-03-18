@@ -14,8 +14,8 @@ type Store = {
   keyCount: number | undefined // キーボード打鍵数
   clickCount: number | undefined // マウスクリック数
   udpAddresses: string[] | undefined // UDP送信先アドレス一覧
-  lastUpdated: number | undefined // 最終更新日時 (Unixタイムスタンプ)
   scoreBoardList: ScoreBoard[] | undefined // スコアボード
+  nextResetUnixTimestamp: number | undefined // 次回リセット時刻 (Unixタイムスタンプ)
 }
 
 type StoreManager = {
@@ -25,8 +25,8 @@ type StoreManager = {
   setKeyCount: (keyCount: number) => void
   setClickCount: (clickCount: number) => void
   updateScoreBoardList: (receivedScoreBoard: ScoreBoard) => void
-  updateLastUpdatedToCurrentTime: (unixTimestamp: number) => void
   resetDynamicData: () => void
+  setNextResetUnixTimestamp: (unixTimestamp: number) => void
 } & Store
 
 /** 永続化データーの管理 (複数箇所からこの関数を呼び出してOK) */
@@ -92,17 +92,17 @@ export const storeManager = (): StoreManager => {
     electronStore.set("scoreBoardList", newScoreBoardList)
   }
 
-  const lastUpdated = electronStore.get("lastUpdated")
-  const updateLastUpdatedToCurrentTime = (unixTimestamp: number): void => {
-    electronStore.set("lastUpdated", unixTimestamp)
-  }
-
   const resetDynamicData = (): void => {
     electronStore.set("keyCount", 0)
     electronStore.set("clickCount", 0)
     electronStore.set("udpAddresses", [])
     global.keyCount = 0
     global.clickCount = 0
+  }
+
+  const nextResetUnixTimestamp = electronStore.get("nextResetUnixTimestamp")
+  const setNextResetUnixTimestamp = (unixTimestamp: number): void => {
+    electronStore.set("nextResetUnixTimestamp", unixTimestamp)
   }
 
   return {
@@ -118,8 +118,8 @@ export const storeManager = (): StoreManager => {
     setClickCount,
     scoreBoardList,
     updateScoreBoardList,
-    lastUpdated,
-    updateLastUpdatedToCurrentTime,
-    resetDynamicData
+    resetDynamicData,
+    nextResetUnixTimestamp,
+    setNextResetUnixTimestamp
   } as const
 }

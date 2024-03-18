@@ -88,8 +88,21 @@ app.on("window-all-closed", () => {
 const main = (): void => {
   const mainWindow = createWindow()
 
-  const { hasInitialized, keyCount, setKeyCount, clickCount, setClickCount } = storeManager()
-  const { initializeScheduler } = scheduler()
+  const {
+    hasInitialized,
+    keyCount,
+    setKeyCount,
+    clickCount,
+    setClickCount,
+    resetDynamicData,
+    nextResetUnixTimestamp,
+    setNextResetUnixTimestamp
+  } = storeManager()
+  const { initializeScheduler } = scheduler({
+    resetDynamicData,
+    nextResetUnixTimestamp,
+    setNextResetUnixTimestamp
+  })
   const { initializeInputMonitoringIpc, killInputMonitoringProcess } = inputMonitoringIpc({
     mainWindow,
     keyCount,
