@@ -11,14 +11,11 @@ import {
 import { readFileSync } from "fs"
 import { BrowserWindow } from "electron"
 import { isMatchingOS } from "./utils/isMatchingOS"
+import { StoreManager } from "./store-manager"
 
 type Args = {
   mainWindow: BrowserWindow
-  keyCount: number | undefined
-  setKeyCount: (keyCount: number) => void
-  clickCount: number | undefined
-  setClickCount: (clickCount: number) => void
-}
+} & Pick<StoreManager, "keyCount" | "setKeyCount" | "clickCount" | "setClickCount">
 
 type InputMonitoringIpc = {
   initializeInputMonitoringIpc: () => void

@@ -18,7 +18,7 @@ type Store = {
   nextResetUnixTimestamp: number | undefined // 次回リセット時刻 (Unixタイムスタンプ)
 }
 
-type StoreManager = {
+export type StoreManager = {
   hasInitialized: boolean
   setNickname: (nickname: string) => void
   addUdpAddress: (address: string) => void

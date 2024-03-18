@@ -12,7 +12,6 @@ import { isMatchingOS } from "./utils/isMatchingOS"
 export const appRoot = path.resolve(".")
 
 const createWindow = (): BrowserWindow => {
-  // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 450,
     height: 245,
@@ -90,19 +89,26 @@ const main = (): void => {
 
   const {
     hasInitialized,
+    uuid,
+    nickname,
+    udpAddresses,
+    addUdpAddress,
     keyCount,
     setKeyCount,
     clickCount,
     setClickCount,
+    updateScoreBoardList,
     resetDynamicData,
     nextResetUnixTimestamp,
     setNextResetUnixTimestamp
   } = storeManager()
+
   const { initializeScheduler } = scheduler({
     resetDynamicData,
     nextResetUnixTimestamp,
     setNextResetUnixTimestamp
   })
+
   const { initializeInputMonitoringIpc, killInputMonitoringProcess } = inputMonitoringIpc({
     mainWindow,
     keyCount,
@@ -110,7 +116,17 @@ const main = (): void => {
     clickCount,
     setClickCount
   })
-  const { initializeUdpCommunication } = udpCommunication()
+
+  const { initializeUdpCommunication } = udpCommunication({
+    uuid,
+    nickname,
+    keyCount,
+    clickCount,
+    udpAddresses,
+    addUdpAddress,
+    updateScoreBoardList
+  })
+
   tray({ showWindow: () => mainWindow.show(), killInputMonitoringProcess })
 
   if (!hasInitialized || is.dev) {

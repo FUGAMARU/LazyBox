@@ -1,12 +1,11 @@
 import { RESET_SCORE_BOARD_BOUNDARY_HOUR } from "./constants"
+import { StoreManager } from "./store-manager"
 import { getNextResetUnixTimestamp } from "./utils/getNextResetUnixTimestamp"
 
-type Args = {
-  resetDynamicData: () => void
-  nextResetUnixTimestamp: number | undefined
-  setNextResetUnixTimestamp: (unixTimestamp: number) => void
-}
-
+type Args = Pick<
+  StoreManager,
+  "resetDynamicData" | "nextResetUnixTimestamp" | "setNextResetUnixTimestamp"
+>
 type Scheduler = {
   initializeScheduler: () => void
 }
