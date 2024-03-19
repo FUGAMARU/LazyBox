@@ -1,6 +1,7 @@
 import { contextBridge } from "electron"
 import { electronAPI } from "@electron-toolkit/preload"
 import { storeManager } from "../main/store-manager"
+import { NICKNAME_SAVE_MESSAGE_DURATION } from "../main/constants"
 
 const { uuid, nickname, setNickname, keyCount, clickCount } = storeManager()
 
@@ -10,7 +11,8 @@ export const api = {
   nickname,
   setNickname,
   keyCount,
-  clickCount
+  clickCount,
+  nicknameSaveMessageDuration: NICKNAME_SAVE_MESSAGE_DURATION
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

@@ -10,6 +10,9 @@ export class InputCard extends LitElement {
   @property()
   errorText?: string | undefined = undefined
 
+  @property()
+  successText?: string | undefined = undefined
+
   static styles = [
     destyle,
     css`
@@ -34,6 +37,7 @@ export class InputCard extends LitElement {
       colorTheme="silver"
       title="あなたのニックネーム"
       errorText=${this.errorText}
+      successText=${this.successText}
       buttonText="保存"
       onButtonClick=${() => {
         alert("ボタンがクリックされました")

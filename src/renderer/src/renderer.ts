@@ -11,6 +11,7 @@ const doAThing = (): void => {
 
   const nickname = window.api.nickname
   if (nickname === undefined) {
+    replaceAttribute("#nickname-input", "successText", "")
     replaceAttribute("#nickname-input", "errorText", "ニックネームを設定するとスコアが共有されます")
   } else {
     replaceAttribute("#nickname-input", "value", nickname)
@@ -29,12 +30,18 @@ export const handleSaveButtonClick = (): void => {
   const { nicknameInputValue } = window
 
   if (nicknameInputValue === "") {
+    replaceAttribute("#nickname-input", "successText", "")
     replaceAttribute("#nickname-input", "errorText", "ニックネームを入力してください")
     return
   }
 
   window.api.setNickname(nicknameInputValue)
   replaceAttribute("#nickname-input", "errorText", "")
+  replaceAttribute("#nickname-input", "successText", "ニックネームを保存しました")
+
+  setTimeout(() => {
+    replaceAttribute("#nickname-input", "successText", "")
+  }, window.api.nicknameSaveMessageDuration * 1000)
 }
 
 const replaceText = (selector: string, text: string): void => {

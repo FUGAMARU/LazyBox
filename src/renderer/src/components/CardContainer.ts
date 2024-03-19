@@ -16,6 +16,9 @@ export class CardContainer extends LitElement {
   errorText?: string | undefined = undefined
 
   @property()
+  successText?: string | undefined = undefined
+
+  @property()
   buttonText?: string | undefined = undefined
 
   @property({ attribute: false })
@@ -94,10 +97,18 @@ export class CardContainer extends LitElement {
               font-weight: 700;
             }
 
-            > .errortext {
+            > .error {
               font-size: 8px;
               line-height: 12px;
               background-color: #ff7ef2;
+              border-radius: 2px;
+              padding: 0px 6px;
+            }
+
+            > .success {
+              font-size: 8px;
+              line-height: 12px;
+              background-color: #4fd64f;
               border-radius: 2px;
               padding: 0px 6px;
             }
@@ -128,7 +139,12 @@ export class CardContainer extends LitElement {
       <div class="contents">
         <div class="upper">
           <span class="title">${this.title}</span>
-          ${this.errorText ? html`<span class="errortext">${this.errorText}</span>` : ""}
+          ${this.errorText
+            ? html`<span class="error" id="error-text">${this.errorText}</span>`
+            : ""}
+          ${this.successText
+            ? html`<span class="success" id="success-text">${this.successText}</span>`
+            : ""}
         </div>
         <slot></slot>
       </div>

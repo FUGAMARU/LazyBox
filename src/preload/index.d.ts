@@ -6,5 +6,6 @@ declare global {
     electron: ElectronAPI
     api: typeof api
     nicknameInputValue: string
+    nicknameSaveMessageDuration: number
   }
 }

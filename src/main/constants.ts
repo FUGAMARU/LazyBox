@@ -39,3 +39,6 @@ export const TRAY_ICON_MACOS = [...TRAY_ICON_BASE_PATH, "tray.png"]
 
 /** キーボード打鍵数・マウスクリック・UDP送信先アドレス一覧をリセットする判定境界時刻 (時・24時間表記) */
 export const RESET_SCORE_BOARD_BOUNDARY_HOUR = 7
+
+/** ニックネームの保存完了メッセージを表示しておく長さ (秒) */
+export const NICKNAME_SAVE_MESSAGE_DURATION = 5
