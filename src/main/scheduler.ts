@@ -1,3 +1,4 @@
+import { BrowserWindow } from "electron"
 import { RESET_SCORE_BOARD_BOUNDARY_HOUR } from "./constants"
 import { StoreManager } from "./store-manager"
 import { getNextResetUnixTimestamp as getNextResetUnixTimestampFunc } from "./utils/getNextResetUnixTimestamp"
@@ -5,7 +6,10 @@ import { getNextResetUnixTimestamp as getNextResetUnixTimestampFunc } from "./ut
 type Args = Pick<
   StoreManager,
   "resetDynamicData" | "getNextResetUnixTimestamp" | "setNextResetUnixTimestamp"
->
+> & {
+  mainWindow: BrowserWindow
+}
+
 type Scheduler = {
   initializeScheduler: () => void
 }
@@ -13,7 +17,8 @@ type Scheduler = {
 export const scheduler = ({
   resetDynamicData,
   getNextResetUnixTimestamp,
-  setNextResetUnixTimestamp
+  setNextResetUnixTimestamp,
+  mainWindow
 }: Args): Scheduler => {
   const initializeScheduler = () => {
     setInterval(() => {
@@ -30,7 +35,7 @@ export const scheduler = ({
 
       const currentUnixTimestamp = Math.floor(Date.now() / 1000)
       if (currentUnixTimestamp >= nextResetUnixTimestamp) {
-        resetDynamicData()
+        resetDynamicData(mainWindow)
         setNextResetUnixTimestamp(calculatedNextResetUnixTimestamp)
       }
     }, 1000)

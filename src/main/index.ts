@@ -119,7 +119,8 @@ const main = (): void => {
   const { initializeScheduler } = scheduler({
     resetDynamicData,
     getNextResetUnixTimestamp,
-    setNextResetUnixTimestamp
+    setNextResetUnixTimestamp,
+    mainWindow
   })
 
   const { initializeTrayUtil, updateTrayRanking } = trayUtil({

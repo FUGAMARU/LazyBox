@@ -6,7 +6,9 @@ import {
   INPUT_MONITORING_PROCESS_PATH_LINUX,
   INPUT_MONITORING_PROCESS_PATH_MACOS,
   INPUT_MONITORING_PROCESS_PATH_WINDOWS,
-  INPUT_MONITORING_PROCESS_SIGNALS_PATH
+  INPUT_MONITORING_PROCESS_SIGNALS_PATH,
+  UPDATE_CLICK_COUNT_EVENT,
+  UPDATE_KEY_COUNT_EVENT
 } from "./constants"
 import { readFileSync } from "fs"
 import { BrowserWindow } from "electron"
@@ -51,12 +53,12 @@ export const inputMonitoringIpc = ({
         case signals?.KEY_UP:
           const newKeyCount = global.keyCount + 1
           global.keyCount = newKeyCount
-          mainWindow.webContents.send("update-key-count", newKeyCount)
+          mainWindow.webContents.send(UPDATE_KEY_COUNT_EVENT, newKeyCount)
           break
         case signals?.MOUSE_UP:
           const newClickCount = global.clickCount + 1
           global.clickCount = newClickCount
-          mainWindow.webContents.send("update-click-count", newClickCount)
+          mainWindow.webContents.send(UPDATE_CLICK_COUNT_EVENT, newClickCount)
           break
       }
     })

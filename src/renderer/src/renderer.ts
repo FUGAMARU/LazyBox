@@ -20,11 +20,11 @@ const doAThing = async (): Promise<void> => {
     replaceAttribute("#nickname-input", "value", nickname)
   }
 
-  window.electron.ipcRenderer.on("update-key-count", (_, newCount) => {
+  window.electron.ipcRenderer.on(window.api.updateKeyCountEventName, (_, newCount) => {
     replaceAttribute("#key-count", "count", newCount.toLocaleString())
   })
 
-  window.electron.ipcRenderer.on("update-click-count", (_, newCount) => {
+  window.electron.ipcRenderer.on(window.api.updateClickCountEventName, (_, newCount) => {
     replaceAttribute("#click-count", "count", newCount.toLocaleString())
   })
 }

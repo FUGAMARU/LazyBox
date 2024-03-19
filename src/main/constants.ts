@@ -42,3 +42,9 @@ export const RESET_SCORE_BOARD_BOUNDARY_HOUR = 7
 
 /** ニックネームの保存完了メッセージを表示しておく長さ (秒) */
 export const NICKNAME_SAVE_MESSAGE_DURATION = 5
+
+/** キーボード打鍵回数をIPCで送信する時のイベント名 */
+export const UPDATE_KEY_COUNT_EVENT = "update-key-count"
+
+/** マウスクリック回数をIPCで送信する時のイベント名 */
+export const UPDATE_CLICK_COUNT_EVENT = "update-click-count"
