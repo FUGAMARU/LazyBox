@@ -5,14 +5,14 @@ const init = (): void => {
 }
 
 const doAThing = async (): Promise<void> => {
-  replaceText("#uuid", window.api.uuid ?? "UUIDが取得できませんでした")
+  replaceText("#uuid", window.api.getUUID() ?? "UUIDが取得できませんでした")
 
   const keyCount = await window.api.getKeyCount()
   const clickCount = await window.api.getClickCount()
   replaceAttribute("#key-count", "count", keyCount?.toLocaleString() ?? "0")
   replaceAttribute("#click-count", "count", clickCount?.toLocaleString() ?? "0")
 
-  const nickname = window.api.nickname
+  const nickname = window.api.getNickname()
   if (nickname === undefined) {
     replaceAttribute("#nickname-input", "successText", "")
     replaceAttribute("#nickname-input", "errorText", "ニックネームを設定するとスコアが共有されます")

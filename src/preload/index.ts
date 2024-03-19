@@ -3,12 +3,12 @@ import { electronAPI } from "@electron-toolkit/preload"
 import { storeManager } from "../main/store-manager"
 import { NICKNAME_SAVE_MESSAGE_DURATION } from "../main/constants"
 
-const { uuid, nickname, setNickname } = storeManager()
+const { getUUID, getNickname, setNickname } = storeManager()
 
 // Custom APIs for renderer
 export const api = {
-  uuid,
-  nickname,
+  getUUID,
+  getNickname,
   setNickname,
   nicknameSaveMessageDuration: NICKNAME_SAVE_MESSAGE_DURATION,
   getKeyCount: (): Promise<number | undefined> => ipcRenderer.invoke("get-key-count"),

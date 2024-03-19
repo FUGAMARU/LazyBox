@@ -4,18 +4,25 @@ import { UDP_IDENTIFIER, UDP_PORT, UDP_SEND_COUNT_INTERVAL } from "../constants"
 
 type Args = {
   client: Socket
-} & Pick<UdpCommunicationArgs, "uuid" | "nickname" | "keyCount" | "clickCount" | "udpAddresses">
+} & Pick<
+  UdpCommunicationArgs,
+  "getUUID" | "getNickname" | "keyCount" | "clickCount" | "getUdpAddresses"
+>
 
 /** 打鍵数・クリック数送信部 */
 export const startSendKeyCountAndClickCountInterval = ({
   client,
-  uuid,
-  nickname,
+  getUUID,
+  getNickname,
   keyCount,
   clickCount,
-  udpAddresses
+  getUdpAddresses
 }: Args) => {
   const sendKeyClickCount = (): void => {
+    const uuid = getUUID()
+    const nickname = getNickname()
+    const udpAddresses = getUdpAddresses()
+
     if (
       uuid === undefined ||
       uuid === "" ||

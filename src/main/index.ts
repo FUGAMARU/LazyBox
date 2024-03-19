@@ -4,7 +4,7 @@ import path from "path"
 import icon from "../../resources/icon.png?asset"
 import { storeManager } from "./store-manager"
 import { inputMonitoringIpc } from "./input-monitoring-ipc"
-import { tray } from "./tray"
+import { trayUtil } from "./tray-util"
 import { udpCommunication } from "./udp-communication"
 import { scheduler } from "./scheduler"
 import { isMatchingOS } from "./utils/isMatchingOS"
@@ -87,23 +87,24 @@ app.on("window-all-closed", () => {
 const main = (): void => {
   const {
     hasInitialized,
-    uuid,
-    nickname,
-    udpAddresses,
+    getUUID,
+    getNickname,
+    getUdpAddresses,
     addUdpAddress,
-    keyCount,
+    getKeyCount,
     setKeyCount,
-    clickCount,
+    getClickCount,
     setClickCount,
+    getScoreBoardList,
     updateScoreBoardList,
     resetDynamicData,
-    nextResetUnixTimestamp,
+    getNextResetUnixTimestamp,
     setNextResetUnixTimestamp
   } = storeManager()
 
   // グローバル変数に初期値をセット
-  global.keyCount = keyCount ?? 0
-  global.clickCount = clickCount ?? 0
+  global.keyCount = getKeyCount() ?? 0
+  global.clickCount = getClickCount() ?? 0
 
   // 念の為、グローバル変数に初期値をセットしてからcreateWindowしておく
   const mainWindow = createWindow()
@@ -117,21 +118,35 @@ const main = (): void => {
 
   const { initializeScheduler } = scheduler({
     resetDynamicData,
-    nextResetUnixTimestamp,
+    getNextResetUnixTimestamp,
     setNextResetUnixTimestamp
   })
 
-  const { initializeUdpCommunication } = udpCommunication({
-    uuid,
-    nickname,
-    keyCount: global.keyCount,
-    clickCount: global.clickCount,
-    udpAddresses,
-    addUdpAddress,
-    updateScoreBoardList
+  const { initializeTrayUtil, updateTrayRanking } = trayUtil({
+    showWindow: () => mainWindow.show(),
+    killInputMonitoringProcess
   })
 
-  tray({ showWindow: () => mainWindow.show(), killInputMonitoringProcess })
+  initializeTrayUtil()
+  updateTrayRanking(
+    global.keyCount,
+    global.clickCount,
+    getUUID(),
+    getNickname(),
+    getScoreBoardList()
+  )
+
+  const { initializeUdpCommunication } = udpCommunication({
+    getUUID,
+    getNickname,
+    keyCount: global.keyCount,
+    clickCount: global.clickCount,
+    getUdpAddresses,
+    addUdpAddress,
+    updateScoreBoardList,
+    updateTrayRanking,
+    getScoreBoardList
+  })
 
   if (!hasInitialized || is.dev) {
     // 初期設定(UUID自動生成 & ニックネーム手動設定)が完了していない場合は、設定画面を表示する

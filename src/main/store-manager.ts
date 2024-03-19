@@ -27,7 +27,14 @@ export type StoreManager = {
   updateScoreBoardList: (receivedScoreBoard: ScoreBoard) => void
   resetDynamicData: () => void
   setNextResetUnixTimestamp: (unixTimestamp: number) => void
-} & Store
+  getUUID: () => string | undefined
+  getNickname: () => string | undefined
+  getKeyCount: () => number | undefined
+  getClickCount: () => number | undefined
+  getUdpAddresses: () => string[] | undefined
+  getScoreBoardList: () => ScoreBoard[] | undefined
+  getNextResetUnixTimestamp: () => number | undefined
+}
 
 /** 永続化データーの管理 (複数箇所からこの関数を呼び出してOK) */
 export const storeManager = (): StoreManager => {
@@ -41,14 +48,20 @@ export const storeManager = (): StoreManager => {
 
   const hasInitialized = electronStore.has("uuid") && electronStore.has("nickname")
 
-  const uuid = electronStore.get("uuid")
+  const getUUID = () => {
+    return electronStore.get("uuid")
+  }
 
-  const nickname = electronStore.get("nickname")
+  const getNickname = () => {
+    return electronStore.get("nickname")
+  }
   const setNickname = (nickname: string): void => {
     electronStore.set("nickname", nickname)
   }
 
-  const udpAddresses = electronStore.get("udpAddresses")
+  const getUdpAddresses = () => {
+    return electronStore.get("udpAddresses")
+  }
   const addUdpAddress = (address: string): void => {
     const udpAddresses = electronStore.get("udpAddresses")
     if (udpAddresses !== undefined && !udpAddresses.includes(address)) {
@@ -57,19 +70,27 @@ export const storeManager = (): StoreManager => {
     }
   }
 
-  const keyCount = electronStore.get("keyCount")
+  const getKeyCount = () => {
+    return electronStore.get("keyCount")
+  }
   const setKeyCount = (keyCount: number): void => {
     electronStore.set("keyCount", keyCount)
   }
 
-  const clickCount = electronStore.get("clickCount")
+  const getClickCount = () => {
+    return electronStore.get("clickCount")
+  }
   const setClickCount = (clickCount: number): void => {
     electronStore.set("clickCount", clickCount)
   }
 
-  const scoreBoardList = electronStore.get("scoreBoardList")
+  const getScoreBoardList = () => {
+    return electronStore.get("scoreBoardList")
+  }
   const updateScoreBoardList = (receivedScoreBoard: ScoreBoard): void => {
     const { uuid } = receivedScoreBoard
+
+    const scoreBoardList = getScoreBoardList()
 
     // ここでundefinedチェックしなくても下の処理で吸収できるが、オプショナルチェイニングを使わないために明示的にチェック
     if (scoreBoardList === undefined) {
@@ -100,26 +121,28 @@ export const storeManager = (): StoreManager => {
     global.clickCount = 0
   }
 
-  const nextResetUnixTimestamp = electronStore.get("nextResetUnixTimestamp")
+  const getNextResetUnixTimestamp = () => {
+    return electronStore.get("nextResetUnixTimestamp")
+  }
   const setNextResetUnixTimestamp = (unixTimestamp: number): void => {
     electronStore.set("nextResetUnixTimestamp", unixTimestamp)
   }
 
   return {
     hasInitialized,
-    uuid,
-    nickname,
+    getUUID,
+    getNickname,
     setNickname,
-    udpAddresses,
+    getUdpAddresses,
     addUdpAddress,
-    keyCount,
+    getKeyCount,
     setKeyCount,
-    clickCount,
+    getClickCount,
     setClickCount,
-    scoreBoardList,
+    getScoreBoardList,
     updateScoreBoardList,
     resetDynamicData,
-    nextResetUnixTimestamp,
+    getNextResetUnixTimestamp,
     setNextResetUnixTimestamp
   } as const
 }

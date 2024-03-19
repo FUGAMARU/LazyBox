@@ -3,10 +3,29 @@ import { UDP_BROADCAST_MESSAGE, UDP_IDENTIFIER, UDP_PORT } from "../constants"
 import { UdpCommunicationArgs, UdpMessage } from "."
 import { getLocalAddresses } from "../utils/getLocalAddresses"
 
-type Args = Pick<UdpCommunicationArgs, "addUdpAddress" | "updateScoreBoardList">
+type Args = Pick<
+  UdpCommunicationArgs,
+  | "addUdpAddress"
+  | "updateScoreBoardList"
+  | "updateTrayRanking"
+  | "getUUID"
+  | "getNickname"
+  | "keyCount"
+  | "clickCount"
+  | "getScoreBoardList"
+>
 
 /** データー受信部 */
-export const setupReceiveData = ({ addUdpAddress, updateScoreBoardList }: Args) => {
+export const setupReceiveData = ({
+  addUdpAddress,
+  updateScoreBoardList,
+  updateTrayRanking,
+  getUUID,
+  getNickname,
+  keyCount,
+  clickCount,
+  getScoreBoardList
+}: Args) => {
   const server = dgram.createSocket("udp4")
 
   // 他のクライアントからプライベートIPの通知を受け取った時
@@ -21,10 +40,11 @@ export const setupReceiveData = ({ addUdpAddress, updateScoreBoardList }: Args) 
     }
 
     try {
-      const { identifier, ...data } = JSON.parse(message) as UdpMessage
+      const { identifier, ...scoreBoard } = JSON.parse(message) as UdpMessage
 
       if (identifier !== undefined && identifier !== UDP_IDENTIFIER) return
-      updateScoreBoardList(data)
+      updateScoreBoardList(scoreBoard)
+      updateTrayRanking(keyCount, clickCount, getUUID(), getNickname(), getScoreBoardList())
     } catch (e) {
       // JSON.parseに失敗した時は何もしない
       // UDP_BROADCAST_MESSAGEがデフォルトから書き換えられている場合などはJSON.parseに失敗する
