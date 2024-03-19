@@ -33,6 +33,8 @@ export type StoreManager = {
   getNickname: () => string | undefined
   getKeyCount: () => number | undefined
   getClickCount: () => number | undefined
+  getGlobalKeyCount: () => number
+  getGlobalClickCount: () => number
   getUdpAddresses: () => string[] | undefined
   getScoreBoardList: () => ScoreBoard[] | undefined
   getNextResetUnixTimestamp: () => number | undefined
@@ -84,6 +86,13 @@ export const storeManager = (): StoreManager => {
   }
   const setClickCount = (clickCount: number): void => {
     electronStore.set("clickCount", clickCount)
+  }
+
+  const getGlobalKeyCount = (): number => {
+    return global.keyCount
+  }
+  const getGlobalClickCount = (): number => {
+    return global.clickCount
   }
 
   const getScoreBoardList = () => {
@@ -143,6 +152,8 @@ export const storeManager = (): StoreManager => {
     setKeyCount,
     getClickCount,
     setClickCount,
+    getGlobalKeyCount,
+    getGlobalClickCount,
     getScoreBoardList,
     updateScoreBoardList,
     resetDynamicData,

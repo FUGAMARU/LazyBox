@@ -6,7 +6,7 @@ type Args = {
   client: Socket
 } & Pick<
   UdpCommunicationArgs,
-  "getUUID" | "getNickname" | "keyCount" | "clickCount" | "getUdpAddresses"
+  "getUUID" | "getNickname" | "getGlobalKeyCount" | "getGlobalClickCount" | "getUdpAddresses"
 >
 
 /** 打鍵数・クリック数送信部 */
@@ -14,8 +14,8 @@ export const startSendKeyCountAndClickCountInterval = ({
   client,
   getUUID,
   getNickname,
-  keyCount,
-  clickCount,
+  getGlobalKeyCount,
+  getGlobalClickCount,
   getUdpAddresses
 }: Args) => {
   const sendKeyClickCount = (): void => {
@@ -37,8 +37,8 @@ export const startSendKeyCountAndClickCountInterval = ({
       identifier: UDP_IDENTIFIER,
       uuid,
       nickname,
-      keyCount: keyCount ?? 0,
-      clickCount: clickCount ?? 0
+      keyCount: getGlobalKeyCount() ?? 0,
+      clickCount: getGlobalClickCount() ?? 0
     } as const satisfies UdpMessage
 
     console.log("Data to Send! ->", data, "to ->", udpAddresses, "at ->", UDP_PORT, "port.")

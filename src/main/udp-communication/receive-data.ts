@@ -10,8 +10,8 @@ type Args = Pick<
   | "updateTrayRanking"
   | "getUUID"
   | "getNickname"
-  | "keyCount"
-  | "clickCount"
+  | "getGlobalKeyCount"
+  | "getGlobalClickCount"
   | "getScoreBoardList"
 >
 
@@ -22,8 +22,8 @@ export const setupReceiveData = ({
   updateTrayRanking,
   getUUID,
   getNickname,
-  keyCount,
-  clickCount,
+  getGlobalKeyCount,
+  getGlobalClickCount,
   getScoreBoardList
 }: Args) => {
   const server = dgram.createSocket("udp4")
@@ -42,9 +42,20 @@ export const setupReceiveData = ({
     try {
       const { identifier, ...scoreBoard } = JSON.parse(message) as UdpMessage
 
+      console.log(`
+        Received Data! -> ${JSON.stringify(scoreBoard)}
+        from -> ${remoteInfo.address}
+      `)
+
       if (identifier !== undefined && identifier !== UDP_IDENTIFIER) return
       updateScoreBoardList(scoreBoard)
-      updateTrayRanking(keyCount, clickCount, getUUID(), getNickname(), getScoreBoardList())
+      updateTrayRanking(
+        getGlobalKeyCount(),
+        getGlobalClickCount(),
+        getUUID(),
+        getNickname(),
+        getScoreBoardList()
+      )
     } catch (e) {
       // JSON.parseに失敗した時は何もしない
       // UDP_BROADCAST_MESSAGEがデフォルトから書き換えられている場合などはJSON.parseに失敗する

@@ -95,6 +95,8 @@ const main = (): void => {
     setKeyCount,
     getClickCount,
     setClickCount,
+    getGlobalKeyCount,
+    getGlobalClickCount,
     getScoreBoardList,
     updateScoreBoardList,
     resetDynamicData,
@@ -103,6 +105,9 @@ const main = (): void => {
   } = storeManager()
 
   // グローバル変数に初期値をセット
+  // LaxyBoxでは、global.keyCountとglobal.clickCountをリアルタイムな打鍵数・クリック数として扱う
+  // そして、最新の打鍵数・クリック数を取得するためにgetGlobalKeyCountとgetGlobalClickCountを使う
+  // getKeyCountとgetClickCountは、永続化のみに使うので、こことrendererの初期化部分でしか使わない。
   global.keyCount = getKeyCount() ?? 0
   global.clickCount = getClickCount() ?? 0
 
@@ -113,7 +118,9 @@ const main = (): void => {
   const { initializeInputMonitoringIpc, killInputMonitoringProcess } = inputMonitoringIpc({
     mainWindow,
     setKeyCount,
-    setClickCount
+    setClickCount,
+    getGlobalKeyCount,
+    getGlobalClickCount
   })
 
   const { initializeScheduler } = scheduler({
@@ -130,8 +137,8 @@ const main = (): void => {
 
   initializeTrayUtil()
   updateTrayRanking(
-    global.keyCount,
-    global.clickCount,
+    getGlobalKeyCount(),
+    getGlobalClickCount(),
     getUUID(),
     getNickname(),
     getScoreBoardList()
@@ -140,8 +147,8 @@ const main = (): void => {
   const { initializeUdpCommunication } = udpCommunication({
     getUUID,
     getNickname,
-    keyCount: global.keyCount,
-    clickCount: global.clickCount,
+    getGlobalKeyCount,
+    getGlobalClickCount,
     getUdpAddresses,
     addUdpAddress,
     updateScoreBoardList,
@@ -157,12 +164,12 @@ const main = (): void => {
   initializeScheduler()
   initializeInputMonitoringIpc()
   initializeUdpCommunication()
+
+  ipcMain.handle("get-key-count", () => {
+    return getGlobalKeyCount()
+  })
+
+  ipcMain.handle("get-click-count", () => {
+    return getGlobalClickCount()
+  })
 }
-
-ipcMain.handle("get-key-count", () => {
-  return global.keyCount
-})
-
-ipcMain.handle("get-click-count", () => {
-  return global.clickCount
-})

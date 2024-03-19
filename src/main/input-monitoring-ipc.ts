@@ -17,7 +17,10 @@ import { StoreManager } from "./store-manager"
 
 type Args = {
   mainWindow: BrowserWindow
-} & Pick<StoreManager, "setKeyCount" | "setClickCount">
+} & Pick<
+  StoreManager,
+  "setKeyCount" | "setClickCount" | "getGlobalKeyCount" | "getGlobalClickCount"
+>
 
 type InputMonitoringIpc = {
   initializeInputMonitoringIpc: () => void
@@ -28,7 +31,9 @@ type InputMonitoringIpc = {
 export const inputMonitoringIpc = ({
   mainWindow,
   setKeyCount,
-  setClickCount
+  setClickCount,
+  getGlobalKeyCount,
+  getGlobalClickCount
 }: Args): InputMonitoringIpc => {
   let inputMonitoringProcess: ChildProcessWithoutNullStreams | undefined = undefined
   let signals: { KEY_UP: string; MOUSE_UP: string; SHUTDOWN: string } | undefined = undefined
@@ -51,12 +56,12 @@ export const inputMonitoringIpc = ({
       const message = data.toString().trim()
       switch (message) {
         case signals?.KEY_UP:
-          const newKeyCount = global.keyCount + 1
+          const newKeyCount = getGlobalKeyCount() + 1
           global.keyCount = newKeyCount
           mainWindow.webContents.send(UPDATE_KEY_COUNT_EVENT, newKeyCount)
           break
         case signals?.MOUSE_UP:
-          const newClickCount = global.clickCount + 1
+          const newClickCount = getGlobalClickCount() + 1
           global.clickCount = newClickCount
           mainWindow.webContents.send(UPDATE_CLICK_COUNT_EVENT, newClickCount)
           break
@@ -65,8 +70,8 @@ export const inputMonitoringIpc = ({
 
     // キーボードを打鍵したりマウスをクリックする度にファイルに書き込むのは気が引けるので一定間隔で保存する
     setInterval(() => {
-      setKeyCount(global.keyCount)
-      setClickCount(global.clickCount)
+      setKeyCount(getGlobalKeyCount())
+      setClickCount(getGlobalClickCount())
     }, COUNT_SAVE_INTERVAL * 1000)
   }
 

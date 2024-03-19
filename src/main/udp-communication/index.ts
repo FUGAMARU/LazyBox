@@ -17,10 +17,10 @@ export type UdpCommunicationArgs = Pick<
   | "addUdpAddress"
   | "updateScoreBoardList"
   | "getScoreBoardList"
-> & {
-  keyCount: number | undefined // global.keyCount
-  clickCount: number | undefined // global.clickCount
-} & Pick<TrayUtil, "updateTrayRanking">
+  | "getGlobalKeyCount"
+  | "getGlobalClickCount"
+> &
+  Pick<TrayUtil, "updateTrayRanking">
 
 type UdpCommunication = {
   initializeUdpCommunication: () => void
@@ -30,8 +30,8 @@ type UdpCommunication = {
 export const udpCommunication = ({
   getUUID,
   getNickname,
-  keyCount,
-  clickCount,
+  getGlobalKeyCount,
+  getGlobalClickCount,
   getUdpAddresses,
   addUdpAddress,
   updateScoreBoardList,
@@ -45,8 +45,8 @@ export const udpCommunication = ({
       updateTrayRanking,
       getUUID,
       getNickname,
-      keyCount,
-      clickCount,
+      getGlobalKeyCount,
+      getGlobalClickCount,
       getScoreBoardList
     })
 
@@ -56,8 +56,8 @@ export const udpCommunication = ({
       client,
       getUUID,
       getNickname,
-      keyCount,
-      clickCount,
+      getGlobalKeyCount,
+      getGlobalClickCount,
       getUdpAddresses
     })
   }
