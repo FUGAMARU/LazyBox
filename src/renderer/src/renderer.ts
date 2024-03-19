@@ -4,10 +4,13 @@ const init = (): void => {
   })
 }
 
-const doAThing = (): void => {
+const doAThing = async (): Promise<void> => {
   replaceText("#uuid", window.api.uuid ?? "UUIDが取得できませんでした")
-  replaceAttribute("#key-count", "count", window.api.keyCount?.toLocaleString() ?? "0")
-  replaceAttribute("#click-count", "count", window.api.clickCount?.toLocaleString() ?? "0")
+
+  const keyCount = await window.api.getKeyCount()
+  const clickCount = await window.api.getClickCount()
+  replaceAttribute("#key-count", "count", keyCount?.toLocaleString() ?? "0")
+  replaceAttribute("#click-count", "count", clickCount?.toLocaleString() ?? "0")
 
   const nickname = window.api.nickname
   if (nickname === undefined) {

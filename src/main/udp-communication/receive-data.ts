@@ -1,13 +1,9 @@
 import dgram from "dgram"
 import { UDP_BROADCAST_MESSAGE, UDP_IDENTIFIER, UDP_PORT } from "../constants"
-import { ScoreBoard } from "../store-manager"
-import { UdpMessage } from "."
+import { UdpCommunicationArgs, UdpMessage } from "."
 import { getLocalAddresses } from "../utils/getLocalAddresses"
 
-type Args = {
-  addUdpAddress: (address: string) => void
-  updateScoreBoardList: (scoreBoard: ScoreBoard) => void
-}
+type Args = Pick<UdpCommunicationArgs, "addUdpAddress" | "updateScoreBoardList">
 
 /** データー受信部 */
 export const setupReceiveData = ({ addUdpAddress, updateScoreBoardList }: Args) => {

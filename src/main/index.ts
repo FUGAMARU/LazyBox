@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, nativeTheme } from "electron"
+import { app, shell, BrowserWindow, nativeTheme, ipcMain } from "electron"
 import { electronApp, optimizer, is } from "@electron-toolkit/utils"
 import path from "path"
 import icon from "../../resources/icon.png?asset"
@@ -85,8 +85,6 @@ app.on("window-all-closed", () => {
 // このファイルには、アプリ固有のメイン・プロセス・コードを含めることができる。
 // 別のファイルにして、ここで require することもできます。
 const main = (): void => {
-  const mainWindow = createWindow()
-
   const {
     hasInitialized,
     uuid,
@@ -103,25 +101,31 @@ const main = (): void => {
     setNextResetUnixTimestamp
   } = storeManager()
 
+  // グローバル変数に初期値をセット
+  global.keyCount = keyCount ?? 0
+  global.clickCount = clickCount ?? 0
+
+  // 念の為、グローバル変数に初期値をセットしてからcreateWindowしておく
+  const mainWindow = createWindow()
+
+  // グローバル変数に初期値をセットしてからinputMonitoringIpc関数を呼び出す必要がある
+  const { initializeInputMonitoringIpc, killInputMonitoringProcess } = inputMonitoringIpc({
+    mainWindow,
+    setKeyCount,
+    setClickCount
+  })
+
   const { initializeScheduler } = scheduler({
     resetDynamicData,
     nextResetUnixTimestamp,
     setNextResetUnixTimestamp
   })
 
-  const { initializeInputMonitoringIpc, killInputMonitoringProcess } = inputMonitoringIpc({
-    mainWindow,
-    keyCount,
-    setKeyCount,
-    clickCount,
-    setClickCount
-  })
-
   const { initializeUdpCommunication } = udpCommunication({
     uuid,
     nickname,
-    keyCount,
-    clickCount,
+    keyCount: global.keyCount,
+    clickCount: global.clickCount,
     udpAddresses,
     addUdpAddress,
     updateScoreBoardList
@@ -138,3 +142,11 @@ const main = (): void => {
   initializeInputMonitoringIpc()
   initializeUdpCommunication()
 }
+
+ipcMain.handle("get-key-count", () => {
+  return global.keyCount
+})
+
+ipcMain.handle("get-click-count", () => {
+  return global.clickCount
+})

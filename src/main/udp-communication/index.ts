@@ -8,16 +8,13 @@ export type UdpMessage = {
   identifier: string
 } & ScoreBoard
 
-type Args = Pick<
+export type UdpCommunicationArgs = Pick<
   StoreManager,
-  | "uuid"
-  | "nickname"
-  | "keyCount"
-  | "clickCount"
-  | "udpAddresses"
-  | "addUdpAddress"
-  | "updateScoreBoardList"
->
+  "uuid" | "nickname" | "udpAddresses" | "addUdpAddress" | "updateScoreBoardList"
+> & {
+  keyCount: number | undefined // global.keyCount
+  clickCount: number | undefined // global.clickCount
+}
 
 type UdpCommunication = {
   initializeUdpCommunication: () => void
@@ -32,7 +29,7 @@ export const udpCommunication = ({
   udpAddresses,
   addUdpAddress,
   updateScoreBoardList
-}: Args): UdpCommunication => {
+}: UdpCommunicationArgs): UdpCommunication => {
   const initializeUdpCommunication = (): void => {
     setupReceiveData({ addUdpAddress, updateScoreBoardList })
 

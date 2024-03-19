@@ -15,7 +15,7 @@ import { StoreManager } from "./store-manager"
 
 type Args = {
   mainWindow: BrowserWindow
-} & Pick<StoreManager, "keyCount" | "setKeyCount" | "clickCount" | "setClickCount">
+} & Pick<StoreManager, "setKeyCount" | "setClickCount">
 
 type InputMonitoringIpc = {
   initializeInputMonitoringIpc: () => void
@@ -25,16 +25,11 @@ type InputMonitoringIpc = {
 /** キーボード・マウスイベント監視プロセスとのIPC通信 (この関数は1箇所からのみ呼び出されることを想定している) */
 export const inputMonitoringIpc = ({
   mainWindow,
-  keyCount,
   setKeyCount,
-  clickCount,
   setClickCount
 }: Args): InputMonitoringIpc => {
   let inputMonitoringProcess: ChildProcessWithoutNullStreams | undefined = undefined
   let signals: { KEY_UP: string; MOUSE_UP: string; SHUTDOWN: string } | undefined = undefined
-
-  global.keyCount = keyCount ?? 0
-  global.clickCount = clickCount ?? 0
 
   const initializeInputMonitoringIpc = (): void => {
     signals = JSON.parse(

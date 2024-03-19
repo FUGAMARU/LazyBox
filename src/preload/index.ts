@@ -1,18 +1,18 @@
-import { contextBridge } from "electron"
+import { contextBridge, ipcRenderer } from "electron"
 import { electronAPI } from "@electron-toolkit/preload"
 import { storeManager } from "../main/store-manager"
 import { NICKNAME_SAVE_MESSAGE_DURATION } from "../main/constants"
 
-const { uuid, nickname, setNickname, keyCount, clickCount } = storeManager()
+const { uuid, nickname, setNickname } = storeManager()
 
 // Custom APIs for renderer
 export const api = {
   uuid,
   nickname,
   setNickname,
-  keyCount,
-  clickCount,
-  nicknameSaveMessageDuration: NICKNAME_SAVE_MESSAGE_DURATION
+  nicknameSaveMessageDuration: NICKNAME_SAVE_MESSAGE_DURATION,
+  getKeyCount: (): Promise<number | undefined> => ipcRenderer.invoke("get-key-count"),
+  getClickCount: (): Promise<number | undefined> => ipcRenderer.invoke("get-click-count")
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

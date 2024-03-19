@@ -1,15 +1,10 @@
 import { Socket } from "dgram"
-import { UdpMessage } from "."
+import { UdpCommunicationArgs, UdpMessage } from "."
 import { UDP_IDENTIFIER, UDP_PORT, UDP_SEND_COUNT_INTERVAL } from "../constants"
 
 type Args = {
   client: Socket
-  uuid: string | undefined
-  nickname: string | undefined
-  keyCount: number | undefined
-  clickCount: number | undefined
-  udpAddresses: string[] | undefined
-}
+} & Pick<UdpCommunicationArgs, "uuid" | "nickname" | "keyCount" | "clickCount" | "udpAddresses">
 
 /** 打鍵数・クリック数送信部 */
 export const startSendKeyCountAndClickCountInterval = ({
