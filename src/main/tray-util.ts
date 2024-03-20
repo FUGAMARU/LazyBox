@@ -89,13 +89,29 @@ export const trayUtil = ({ showWindow, killInputMonitoringProcess }: Args): Tray
     console.log("RANKING")
     console.log(ranking)
 
-    const rankingMenuItems = ranking.map((scoreBoard, index) => {
-      const medal = ["🥇", "🥈", "🥉"][index] || ""
+    const topRankingMenuItems = ranking.slice(0, 3).map((scoreBoard, idx) => {
+      const medal = ["🥇", "🥈", "🥉"][idx] || ""
       return {
         type: "normal",
         label: `${medal}${scoreBoard.nickname}   ⌨️${scoreBoard.keyCount}   🖱️${scoreBoard.clickCount}`
       }
-    }) as MenuItemConstructorOptions[]
+    })
+
+    const moreRankingMenuItems = ranking.slice(3).map((scoreBoard, _) => {
+      return {
+        type: "normal",
+        label: `${scoreBoard.nickname}   ⌨️${scoreBoard.keyCount}   🖱️${scoreBoard.clickCount}`
+      }
+    })
+
+    const rankingMenuItems = [
+      ...topRankingMenuItems,
+      {
+        type: "submenu",
+        label: "もっと見る",
+        submenu: moreRankingMenuItems
+      }
+    ] as MenuItemConstructorOptions[]
 
     const contextMenu = Menu.buildFromTemplate([
       ...commonContextMenuFirstHalf,
