@@ -1,14 +1,27 @@
 import { BrowserWindow } from "electron"
-import { RESET_SCORE_BOARD_BOUNDARY_HOUR } from "./constants"
+import {
+  RESET_SCORE_BOARD_BOUNDARY_HOUR,
+  UPDATE_CLICK_COUNT_EVENT,
+  UPDATE_KEY_COUNT_EVENT
+} from "./constants"
 import { StoreManager } from "./store-manager"
 import { getNextResetUnixTimestamp as getNextResetUnixTimestampFunc } from "./utils/getNextResetUnixTimestamp"
+import { TrayUtil } from "./tray-util"
 
 type Args = Pick<
   StoreManager,
-  "resetDynamicData" | "getNextResetUnixTimestamp" | "setNextResetUnixTimestamp"
-> & {
-  mainWindow: BrowserWindow
-}
+  | "resetDynamicData"
+  | "getNextResetUnixTimestamp"
+  | "setNextResetUnixTimestamp"
+  | "getGlobalKeyCount"
+  | "getGlobalClickCount"
+  | "getUUID"
+  | "getNickname"
+  | "getScoreBoardList"
+> &
+  Pick<TrayUtil, "updateTrayRanking"> & {
+    mainWindow: BrowserWindow
+  }
 
 type Scheduler = {
   initializeScheduler: () => void
@@ -18,7 +31,13 @@ export const scheduler = ({
   resetDynamicData,
   getNextResetUnixTimestamp,
   setNextResetUnixTimestamp,
-  mainWindow
+  mainWindow,
+  updateTrayRanking,
+  getGlobalKeyCount,
+  getGlobalClickCount,
+  getUUID,
+  getNickname,
+  getScoreBoardList
 }: Args): Scheduler => {
   const initializeScheduler = () => {
     setInterval(() => {
@@ -35,7 +54,19 @@ export const scheduler = ({
 
       const currentUnixTimestamp = Math.floor(Date.now() / 1000)
       if (currentUnixTimestamp >= nextResetUnixTimestamp) {
-        resetDynamicData(mainWindow)
+        resetDynamicData()
+
+        // 表示もリセットしてあげる
+        mainWindow.webContents.send(UPDATE_KEY_COUNT_EVENT, 0)
+        mainWindow.webContents.send(UPDATE_CLICK_COUNT_EVENT, 0)
+        updateTrayRanking(
+          getGlobalKeyCount(),
+          getGlobalClickCount(),
+          getUUID(),
+          getNickname(),
+          getScoreBoardList()
+        )
+
         setNextResetUnixTimestamp(calculatedNextResetUnixTimestamp)
       }
     }, 1000)

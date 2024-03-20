@@ -123,16 +123,22 @@ const main = (): void => {
     getGlobalClickCount
   })
 
+  const { initializeTrayUtil, updateTrayRanking } = trayUtil({
+    showWindow: () => mainWindow.show(),
+    killInputMonitoringProcess
+  })
+
   const { initializeScheduler } = scheduler({
     resetDynamicData,
     getNextResetUnixTimestamp,
     setNextResetUnixTimestamp,
-    mainWindow
-  })
-
-  const { initializeTrayUtil, updateTrayRanking } = trayUtil({
-    showWindow: () => mainWindow.show(),
-    killInputMonitoringProcess
+    mainWindow,
+    updateTrayRanking,
+    getGlobalKeyCount,
+    getGlobalClickCount,
+    getUUID,
+    getNickname,
+    getScoreBoardList
   })
 
   initializeTrayUtil()

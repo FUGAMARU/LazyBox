@@ -76,7 +76,6 @@ export const trayUtil = ({ showWindow, killInputMonitoringProcess }: Args): Tray
       return
     }
 
-    // ScoreBoardListの各アイテムのkeyCountとclickCountを合計し、降順に並べ替える。また、自分のスコアもランキングに含める
     const ranking = scoreBoardList
       .concat({
         uuid: myUUID,

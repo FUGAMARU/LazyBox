@@ -1,7 +1,5 @@
 import ElectronStore from "electron-store"
 import { generateUUID } from "./utils/generateUUID"
-import { BrowserWindow } from "electron"
-import { UPDATE_CLICK_COUNT_EVENT, UPDATE_KEY_COUNT_EVENT } from "./constants"
 
 export type ScoreBoard = {
   uuid: string // UUID
@@ -27,7 +25,7 @@ export type StoreManager = {
   setKeyCount: (keyCount: number) => void
   setClickCount: (clickCount: number) => void
   updateScoreBoardList: (receivedScoreBoard: ScoreBoard) => void
-  resetDynamicData: (mainWindow: BrowserWindow) => void
+  resetDynamicData: () => void
   setNextResetUnixTimestamp: (unixTimestamp: number) => void
   getUUID: () => string | undefined
   getNickname: () => string | undefined
@@ -124,14 +122,13 @@ export const storeManager = (): StoreManager => {
     electronStore.set("scoreBoardList", newScoreBoardList)
   }
 
-  const resetDynamicData = (mainWindow: BrowserWindow): void => {
+  const resetDynamicData = (): void => {
     electronStore.set("keyCount", 0)
     electronStore.set("clickCount", 0)
     electronStore.set("udpAddresses", [])
+    electronStore.set("scoreBoardList", [])
     global.keyCount = 0
     global.clickCount = 0
-    mainWindow.webContents.send(UPDATE_KEY_COUNT_EVENT, 0)
-    mainWindow.webContents.send(UPDATE_CLICK_COUNT_EVENT, 0)
   }
 
   const getNextResetUnixTimestamp = () => {
