@@ -48,3 +48,6 @@ export const UPDATE_KEY_COUNT_EVENT = "update-key-count"
 
 /** マウスクリック回数をIPCで送信する時のイベント名 */
 export const UPDATE_CLICK_COUNT_EVENT = "update-click-count"
+
+/** 順位をIPCで送信する時のイベント名 */
+export const UPDATE_RANKING_EVENT = "update-ranking"

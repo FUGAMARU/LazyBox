@@ -142,15 +142,17 @@ const main = (): void => {
   })
 
   initializeTrayUtil()
-  updateTrayRanking(
+  /** TODO: 以下のupdateTrayRankingの実行は不要？ */
+  /*updateTrayRanking(
     getGlobalKeyCount(),
     getGlobalClickCount(),
     getUUID(),
     getNickname(),
     getScoreBoardList()
-  )
+  )*/
 
   const { initializeUdpCommunication } = udpCommunication({
+    mainWindow,
     getUUID,
     getNickname,
     getGlobalKeyCount,

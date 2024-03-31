@@ -2,11 +2,13 @@ import { BrowserWindow } from "electron"
 import {
   RESET_SCORE_BOARD_BOUNDARY_HOUR,
   UPDATE_CLICK_COUNT_EVENT,
-  UPDATE_KEY_COUNT_EVENT
+  UPDATE_KEY_COUNT_EVENT,
+  UPDATE_RANKING_EVENT
 } from "./constants"
 import { StoreManager } from "./store-manager"
 import { getNextResetUnixTimestamp as getNextResetUnixTimestampFunc } from "./utils/getNextResetUnixTimestamp"
 import { TrayUtil } from "./tray-util"
+import { RankCardData } from "./types/RankCardData"
 
 type Args = Pick<
   StoreManager,
@@ -59,6 +61,10 @@ export const scheduler = ({
         // 表示もリセットしてあげる
         mainWindow.webContents.send(UPDATE_KEY_COUNT_EVENT, 0)
         mainWindow.webContents.send(UPDATE_CLICK_COUNT_EVENT, 0)
+        mainWindow.webContents.send(UPDATE_RANKING_EVENT, {
+          current: 0,
+          total: 0
+        } satisfies RankCardData)
         updateTrayRanking(
           getGlobalKeyCount(),
           getGlobalClickCount(),

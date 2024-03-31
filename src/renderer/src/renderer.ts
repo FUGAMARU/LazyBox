@@ -27,6 +27,12 @@ const doAThing = async (): Promise<void> => {
   window.electron.ipcRenderer.on(window.api.updateClickCountEventName, (_, newCount) => {
     replaceAttribute("#click-count", "count", newCount.toLocaleString())
   })
+
+  window.electron.ipcRenderer.on(window.api.updateRankingEventName, (_, newRankingData) => {
+    const { current, total } = newRankingData
+    replaceAttribute("#ranking", "currentRank", current)
+    replaceAttribute("#ranking", "totalUserCount", total)
+  })
 }
 
 export const handleSaveButtonClick = (): void => {

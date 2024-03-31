@@ -4,12 +4,13 @@ import { setupReceiveData } from "./receive-data"
 import { startBroadcastInterval } from "./broadcast-data"
 import { startSendKeyCountAndClickCountInterval } from "./send-key-count-and-click-count"
 import { TrayUtil } from "../tray-util"
+import { BrowserWindow } from "electron"
 
 export type UdpMessage = {
   identifier: string
 } & ScoreBoard
 
-export type UdpCommunicationArgs = Pick<
+export type UdpCommunicationArgs = { mainWindow: BrowserWindow } & Pick<
   StoreManager,
   | "getUUID"
   | "getNickname"
@@ -28,6 +29,7 @@ type UdpCommunication = {
 
 /** UDP通信の管理・実行 */
 export const udpCommunication = ({
+  mainWindow,
   getUUID,
   getNickname,
   getGlobalKeyCount,
@@ -40,6 +42,7 @@ export const udpCommunication = ({
 }: UdpCommunicationArgs): UdpCommunication => {
   const initializeUdpCommunication = (): void => {
     setupReceiveData({
+      mainWindow,
       addUdpAddress,
       updateScoreBoardList,
       updateTrayRanking,

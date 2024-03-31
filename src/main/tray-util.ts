@@ -4,6 +4,7 @@ import { appRoot } from "."
 import { isMatchingOS } from "./utils/isMatchingOS"
 import { TRAY_ICON_MACOS, TRAY_ICON_WINDOWS } from "./constants"
 import { ScoreBoard } from "./store-manager"
+import { generateRankingData } from "./utils/generateRankingData"
 
 type Args = {
   showWindow: () => void
@@ -76,15 +77,13 @@ export const trayUtil = ({ showWindow, killInputMonitoringProcess }: Args): Tray
       return
     }
 
-    const ranking = scoreBoardList
-      .concat({
-        uuid: myUUID,
-        nickname: myNickname,
-        keyCount: myKeyCount,
-        clickCount: myClickCount
-      })
-      .sort((a, b) => b.keyCount + b.clickCount - (a.keyCount + a.clickCount))
-      .filter((scoreBoard, idx, self) => self.findIndex(s => s.uuid === scoreBoard.uuid) === idx) // UUIDの重複排除
+    const ranking = generateRankingData(
+      myKeyCount,
+      myClickCount,
+      myUUID,
+      myNickname,
+      scoreBoardList
+    )
 
     console.log("RANKING")
     console.log(ranking)

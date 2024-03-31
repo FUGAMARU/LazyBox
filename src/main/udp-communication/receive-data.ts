@@ -1,10 +1,13 @@
 import dgram from "dgram"
-import { UDP_BROADCAST_MESSAGE, UDP_IDENTIFIER, UDP_PORT } from "../constants"
+import { UDP_BROADCAST_MESSAGE, UDP_IDENTIFIER, UDP_PORT, UPDATE_RANKING_EVENT } from "../constants"
 import { UdpCommunicationArgs, UdpMessage } from "."
 import { getLocalAddresses } from "../utils/getLocalAddresses"
+import { generateRankingData } from "../utils/generateRankingData"
+import { RankCardData } from "../types/RankCardData"
 
 type Args = Pick<
   UdpCommunicationArgs,
+  | "mainWindow"
   | "addUdpAddress"
   | "updateScoreBoardList"
   | "updateTrayRanking"
@@ -24,7 +27,8 @@ export const setupReceiveData = ({
   getNickname,
   getGlobalKeyCount,
   getGlobalClickCount,
-  getScoreBoardList
+  getScoreBoardList,
+  mainWindow
 }: Args) => {
   const server = dgram.createSocket("udp4")
 
@@ -49,13 +53,34 @@ export const setupReceiveData = ({
 
       if (identifier !== undefined && identifier !== UDP_IDENTIFIER) return
       updateScoreBoardList(scoreBoard)
-      updateTrayRanking(
-        getGlobalKeyCount(),
-        getGlobalClickCount(),
-        getUUID(),
-        getNickname(),
-        getScoreBoardList()
+
+      const updatedScoreBoardList = getScoreBoardList()
+      const globalKeyCount = getGlobalKeyCount()
+      const globalClickCount = getGlobalClickCount()
+      const uuid = getUUID()
+      const nickname = getNickname()
+
+      updateTrayRanking(globalKeyCount, globalClickCount, uuid, nickname, updatedScoreBoardList)
+
+      /** メインUIの順位表示の更新 */
+      if (uuid === undefined || nickname === undefined || updatedScoreBoardList === undefined)
+        return
+
+      const rankingData = generateRankingData(
+        globalKeyCount,
+        globalClickCount,
+        uuid,
+        nickname,
+        updatedScoreBoardList
       )
+
+      const myRanking = rankingData.findIndex(data => data.uuid === uuid) + 1
+      const totalRanking = rankingData.length
+
+      mainWindow.webContents.send(UPDATE_RANKING_EVENT, {
+        current: myRanking,
+        total: totalRanking
+      } satisfies RankCardData)
     } catch (e) {
       // JSON.parseに失敗した時は何もしない
       // UDP_BROADCAST_MESSAGEがデフォルトから書き換えられている場合などはJSON.parseに失敗する
