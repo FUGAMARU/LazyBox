@@ -8,13 +8,14 @@ import {
   UPDATE_RANKING_EVENT
 } from "../main/constants"
 
-const { getUUID, getNickname, setNickname } = storeManager()
+const { getUUID, getNickname, setNickname, getRanking } = storeManager()
 
 // Custom APIs for renderer
 export const api = {
   getUUID,
   getNickname,
   setNickname,
+  getRanking,
   nicknameSaveMessageDuration: NICKNAME_SAVE_MESSAGE_DURATION,
   getKeyCount: (): Promise<number | undefined> => ipcRenderer.invoke("get-key-count"),
   getClickCount: (): Promise<number | undefined> => ipcRenderer.invoke("get-click-count"),

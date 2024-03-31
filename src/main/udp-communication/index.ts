@@ -20,6 +20,7 @@ export type UdpCommunicationArgs = { mainWindow: BrowserWindow } & Pick<
   | "getScoreBoardList"
   | "getGlobalKeyCount"
   | "getGlobalClickCount"
+  | "getRanking"
 > &
   Pick<TrayUtil, "updateTrayRanking">
 
@@ -38,7 +39,8 @@ export const udpCommunication = ({
   addUdpAddress,
   updateScoreBoardList,
   updateTrayRanking,
-  getScoreBoardList
+  getScoreBoardList,
+  getRanking
 }: UdpCommunicationArgs): UdpCommunication => {
   const initializeUdpCommunication = (): void => {
     setupReceiveData({
@@ -50,7 +52,8 @@ export const udpCommunication = ({
       getNickname,
       getGlobalKeyCount,
       getGlobalClickCount,
-      getScoreBoardList
+      getScoreBoardList,
+      getRanking
     })
 
     const client = dgram.createSocket("udp4")

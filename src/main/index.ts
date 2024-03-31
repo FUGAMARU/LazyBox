@@ -101,7 +101,8 @@ const main = (): void => {
     updateScoreBoardList,
     resetDynamicData,
     getNextResetUnixTimestamp,
-    setNextResetUnixTimestamp
+    setNextResetUnixTimestamp,
+    getRanking
   } = storeManager()
 
   // グローバル変数に初期値をセット
@@ -142,14 +143,13 @@ const main = (): void => {
   })
 
   initializeTrayUtil()
-  /** TODO: 以下のupdateTrayRankingの実行は不要？ */
-  /*updateTrayRanking(
+  updateTrayRanking(
     getGlobalKeyCount(),
     getGlobalClickCount(),
     getUUID(),
     getNickname(),
     getScoreBoardList()
-  )*/
+  ) // ここでupdateTrayRankingを呼ばないと、データーを受信するまでトレイアイコンをクリックしても無反応になる
 
   const { initializeUdpCommunication } = udpCommunication({
     mainWindow,
@@ -161,7 +161,8 @@ const main = (): void => {
     addUdpAddress,
     updateScoreBoardList,
     updateTrayRanking,
-    getScoreBoardList
+    getScoreBoardList,
+    getRanking
   })
 
   if (!hasInitialized || is.dev) {

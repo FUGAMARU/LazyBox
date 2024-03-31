@@ -12,6 +12,10 @@ const doAThing = async (): Promise<void> => {
   replaceAttribute("#key-count", "count", keyCount?.toLocaleString() ?? "0")
   replaceAttribute("#click-count", "count", clickCount?.toLocaleString() ?? "0")
 
+  const ranking = window.api.getRanking()
+  replaceAttribute("#ranking", "currentRank", String(ranking.current))
+  replaceAttribute("#ranking", "totalUserCount", String(ranking.total))
+
   const nickname = window.api.getNickname()
   if (nickname === undefined) {
     replaceAttribute("#nickname-input", "successText", "")

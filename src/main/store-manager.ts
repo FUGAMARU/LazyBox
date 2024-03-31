@@ -1,5 +1,7 @@
 import ElectronStore from "electron-store"
 import { generateUUID } from "./utils/generateUUID"
+import { generateRankingData } from "./utils/generateRankingData"
+import { RankCardData } from "./types/RankCardData"
 
 export type ScoreBoard = {
   uuid: string // UUID
@@ -36,6 +38,7 @@ export type StoreManager = {
   getUdpAddresses: () => string[] | undefined
   getScoreBoardList: () => ScoreBoard[] | undefined
   getNextResetUnixTimestamp: () => number | undefined
+  getRanking: () => RankCardData
 }
 
 /** 永続化データーの管理 (複数箇所からこの関数を呼び出してOK) */
@@ -138,6 +141,41 @@ export const storeManager = (): StoreManager => {
     electronStore.set("nextResetUnixTimestamp", unixTimestamp)
   }
 
+  const getRanking = (): RankCardData => {
+    const uuid = getUUID()
+    const nickname = getNickname()
+    const scoreBoardList = getScoreBoardList()
+
+    if (
+      uuid === undefined ||
+      uuid === "" ||
+      nickname === undefined ||
+      nickname === "" ||
+      scoreBoardList === undefined ||
+      scoreBoardList.length === 0
+    )
+      return {
+        current: 0,
+        total: 0
+      }
+
+    const rankingData = generateRankingData(
+      getGlobalKeyCount(),
+      getGlobalClickCount(),
+      uuid,
+      nickname,
+      scoreBoardList
+    )
+
+    const myRanking = rankingData.findIndex(data => data.uuid === uuid) + 1
+    const totalRanking = rankingData.length
+
+    return {
+      current: myRanking,
+      total: totalRanking
+    }
+  }
+
   return {
     hasInitialized,
     getUUID,
@@ -155,6 +193,7 @@ export const storeManager = (): StoreManager => {
     updateScoreBoardList,
     resetDynamicData,
     getNextResetUnixTimestamp,
-    setNextResetUnixTimestamp
+    setNextResetUnixTimestamp,
+    getRanking
   } as const
 }
