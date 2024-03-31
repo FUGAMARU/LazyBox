@@ -84,6 +84,7 @@ export const trayUtil = ({ showWindow, killInputMonitoringProcess }: Args): Tray
         clickCount: myClickCount
       })
       .sort((a, b) => b.keyCount + b.clickCount - (a.keyCount + a.clickCount))
+      .filter((scoreBoard, idx, self) => self.findIndex(s => s.uuid === scoreBoard.uuid) === idx) // UUIDの重複排除
 
     console.log("RANKING")
     console.log(ranking)
