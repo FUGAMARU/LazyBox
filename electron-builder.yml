@@ -1,5 +1,5 @@
-appId: com.electron.app
-productName: lazybox
+appId: com.electron.lazybox
+productName: LazyBox
 directories:
   buildResources: build
 files:
@@ -19,6 +19,7 @@ nsis:
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
 mac:
+  icon: resources/icons/icon.png
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
     - NSCameraUsageDescription: Application requests access to the device's camera.

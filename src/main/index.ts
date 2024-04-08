@@ -1,7 +1,7 @@
 import { app, shell, BrowserWindow, nativeTheme, ipcMain } from "electron"
 import { electronApp, optimizer, is } from "@electron-toolkit/utils"
 import path from "path"
-import icon from "../../resources/icon.png?asset"
+import icon from "../../resources/icons/icon.png?asset"
 import { storeManager } from "./store-manager"
 import { inputMonitoringIpc } from "./input-monitoring-ipc"
 import { trayUtil } from "./tray-util"
