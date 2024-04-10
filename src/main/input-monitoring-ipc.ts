@@ -8,7 +8,7 @@ import {
   UPDATE_CLICK_COUNT_EVENT,
   UPDATE_KEY_COUNT_EVENT
 } from "./constants"
-import { readFileSync } from "fs"
+import { readFileSync } from "node:fs"
 import { BrowserWindow } from "electron"
 import { isMatchingOS } from "./utils/isMatchingOS"
 import { StoreManager } from "./store-manager"

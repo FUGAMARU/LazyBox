@@ -1,6 +1,6 @@
 import { app, shell, BrowserWindow, nativeTheme, ipcMain } from "electron"
 import { electronApp, optimizer, is } from "@electron-toolkit/utils"
-import path from "path"
+import path from "node:path"
 import icon from "../../resources/icons/icon.png?asset"
 import { storeManager } from "./store-manager"
 import { inputMonitoringIpc } from "./input-monitoring-ipc"
