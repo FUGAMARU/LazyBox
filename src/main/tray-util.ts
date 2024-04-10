@@ -56,11 +56,11 @@ export const trayUtil = ({ showWindow, killInputMonitoringProcess }: Args): Tray
     myNickname: string | undefined,
     scoreBoardList: ScoreBoard[] | undefined
   ): void => {
+    const rankingItemFormat = "$rank$nickname   ⌨️$keyCount   🖱️$clickCount"
+
     if (
       myKeyCount === undefined ||
       myClickCount === undefined ||
-      scoreBoardList === undefined ||
-      scoreBoardList.length === 0 ||
       myUUID === undefined ||
       myUUID === "" ||
       myNickname === undefined ||
@@ -68,7 +68,24 @@ export const trayUtil = ({ showWindow, killInputMonitoringProcess }: Args): Tray
     ) {
       const contextMenu = Menu.buildFromTemplate([
         ...commonContextMenuFirstHalf,
-        { type: "normal", label: "他ユーザーのスコアデーターを受信していません" },
+        { type: "normal", label: "未設定のデーターがあるため他ユーザーとスコアを共有していません" },
+        ...commonContextMenuSecondHalf
+      ])
+      tray?.setContextMenu(contextMenu)
+      return
+    }
+
+    if (scoreBoardList === undefined || scoreBoardList.length === 0) {
+      const contextMenu = Menu.buildFromTemplate([
+        ...commonContextMenuFirstHalf,
+        {
+          type: "normal",
+          label: rankingItemFormat
+            .replace("$rank", "🥇")
+            .replace("$nickname", myNickname)
+            .replace("$keyCount", myKeyCount.toLocaleString())
+            .replace("$clickCount", myClickCount.toLocaleString())
+        },
         ...commonContextMenuSecondHalf
       ])
       tray?.setContextMenu(contextMenu)
@@ -90,14 +107,22 @@ export const trayUtil = ({ showWindow, killInputMonitoringProcess }: Args): Tray
       const medal = ["🥇", "🥈", "🥉"][idx] || ""
       return {
         type: "normal",
-        label: `${medal}${scoreBoard.nickname}   ⌨️${scoreBoard.keyCount}   🖱️${scoreBoard.clickCount}`
+        label: rankingItemFormat
+          .replace("$rank", medal)
+          .replace("$nickname", scoreBoard.nickname)
+          .replace("$keyCount", scoreBoard.keyCount.toLocaleString())
+          .replace("$clickCount", scoreBoard.clickCount.toLocaleString())
       }
     })
 
     const moreRankingMenuItems = ranking.slice(3).map((scoreBoard, _) => {
       return {
         type: "normal",
-        label: `${scoreBoard.nickname}   ⌨️${scoreBoard.keyCount}   🖱️${scoreBoard.clickCount}`
+        label: rankingItemFormat
+          .replace("$rank", "")
+          .replace("$nickname", scoreBoard.nickname)
+          .replace("$keyCount", scoreBoard.keyCount.toLocaleString())
+          .replace("$clickCount", scoreBoard.clickCount.toLocaleString())
       }
     })
 
