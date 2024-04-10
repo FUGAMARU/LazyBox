@@ -1,6 +1,6 @@
 import { Socket } from "dgram"
 import { UdpCommunicationArgs, UdpMessage } from "."
-import { UDP_IDENTIFIER, UDP_PORT, UDP_SEND_COUNT_INTERVAL } from "../constants"
+import { UDP_IDENTIFIER, UDP_PORT, UDP_SEND_COUNT_INTERVAL } from "../constants/value"
 
 type Args = {
   client: Socket

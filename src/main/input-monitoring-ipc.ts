@@ -1,17 +1,19 @@
 import { ChildProcessWithoutNullStreams, spawn } from "child_process"
 import {
-  COUNT_SAVE_INTERVAL,
   INPUT_MONITORING_PROCESS_PATH_LINUX,
   INPUT_MONITORING_PROCESS_PATH_MACOS,
   INPUT_MONITORING_PROCESS_PATH_WINDOWS,
-  INPUT_MONITORING_PROCESS_SIGNALS_PATH,
-  UPDATE_CLICK_COUNT_EVENT,
-  UPDATE_KEY_COUNT_EVENT
-} from "./constants"
+  INPUT_MONITORING_PROCESS_SIGNALS_PATH
+} from "./constants/path"
 import { readFileSync } from "node:fs"
 import { BrowserWindow } from "electron"
 import { isMatchingOS } from "./utils/isMatchingOS"
 import { StoreManager } from "./store-manager"
+import {
+  UPDATE_KEY_COUNT_EVENT,
+  UPDATE_CLICK_COUNT_EVENT,
+  COUNT_SAVE_INTERVAL
+} from "./constants/value"
 
 type Args = {
   mainWindow: BrowserWindow

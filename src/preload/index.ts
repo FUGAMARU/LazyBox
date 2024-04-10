@@ -6,7 +6,7 @@ import {
   UPDATE_CLICK_COUNT_EVENT,
   UPDATE_KEY_COUNT_EVENT,
   UPDATE_RANKING_EVENT
-} from "../main/constants"
+} from "../main/constants/value"
 
 const { getUUID, getNickname, setNickname, getRanking } = storeManager()
 

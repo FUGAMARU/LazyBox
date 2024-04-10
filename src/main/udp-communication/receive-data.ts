@@ -1,5 +1,10 @@
 import dgram from "dgram"
-import { UDP_BROADCAST_MESSAGE, UDP_IDENTIFIER, UDP_PORT, UPDATE_RANKING_EVENT } from "../constants"
+import {
+  UDP_BROADCAST_MESSAGE,
+  UDP_IDENTIFIER,
+  UDP_PORT,
+  UPDATE_RANKING_EVENT
+} from "../constants/value"
 import { UdpCommunicationArgs, UdpMessage } from "."
 import { getLocalAddresses } from "../utils/getLocalAddresses"
 

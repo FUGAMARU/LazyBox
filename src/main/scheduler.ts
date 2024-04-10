@@ -4,7 +4,7 @@ import {
   UPDATE_CLICK_COUNT_EVENT,
   UPDATE_KEY_COUNT_EVENT,
   UPDATE_RANKING_EVENT
-} from "./constants"
+} from "./constants/value"
 import { StoreManager } from "./store-manager"
 import { getNextResetUnixTimestamp as getNextResetUnixTimestampFunc } from "./utils/getNextResetUnixTimestamp"
 import { TrayUtil } from "./tray-util"

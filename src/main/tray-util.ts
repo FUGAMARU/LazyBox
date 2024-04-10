@@ -2,7 +2,7 @@ import { Tray, Menu, app, MenuItemConstructorOptions } from "electron"
 import { isMatchingOS } from "./utils/isMatchingOS"
 import { ScoreBoard } from "./store-manager"
 import { generateRankingData } from "./utils/generateRankingData"
-import { TRAY_ICON_WINDOWS, TRAY_ICON_MACOS } from "./constants"
+import { TRAY_ICON_WINDOWS, TRAY_ICON_MACOS } from "./constants/path"
 
 type Args = {
   showWindow: () => void
