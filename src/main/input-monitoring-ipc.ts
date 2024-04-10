@@ -1,6 +1,4 @@
 import { ChildProcessWithoutNullStreams, spawn } from "child_process"
-import path from "path"
-import { appRoot } from "."
 import {
   COUNT_SAVE_INTERVAL,
   INPUT_MONITORING_PROCESS_PATH_LINUX,
@@ -39,16 +37,14 @@ export const inputMonitoringIpc = ({
   let signals: { KEY_UP: string; MOUSE_UP: string; SHUTDOWN: string } | undefined = undefined
 
   const initializeInputMonitoringIpc = (): void => {
-    signals = JSON.parse(
-      readFileSync(path.join(appRoot, ...INPUT_MONITORING_PROCESS_SIGNALS_PATH), "utf-8")
-    )
+    signals = JSON.parse(readFileSync(INPUT_MONITORING_PROCESS_SIGNALS_PATH, "utf-8"))
 
     const inputMonitoringProcessPath = isMatchingOS("windows")
       ? INPUT_MONITORING_PROCESS_PATH_WINDOWS
       : isMatchingOS("macos")
         ? INPUT_MONITORING_PROCESS_PATH_MACOS
         : INPUT_MONITORING_PROCESS_PATH_LINUX
-    inputMonitoringProcess = spawn(path.join(appRoot, ...inputMonitoringProcessPath), [], {
+    inputMonitoringProcess = spawn(inputMonitoringProcessPath, [], {
       shell: true
     })
 

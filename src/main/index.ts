@@ -9,8 +9,6 @@ import { udpCommunication } from "./udp-communication"
 import { scheduler } from "./scheduler"
 import { isMatchingOS } from "./utils/isMatchingOS"
 
-export const appRoot = path.resolve(".")
-
 const createWindow = (): BrowserWindow => {
   const mainWindow = new BrowserWindow({
     width: 450,
