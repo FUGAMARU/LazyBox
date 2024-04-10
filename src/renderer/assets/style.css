@@ -20,14 +20,18 @@
 }
 
 :root {
-  --color-blue: #007bff;
-  --color-light-gray: #b0b0b0;
-  --color-text-black: #424242;
-  --color-text-gray: #727473;
-  --color-text-error: #ff3d1f;
   --parts-gap: 0.8rem;
-
   --color-text-white: #fafafa;
+  --color-border-green: #cbff36;
+  --color-border-blue: #24f0fd;
+  --color-border-yellow: #fff506;
+  --color-border-silver: #eaeaea;
+  --color-gradient-green: linear-gradient(180deg, #cbff36 0%, #4ebe26 100%);
+  --color-gradient-blue: linear-gradient(180deg, #24f0fd 0%, #2c8afa 100%);
+  --color-gradient-yellow: linear-gradient(180deg, #fff506 0%, #fcaa0c 100%);
+  --color-gradient-silver: linear-gradient(180deg, #eaeaea 0%, #868686 100%);
+  --color-error: #ff7ef2;
+  --color-success: #4fd64f;
 }
 
 html {

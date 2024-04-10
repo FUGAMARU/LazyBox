@@ -42,19 +42,19 @@ export class CardContainer extends LitElement {
         border-radius: 10px;
 
         &.-green {
-          border-color: #cbff36;
+          border-color: var(--color-border-green);
         }
 
         &.-blue {
-          border-color: #24f0fd;
+          border-color: var(--color-border-blue);
         }
 
         &.-yellow {
-          border-color: #fff506;
+          border-color: var(--color-border-yellow);
         }
 
         &.-silver {
-          border-color: #eaeaea;
+          border-color: var(--color-border-silver);
         }
 
         > .bar {
@@ -63,19 +63,19 @@ export class CardContainer extends LitElement {
           width: 4px;
 
           &.-green {
-            background: linear-gradient(180deg, #cbff36 0%, #4ebe26 100%);
+            background: var(--color-gradient-green);
           }
 
           &.-blue {
-            background: linear-gradient(180deg, #24f0fd 0%, #2c8afa 100%);
+            background: var(--color-gradient-blue);
           }
 
           &.-yellow {
-            background: linear-gradient(180deg, #fff506 0%, #fcaa0c 100%);
+            background: var(--color-gradient-yellow);
           }
 
           &.-silver {
-            background: linear-gradient(180deg, #eaeaea 0%, #868686 100%);
+            background: var(--color-gradient-silver);
           }
         }
 
@@ -100,7 +100,7 @@ export class CardContainer extends LitElement {
             > .error {
               font-size: 8px;
               line-height: 12px;
-              background-color: #ff7ef2;
+              background-color: var(--color-error);
               border-radius: 2px;
               padding: 0px 6px;
             }
@@ -108,7 +108,7 @@ export class CardContainer extends LitElement {
             > .success {
               font-size: 8px;
               line-height: 12px;
-              background-color: #4fd64f;
+              background-color: var(--color-success);
               border-radius: 2px;
               padding: 0px 6px;
             }
