@@ -104,7 +104,7 @@ const main = (): void => {
   } = storeManager()
 
   // グローバル変数に初期値をセット
-  // LaxyBoxでは、global.keyCountとglobal.clickCountをリアルタイムな打鍵数・クリック数として扱う
+  // LazyBoxでは、global.keyCountとglobal.clickCountをリアルタイムな打鍵数・クリック数として扱う
   // そして、最新の打鍵数・クリック数を取得するためにgetGlobalKeyCountとgetGlobalClickCountを使う
   // getKeyCountとgetClickCountは、永続化のみに使うので、こことrendererの初期化部分でしか使わない。
   global.keyCount = getKeyCount() ?? 0
