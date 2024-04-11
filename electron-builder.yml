@@ -1,5 +1,6 @@
-appId: com.electron.lazybox
+appId: com.electron.fugamaru.lazybox
 productName: LazyBox
+copyright: Copyright © 2024 ${author}
 directories:
   buildResources: build
 files:
@@ -14,7 +15,9 @@ extraResources:
 asarUnpack:
   - resources/**
 win:
-  executableName: lazybox
+  icon: resources/icons/icon.png
+  target: nsis
+  executableName: LazyBox
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
@@ -22,6 +25,7 @@ nsis:
   createDesktopShortcut: always
 mac:
   icon: resources/icons/icon.png
+  target: dmg
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
     - NSCameraUsageDescription: Application requests access to the device's camera.

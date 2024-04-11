@@ -28,6 +28,6 @@ export const INPUT_MONITORING_PROCESS_SIGNALS_PATH = path.join(
 )
 
 /** トレイアイコン */
-const TRAY_ICON_BASE_PATH = path.join(RESOURCE_FOLDER_PATH, "/icons")
-export const TRAY_ICON_WINDOWS = path.join(TRAY_ICON_BASE_PATH, "/tray_tmp.ico")
-export const TRAY_ICON_MACOS = path.join(TRAY_ICON_BASE_PATH, "/tray.png")
+const ICON_BASE_PATH = path.join(RESOURCE_FOLDER_PATH, "/icons")
+export const TRAY_ICON_WINDOWS = path.join(ICON_BASE_PATH, "/tray.ico")
+export const TRAY_ICON_MACOS = path.join(ICON_BASE_PATH, "/tray.png")
