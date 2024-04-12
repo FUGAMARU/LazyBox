@@ -17,6 +17,8 @@ import {
 
 type Args = {
   mainWindow: BrowserWindow
+  onKeyUp: () => void
+  onMouseUp: () => void
 } & Pick<
   StoreManager,
   "setStoredKeyCount" | "setStoredClickCount" | "getGlobalKeyCount" | "getGlobalClickCount"
@@ -33,7 +35,9 @@ export const inputMonitoringIpc = ({
   setStoredKeyCount,
   setStoredClickCount,
   getGlobalKeyCount,
-  getGlobalClickCount
+  getGlobalClickCount,
+  onKeyUp,
+  onMouseUp
 }: Args): InputMonitoringIpc => {
   let inputMonitoringProcess: ChildProcessWithoutNullStreams | undefined = undefined
   let signals: { KEY_UP: string; MOUSE_UP: string; SHUTDOWN: string } | undefined = undefined
@@ -52,16 +56,19 @@ export const inputMonitoringIpc = ({
 
     inputMonitoringProcess.stdout.on("data", data => {
       const message = data.toString().trim()
+
       switch (message) {
         case signals?.KEY_UP:
           const newKeyCount = getGlobalKeyCount() + 1
           global.keyCount = newKeyCount
           mainWindow.webContents.send(UPDATE_KEY_COUNT_EVENT, newKeyCount)
+          onKeyUp()
           break
         case signals?.MOUSE_UP:
           const newClickCount = getGlobalClickCount() + 1
           global.clickCount = newClickCount
           mainWindow.webContents.send(UPDATE_CLICK_COUNT_EVENT, newClickCount)
+          onMouseUp()
           break
       }
     })

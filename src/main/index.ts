@@ -80,8 +80,6 @@ app.on("window-all-closed", () => {
   // app.quit() バックグラウンド常駐させたいのでウィンドウを全て閉じても終了しない (window-all-closedハンドラーを削除すると終了してしまうようになるので注意)
 })
 
-// このファイルには、アプリ固有のメイン・プロセス・コードを含めることができる。
-// 別のファイルにして、ここで require することもできます。
 const main = (): void => {
   const {
     hasNickname,
@@ -105,7 +103,7 @@ const main = (): void => {
 
   /* ここに遷移してきた時点で既にUUIDは存在が確定しているので以降のUUID空値チェックなどは不要 */
 
-  /* LazyBoxでは、global.keyCountとglobal.clickCountをリアルタイムな打鍵数・クリック数として扱う
+  /** LazyBoxでは、global.keyCountとglobal.clickCountをリアルタイムな打鍵数・クリック数として扱う
    * そして、最新の打鍵数・クリック数を取得するためにgetGlobalKeyCountとgetGlobalClickCountを使う
    * getStoredKeyCountとgetStoredClickCountは、永続化されたカウントデーターの復元のみに使うので、こことrendererの初期化部分でしか使わない。 */
   global.keyCount = getStoredKeyCount() ?? 0
@@ -114,13 +112,28 @@ const main = (): void => {
   // 念の為、グローバル変数に初期値をセットしてからcreateWindowしておく
   const mainWindow = createWindow()
 
+  /** キーボード・マウスイベントが発生した時に、トレイアイコンのランキングを更新する
+   * ( importとexportの順序の関係でinputMonitoringIpc内でupdateTrayRankingが直接実行できないのでここで実行する )
+   */
+  const handleInputEventOccured = () => {
+    updateTrayRanking(
+      getGlobalKeyCount(),
+      getGlobalClickCount(),
+      getUUID(),
+      getNickname() ?? "あなた",
+      getScoreBoardList()
+    )
+  }
+
   // グローバル変数に初期値をセットしてからinputMonitoringIpc関数を呼び出す必要がある
   const { initializeInputMonitoringIpc, killInputMonitoringProcess } = inputMonitoringIpc({
     mainWindow,
     setStoredKeyCount,
     setStoredClickCount,
     getGlobalKeyCount,
-    getGlobalClickCount
+    getGlobalClickCount,
+    onKeyUp: handleInputEventOccured,
+    onMouseUp: handleInputEventOccured
   })
 
   const { initializeTrayUtil, updateTrayRanking } = trayUtil({
@@ -134,11 +147,8 @@ const main = (): void => {
     setNextResetUnixTimestamp,
     mainWindow,
     updateTrayRanking,
-    getGlobalKeyCount,
-    getGlobalClickCount,
     getUUID,
-    getNickname,
-    getScoreBoardList
+    getNickname
   })
 
   initializeTrayUtil()
@@ -149,6 +159,7 @@ const main = (): void => {
     getNickname() ?? "あなた",
     getScoreBoardList()
   ) // ここでupdateTrayRankingを呼ばないと、データーを受信するまでトレイアイコンをクリックしても無反応になる
+  // TODO: カッコよくないのでこれ書かなくても良い方法を考える
 
   const { initializeUdpCommunication } = udpCommunication({
     mainWindow,
