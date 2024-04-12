@@ -69,7 +69,7 @@ export const scheduler = ({
           getGlobalKeyCount(),
           getGlobalClickCount(),
           getUUID(),
-          getNickname(),
+          getNickname() ?? "あなた",
           getScoreBoardList()
         )
 

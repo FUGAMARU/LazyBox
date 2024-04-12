@@ -63,7 +63,7 @@ export const setupReceiveData = ({
       const globalKeyCount = getGlobalKeyCount()
       const globalClickCount = getGlobalClickCount()
       const uuid = getUUID()
-      const nickname = getNickname()
+      const nickname = getNickname() ?? "あなた"
 
       updateTrayRanking(globalKeyCount, globalClickCount, uuid, nickname, updatedScoreBoardList)
 

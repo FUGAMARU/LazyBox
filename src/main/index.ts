@@ -146,7 +146,7 @@ const main = (): void => {
     getGlobalKeyCount(),
     getGlobalClickCount(),
     getUUID(),
-    getNickname(),
+    getNickname() ?? "あなた",
     getScoreBoardList()
   ) // ここでupdateTrayRankingを呼ばないと、データーを受信するまでトレイアイコンをクリックしても無反応になる
 

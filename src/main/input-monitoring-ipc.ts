@@ -1,4 +1,4 @@
-import { ChildProcessWithoutNullStreams, spawn } from "child_process"
+import { ChildProcessWithoutNullStreams, spawn } from "node:child_process"
 import {
   INPUT_MONITORING_PROCESS_PATH_LINUX,
   INPUT_MONITORING_PROCESS_PATH_MACOS,

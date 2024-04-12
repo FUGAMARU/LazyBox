@@ -12,33 +12,16 @@ type Args = {
 export type TrayUtil = {
   initializeTrayUtil: () => void
   updateTrayRanking: (
-    myKeyCount: number | undefined,
-    myClickCount: number | undefined,
+    myKeyCount: number,
+    myClickCount: number,
     myUUID: string,
-    myNickname: string | undefined,
+    myNickname: string,
     scoreBoardList: ScoreBoard[] | undefined
   ) => void
 }
 
 export const trayUtil = ({ showWindow, killInputMonitoringProcess }: Args): TrayUtil => {
   let tray: Tray | undefined = undefined
-
-  const commonContextMenuFirstHalf = [
-    { type: "normal", label: "LazyBoxを開く", click: () => showWindow() },
-    { type: "separator" }
-  ] as const satisfies MenuItemConstructorOptions[]
-  const commonContextMenuSecondHalf = [
-    { type: "separator" },
-    {
-      label: "終了",
-      click: (): void => {
-        killInputMonitoringProcess()
-        console.log("PROCESS KILLED")
-        global.canQuit = true
-        app.quit()
-      }
-    }
-  ] as const satisfies MenuItemConstructorOptions[]
 
   const initializeTrayUtil = (): void => {
     const trayIcon = isMatchingOS("windows")
@@ -53,33 +36,61 @@ export const trayUtil = ({ showWindow, killInputMonitoringProcess }: Args): Tray
     })
   }
 
+  const updateTrayData = (rankingMenuItems: MenuItemConstructorOptions[]): void => {
+    const commonContextMenuFirstHalf = [
+      { type: "normal", label: "LazyBoxを開く", click: () => showWindow() },
+      { type: "separator" }
+    ] as const satisfies MenuItemConstructorOptions[]
+
+    const commonContextMenuSecondHalf = [
+      { type: "separator" },
+      {
+        label: "終了",
+        click: (): void => {
+          killInputMonitoringProcess()
+          console.log("PROCESS KILLED")
+          global.canQuit = true
+          app.quit()
+        }
+      }
+    ] as const satisfies MenuItemConstructorOptions[]
+
+    const contextMenu = Menu.buildFromTemplate([
+      ...commonContextMenuFirstHalf,
+      ...rankingMenuItems,
+      ...commonContextMenuSecondHalf
+    ])
+    tray?.setContextMenu(contextMenu)
+  }
+
+  const generateTop3RankingMenuItems = (ranking: ScoreBoard[]): MenuItemConstructorOptions[] => {
+    const rankingItemFormat = "$rank$nickname   ⌨️$keyCount   🖱️$clickCount"
+
+    return ranking.slice(0, 3).map((scoreBoard, idx) => {
+      const medal = ["🥇", "🥈", "🥉"][idx] || ""
+      return {
+        type: "normal",
+        label: rankingItemFormat
+          .replace("$rank", medal)
+          .replace("$nickname", scoreBoard.nickname)
+          .replace("$keyCount", scoreBoard.keyCount.toLocaleString())
+          .replace("$clickCount", scoreBoard.clickCount.toLocaleString())
+      } as const satisfies MenuItemConstructorOptions
+    })
+  }
+
   const updateTrayRanking = (
-    myKeyCount: number | undefined,
-    myClickCount: number | undefined,
+    myKeyCount: number,
+    myClickCount: number,
     myUUID: string,
-    myNickname: string | undefined,
+    myNickname: string,
     scoreBoardList: ScoreBoard[] | undefined
   ): void => {
     const rankingItemFormat = "$rank$nickname   ⌨️$keyCount   🖱️$clickCount"
 
-    if (
-      myKeyCount === undefined ||
-      myClickCount === undefined ||
-      myNickname === undefined ||
-      myNickname === ""
-    ) {
-      const contextMenu = Menu.buildFromTemplate([
-        ...commonContextMenuFirstHalf,
-        { type: "normal", label: "未設定のデーターがあるため他ユーザーとスコアを共有していません" },
-        ...commonContextMenuSecondHalf
-      ])
-      tray?.setContextMenu(contextMenu)
-      return
-    }
-
+    /** 同一ネットワーク内の他のユーザーのスコアを受信していない時の表示 */
     if (scoreBoardList === undefined || scoreBoardList.length === 0) {
-      const contextMenu = Menu.buildFromTemplate([
-        ...commonContextMenuFirstHalf,
+      const rankingMenuItems = [
         {
           type: "normal",
           label: rankingItemFormat
@@ -87,10 +98,10 @@ export const trayUtil = ({ showWindow, killInputMonitoringProcess }: Args): Tray
             .replace("$nickname", myNickname)
             .replace("$keyCount", myKeyCount.toLocaleString())
             .replace("$clickCount", myClickCount.toLocaleString())
-        },
-        ...commonContextMenuSecondHalf
-      ])
-      tray?.setContextMenu(contextMenu)
+        }
+      ] as const satisfies MenuItemConstructorOptions[]
+
+      updateTrayData(rankingMenuItems)
       return
     }
 
@@ -102,21 +113,15 @@ export const trayUtil = ({ showWindow, killInputMonitoringProcess }: Args): Tray
       scoreBoardList
     )
 
-    console.log("RANKING")
-    console.log(ranking)
+    /** ランキングに表示するトータルのユーザー人数が3人以下であればサブメニューを展開する必要はない */
+    if (ranking.length <= 3) {
+      const rankingMenuItems = generateTop3RankingMenuItems(ranking)
+      updateTrayData(rankingMenuItems)
+      return
+    }
 
-    const topRankingMenuItems = ranking.slice(0, 3).map((scoreBoard, idx) => {
-      const medal = ["🥇", "🥈", "🥉"][idx] || ""
-      return {
-        type: "normal",
-        label: rankingItemFormat
-          .replace("$rank", medal)
-          .replace("$nickname", scoreBoard.nickname)
-          .replace("$keyCount", scoreBoard.keyCount.toLocaleString())
-          .replace("$clickCount", scoreBoard.clickCount.toLocaleString())
-      }
-    })
-
+    /** もし自分を除いて3人のユーザーがスコアボードにいる場合は表示が入り切らなくなるのでサブメニューにランキングを展開する */
+    const topRankingMenuItems = generateTop3RankingMenuItems(ranking)
     const moreRankingMenuItems = ranking.slice(3).map((scoreBoard, _) => {
       return {
         type: "normal",
@@ -125,7 +130,7 @@ export const trayUtil = ({ showWindow, killInputMonitoringProcess }: Args): Tray
           .replace("$nickname", scoreBoard.nickname)
           .replace("$keyCount", scoreBoard.keyCount.toLocaleString())
           .replace("$clickCount", scoreBoard.clickCount.toLocaleString())
-      }
+      } as const satisfies MenuItemConstructorOptions
     })
 
     const rankingMenuItems = [
@@ -135,14 +140,9 @@ export const trayUtil = ({ showWindow, killInputMonitoringProcess }: Args): Tray
         label: "もっと見る",
         submenu: moreRankingMenuItems
       }
-    ] as MenuItemConstructorOptions[]
+    ] as const satisfies MenuItemConstructorOptions[]
 
-    const contextMenu = Menu.buildFromTemplate([
-      ...commonContextMenuFirstHalf,
-      ...rankingMenuItems,
-      ...commonContextMenuSecondHalf
-    ])
-    tray?.setContextMenu(contextMenu)
+    updateTrayData(rankingMenuItems)
   }
 
   return {
