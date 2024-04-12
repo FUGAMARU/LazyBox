@@ -14,7 +14,7 @@ export type TrayUtil = {
   updateTrayRanking: (
     myKeyCount: number | undefined,
     myClickCount: number | undefined,
-    myUUID: string | undefined,
+    myUUID: string,
     myNickname: string | undefined,
     scoreBoardList: ScoreBoard[] | undefined
   ) => void
@@ -56,7 +56,7 @@ export const trayUtil = ({ showWindow, killInputMonitoringProcess }: Args): Tray
   const updateTrayRanking = (
     myKeyCount: number | undefined,
     myClickCount: number | undefined,
-    myUUID: string | undefined,
+    myUUID: string,
     myNickname: string | undefined,
     scoreBoardList: ScoreBoard[] | undefined
   ): void => {
@@ -65,8 +65,6 @@ export const trayUtil = ({ showWindow, killInputMonitoringProcess }: Args): Tray
     if (
       myKeyCount === undefined ||
       myClickCount === undefined ||
-      myUUID === undefined ||
-      myUUID === "" ||
       myNickname === undefined ||
       myNickname === ""
     ) {

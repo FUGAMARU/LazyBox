@@ -103,6 +103,8 @@ const main = (): void => {
     getRanking
   } = storeManager()
 
+  /* ここに遷移してきた時点で既にUUIDは存在が確定しているので以降のUUID空値チェックなどは不要 */
+
   // グローバル変数に初期値をセット
   // LazyBoxでは、global.keyCountとglobal.clickCountをリアルタイムな打鍵数・クリック数として扱う
   // そして、最新の打鍵数・クリック数を取得するためにgetGlobalKeyCountとgetGlobalClickCountを使う

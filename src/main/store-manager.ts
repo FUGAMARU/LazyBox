@@ -29,7 +29,7 @@ export type StoreManager = {
   updateScoreBoardList: (receivedScoreBoard: ScoreBoard) => void
   resetDynamicData: () => void
   setNextResetUnixTimestamp: (unixTimestamp: number) => void
-  getUUID: () => string | undefined
+  getUUID: () => string
   getNickname: () => string | undefined
   getKeyCount: () => number | undefined
   getClickCount: () => number | undefined
@@ -54,7 +54,7 @@ export const storeManager = (): StoreManager => {
   const hasInitialized = electronStore.has("uuid") && electronStore.has("nickname")
 
   const getUUID = () => {
-    return electronStore.get("uuid")
+    return electronStore.get("uuid") as string // 空値チェック後なのでundefinedにはなり得ない
   }
 
   const getNickname = () => {
