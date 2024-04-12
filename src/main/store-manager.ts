@@ -25,15 +25,15 @@ export type StoreManager = {
   hasNickname: boolean
   setNickname: (nickname: string) => void
   addUdpAddress: (address: string) => void
-  setKeyCount: (keyCount: number) => void
-  setClickCount: (clickCount: number) => void
+  setStoredKeyCount: (keyCount: number) => void
+  setStoredClickCount: (clickCount: number) => void
   updateScoreBoardList: (receivedScoreBoard: ScoreBoard) => void
   resetDynamicData: () => void
   setNextResetUnixTimestamp: (unixTimestamp: number) => void
   getUUID: () => string
   getNickname: () => string | undefined
-  getKeyCount: () => number | undefined
-  getClickCount: () => number | undefined
+  getStoredKeyCount: () => number | undefined
+  getStoredClickCount: () => number | undefined
   getGlobalKeyCount: () => number
   getGlobalClickCount: () => number
   getUdpAddresses: () => string[] | undefined
@@ -76,17 +76,17 @@ export const storeManager = (): StoreManager => {
     }
   }
 
-  const getKeyCount = () => {
+  const getStoredKeyCount = () => {
     return electronStore.get("keyCount")
   }
-  const setKeyCount = (keyCount: number): void => {
+  const setStoredKeyCount = (keyCount: number): void => {
     electronStore.set("keyCount", keyCount)
   }
 
-  const getClickCount = () => {
+  const getStoredClickCount = () => {
     return electronStore.get("clickCount")
   }
-  const setClickCount = (clickCount: number): void => {
+  const setStoredClickCount = (clickCount: number): void => {
     electronStore.set("clickCount", clickCount)
   }
 
@@ -177,10 +177,10 @@ export const storeManager = (): StoreManager => {
     setNickname,
     getUdpAddresses,
     addUdpAddress,
-    getKeyCount,
-    setKeyCount,
-    getClickCount,
-    setClickCount,
+    getStoredKeyCount,
+    setStoredKeyCount,
+    getStoredClickCount,
+    setStoredClickCount,
     getGlobalKeyCount,
     getGlobalClickCount,
     getScoreBoardList,

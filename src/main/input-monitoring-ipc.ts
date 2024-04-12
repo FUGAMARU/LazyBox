@@ -19,7 +19,7 @@ type Args = {
   mainWindow: BrowserWindow
 } & Pick<
   StoreManager,
-  "setKeyCount" | "setClickCount" | "getGlobalKeyCount" | "getGlobalClickCount"
+  "setStoredKeyCount" | "setStoredClickCount" | "getGlobalKeyCount" | "getGlobalClickCount"
 >
 
 type InputMonitoringIpc = {
@@ -30,8 +30,8 @@ type InputMonitoringIpc = {
 /** キーボード・マウスイベント監視プロセスとのIPC通信 (この関数は1箇所からのみ呼び出されることを想定している) */
 export const inputMonitoringIpc = ({
   mainWindow,
-  setKeyCount,
-  setClickCount,
+  setStoredKeyCount,
+  setStoredClickCount,
   getGlobalKeyCount,
   getGlobalClickCount
 }: Args): InputMonitoringIpc => {
@@ -68,8 +68,8 @@ export const inputMonitoringIpc = ({
 
     // キーボードを打鍵したりマウスをクリックする度にファイルに書き込むのは気が引けるので一定間隔で保存する
     setInterval(() => {
-      setKeyCount(getGlobalKeyCount())
-      setClickCount(getGlobalClickCount())
+      setStoredKeyCount(getGlobalKeyCount())
+      setStoredClickCount(getGlobalClickCount())
     }, COUNT_SAVE_INTERVAL * 1000)
   }
 

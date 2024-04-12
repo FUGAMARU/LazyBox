@@ -89,10 +89,10 @@ const main = (): void => {
     getNickname,
     getUdpAddresses,
     addUdpAddress,
-    getKeyCount,
-    setKeyCount,
-    getClickCount,
-    setClickCount,
+    getStoredKeyCount,
+    setStoredKeyCount,
+    getStoredClickCount,
+    setStoredClickCount,
     getGlobalKeyCount,
     getGlobalClickCount,
     getScoreBoardList,
@@ -105,12 +105,11 @@ const main = (): void => {
 
   /* ここに遷移してきた時点で既にUUIDは存在が確定しているので以降のUUID空値チェックなどは不要 */
 
-  // グローバル変数に初期値をセット
-  // LazyBoxでは、global.keyCountとglobal.clickCountをリアルタイムな打鍵数・クリック数として扱う
-  // そして、最新の打鍵数・クリック数を取得するためにgetGlobalKeyCountとgetGlobalClickCountを使う
-  // getKeyCountとgetClickCountは、永続化のみに使うので、こことrendererの初期化部分でしか使わない。
-  global.keyCount = getKeyCount() ?? 0
-  global.clickCount = getClickCount() ?? 0
+  /* LazyBoxでは、global.keyCountとglobal.clickCountをリアルタイムな打鍵数・クリック数として扱う
+   * そして、最新の打鍵数・クリック数を取得するためにgetGlobalKeyCountとgetGlobalClickCountを使う
+   * getStoredKeyCountとgetStoredClickCountは、永続化されたカウントデーターの復元のみに使うので、こことrendererの初期化部分でしか使わない。 */
+  global.keyCount = getStoredKeyCount() ?? 0
+  global.clickCount = getStoredClickCount() ?? 0
 
   // 念の為、グローバル変数に初期値をセットしてからcreateWindowしておく
   const mainWindow = createWindow()
@@ -118,8 +117,8 @@ const main = (): void => {
   // グローバル変数に初期値をセットしてからinputMonitoringIpc関数を呼び出す必要がある
   const { initializeInputMonitoringIpc, killInputMonitoringProcess } = inputMonitoringIpc({
     mainWindow,
-    setKeyCount,
-    setClickCount,
+    setStoredKeyCount,
+    setStoredClickCount,
     getGlobalKeyCount,
     getGlobalClickCount
   })
@@ -174,6 +173,7 @@ const main = (): void => {
   initializeInputMonitoringIpc()
   initializeUdpCommunication()
 
+  /** レンダラープロセスから最新のカウントを取得するリクエストに反応するためのハンドラー */
   ipcMain.handle("get-key-count", () => {
     return getGlobalKeyCount()
   })
