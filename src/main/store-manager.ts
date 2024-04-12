@@ -22,7 +22,7 @@ type Store = {
 }
 
 export type StoreManager = {
-  hasInitialized: boolean
+  hasNickname: boolean
   setNickname: (nickname: string) => void
   addUdpAddress: (address: string) => void
   setKeyCount: (keyCount: number) => void
@@ -52,7 +52,7 @@ export const storeManager = (): StoreManager => {
     electronStore.set("uuid", generateUUID())
   }
 
-  const hasInitialized = electronStore.has("uuid") && electronStore.has("nickname")
+  const hasNickname = electronStore.has("nickname")
 
   const getUUID = () => {
     return electronStore.get("uuid") as string // 空値チェック後なのでundefinedにはなり得ない
@@ -147,14 +147,7 @@ export const storeManager = (): StoreManager => {
     const nickname = getNickname()
     const scoreBoardList = getScoreBoardList()
 
-    if (
-      uuid === undefined ||
-      uuid === "" ||
-      nickname === undefined ||
-      nickname === "" ||
-      scoreBoardList === undefined ||
-      scoreBoardList.length === 0
-    )
+    if (scoreBoardList === undefined || scoreBoardList.length === 0)
       return {
         current: 0,
         total: 0
@@ -164,7 +157,7 @@ export const storeManager = (): StoreManager => {
       getGlobalKeyCount(),
       getGlobalClickCount(),
       uuid,
-      nickname,
+      nickname ?? "あなた",
       scoreBoardList
     )
 
@@ -178,7 +171,7 @@ export const storeManager = (): StoreManager => {
   }
 
   return {
-    hasInitialized,
+    hasNickname,
     getUUID,
     getNickname,
     setNickname,

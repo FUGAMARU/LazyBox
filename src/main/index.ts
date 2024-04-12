@@ -84,7 +84,7 @@ app.on("window-all-closed", () => {
 // 別のファイルにして、ここで require することもできます。
 const main = (): void => {
   const {
-    hasInitialized,
+    hasNickname,
     getUUID,
     getNickname,
     getUdpAddresses,
@@ -165,8 +165,8 @@ const main = (): void => {
     getRanking
   })
 
-  if (!hasInitialized || is.dev) {
-    // 初期設定(UUID自動生成 & ニックネーム手動設定)が完了していない場合は、設定画面を表示する
+  if (!hasNickname || is.dev) {
+    // ニックネーム設定が完了していない場合 or 開発環境の場合は、設定画面を表示する
     mainWindow.show()
   }
 

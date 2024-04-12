@@ -23,20 +23,13 @@ export const startSendKeyCountAndClickCountInterval = ({
     const nickname = getNickname()
     const udpAddresses = getUdpAddresses()
 
-    if (
-      uuid === undefined ||
-      uuid === "" ||
-      nickname === undefined ||
-      nickname === "" ||
-      udpAddresses === undefined ||
-      udpAddresses.length === 0
-    )
-      return
+    /** 送信先が無い場合はデーターを送信する必要がない */
+    if (udpAddresses === undefined || udpAddresses.length === 0) return
 
     const data = {
       identifier: UDP_IDENTIFIER,
       uuid,
-      nickname,
+      nickname: nickname ?? "(ニックネーム未設定)",
       keyCount: getGlobalKeyCount() ?? 0,
       clickCount: getGlobalClickCount() ?? 0
     } as const satisfies UdpMessage

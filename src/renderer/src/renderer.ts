@@ -17,10 +17,7 @@ const doAThing = async (): Promise<void> => {
   replaceAttribute("#ranking", "totalUserCount", String(ranking.total))
 
   const nickname = window.api.getNickname()
-  if (nickname === undefined) {
-    replaceAttribute("#nickname-input", "successText", "")
-    replaceAttribute("#nickname-input", "errorText", "ニックネームを設定するとスコアが共有されます")
-  } else {
+  if (nickname !== undefined) {
     replaceAttribute("#nickname-input", "value", nickname)
   }
 
