@@ -16,11 +16,8 @@ type Args = Pick<
   | "resetDynamicData"
   | "getNextResetUnixTimestamp"
   | "setNextResetUnixTimestamp"
-  | "getGlobalKeyCount"
-  | "getGlobalClickCount"
   | "getUUID"
   | "getNickname"
-  | "getScoreBoardList"
 > &
   Pick<TrayUtil, "updateTrayRanking"> & {
     mainWindow: BrowserWindow
@@ -36,11 +33,8 @@ export const scheduler = ({
   setNextResetUnixTimestamp,
   mainWindow,
   updateTrayRanking,
-  getGlobalKeyCount,
-  getGlobalClickCount,
   getUUID,
-  getNickname,
-  getScoreBoardList
+  getNickname
 }: Args): Scheduler => {
   const initializeScheduler = () => {
     setInterval(() => {
@@ -66,13 +60,7 @@ export const scheduler = ({
           current: 0,
           total: 0
         } satisfies RankCardData)
-        updateTrayRanking(
-          getGlobalKeyCount(),
-          getGlobalClickCount(),
-          getUUID(),
-          ensureNickname(getNickname(), "myself"),
-          getScoreBoardList()
-        )
+        updateTrayRanking(0, 0, getUUID(), ensureNickname(getNickname(), "myself"), [])
 
         setNextResetUnixTimestamp(calculatedNextResetUnixTimestamp)
       }

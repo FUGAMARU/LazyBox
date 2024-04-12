@@ -135,11 +135,8 @@ const main = (): void => {
     setNextResetUnixTimestamp,
     mainWindow,
     updateTrayRanking,
-    getGlobalKeyCount,
-    getGlobalClickCount,
     getUUID,
-    getNickname,
-    getScoreBoardList
+    getNickname
   })
 
   initializeTrayUtil()
