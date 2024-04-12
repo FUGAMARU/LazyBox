@@ -1,4 +1,4 @@
-import os from "os"
+import os from "node:os"
 
 // https://qiita.com/_shimizu/items/b38d1459abf8436f7f1f
 export const getLocalAddresses = (): string[] => {

@@ -1,4 +1,4 @@
-import { Socket } from "dgram"
+import { Socket } from "node:dgram"
 import { UdpCommunicationArgs, UdpMessage } from "."
 import { UDP_IDENTIFIER, UDP_PORT, UDP_SEND_COUNT_INTERVAL } from "../constants/value"
 import { ensureNickname } from "../utils/ensureNickname"

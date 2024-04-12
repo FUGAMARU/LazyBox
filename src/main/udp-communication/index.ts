@@ -1,4 +1,4 @@
-import dgram from "dgram"
+import dgram from "node:dgram"
 import { ScoreBoard, StoreManager } from "../store-manager"
 import { setupReceiveData } from "./receive-data"
 import { startBroadcastInterval } from "./broadcast-data"

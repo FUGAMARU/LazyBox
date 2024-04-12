@@ -1,4 +1,4 @@
-import dgram from "dgram"
+import dgram from "node:dgram"
 import {
   UDP_BROADCAST_MESSAGE,
   UDP_IDENTIFIER,

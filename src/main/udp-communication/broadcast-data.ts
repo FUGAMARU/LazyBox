@@ -1,4 +1,4 @@
-import { Socket } from "dgram"
+import { Socket } from "node:dgram"
 import { UDP_BROADCAST_MESSAGE, UDP_PORT, UDP_BROADCAST_INTERVAL } from "../constants/value"
 import { getBroadcastAddresses } from "../utils/getBroadcastAddresses"
 

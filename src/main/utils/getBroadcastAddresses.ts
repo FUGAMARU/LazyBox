@@ -1,4 +1,4 @@
-import os from "os"
+import os from "node:os"
 import ip from "ip"
 
 // https://qiita.com/niusounds/items/712770e79888f4235637
