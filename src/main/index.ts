@@ -105,7 +105,7 @@ const main = (): void => {
 
   /* ここに遷移してきた時点で既にUUIDは存在が確定しているので以降のUUID空値チェックなどは不要 */
 
-  /* LazyBoxでは、global.keyCountとglobal.clickCountをリアルタイムな打鍵数・クリック数として扱う
+  /** LazyBoxでは、global.keyCountとglobal.clickCountをリアルタイムな打鍵数・クリック数として扱う
    * そして、最新の打鍵数・クリック数を取得するためにgetGlobalKeyCountとgetGlobalClickCountを使う
    * getStoredKeyCountとgetStoredClickCountは、永続化されたカウントデーターの復元のみに使うので、こことrendererの初期化部分でしか使わない。 */
   global.keyCount = getStoredKeyCount() ?? 0
@@ -149,6 +149,7 @@ const main = (): void => {
     getNickname() ?? "あなた",
     getScoreBoardList()
   ) // ここでupdateTrayRankingを呼ばないと、データーを受信するまでトレイアイコンをクリックしても無反応になる
+  // TODO: カッコよくないのでこれ書かなくても良い方法を考える
 
   const { initializeUdpCommunication } = udpCommunication({
     mainWindow,
