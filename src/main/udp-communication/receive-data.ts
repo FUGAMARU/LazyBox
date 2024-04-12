@@ -7,6 +7,7 @@ import {
 } from "../constants/value"
 import { UdpCommunicationArgs, UdpMessage } from "."
 import { getLocalAddresses } from "../utils/getLocalAddresses"
+import { ensureNickname } from "../utils/ensureNickname"
 
 type Args = Pick<
   UdpCommunicationArgs,
@@ -63,7 +64,7 @@ export const setupReceiveData = ({
       const globalKeyCount = getGlobalKeyCount()
       const globalClickCount = getGlobalClickCount()
       const uuid = getUUID()
-      const nickname = getNickname() ?? "あなた"
+      const nickname = ensureNickname(getNickname(), "myself")
 
       updateTrayRanking(globalKeyCount, globalClickCount, uuid, nickname, updatedScoreBoardList)
 

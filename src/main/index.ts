@@ -8,6 +8,7 @@ import { trayUtil } from "./tray-util"
 import { udpCommunication } from "./udp-communication"
 import { scheduler } from "./scheduler"
 import { isMatchingOS } from "./utils/isMatchingOS"
+import { ensureNickname } from "./utils/ensureNickname"
 
 const createWindow = (): BrowserWindow => {
   const mainWindow = new BrowserWindow({
@@ -146,7 +147,7 @@ const main = (): void => {
     getGlobalKeyCount(),
     getGlobalClickCount(),
     getUUID(),
-    getNickname() ?? "あなた",
+    ensureNickname(getNickname(), "myself"),
     getScoreBoardList()
   ) // ここでupdateTrayRankingを呼ばないと、データーを受信するまでトレイアイコンをクリックしても無反応になる
   // TODO: カッコよくないのでこれ書かなくても良い方法を考える

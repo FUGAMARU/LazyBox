@@ -9,6 +9,7 @@ import { StoreManager } from "./store-manager"
 import { getNextResetUnixTimestamp as getNextResetUnixTimestampFunc } from "./utils/getNextResetUnixTimestamp"
 import { TrayUtil } from "./tray-util"
 import { RankCardData } from "./types/RankCardData"
+import { ensureNickname } from "./utils/ensureNickname"
 
 type Args = Pick<
   StoreManager,
@@ -69,7 +70,7 @@ export const scheduler = ({
           getGlobalKeyCount(),
           getGlobalClickCount(),
           getUUID(),
-          getNickname() ?? "あなた",
+          ensureNickname(getNickname(), "myself"),
           getScoreBoardList()
         )
 

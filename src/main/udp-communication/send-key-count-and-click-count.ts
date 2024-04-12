@@ -1,6 +1,7 @@
 import { Socket } from "dgram"
 import { UdpCommunicationArgs, UdpMessage } from "."
 import { UDP_IDENTIFIER, UDP_PORT, UDP_SEND_COUNT_INTERVAL } from "../constants/value"
+import { ensureNickname } from "../utils/ensureNickname"
 
 type Args = {
   client: Socket
@@ -29,7 +30,7 @@ export const startSendKeyCountAndClickCountInterval = ({
     const data = {
       identifier: UDP_IDENTIFIER,
       uuid,
-      nickname: nickname ?? "(ニックネーム未設定)",
+      nickname: ensureNickname(nickname, "otherUser"),
       keyCount: getGlobalKeyCount() ?? 0,
       clickCount: getGlobalClickCount() ?? 0
     } as const satisfies UdpMessage

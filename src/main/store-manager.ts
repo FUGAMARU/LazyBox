@@ -3,6 +3,7 @@ import { generateUUID } from "./utils/generateUUID"
 import { generateRankingData } from "./utils/generateRankingData"
 import { RankCardData } from "./types/RankCardData"
 import { ELECTRON_STORE_ENCRYPTION_KEY } from "./constants/value"
+import { ensureNickname } from "./utils/ensureNickname"
 
 export type ScoreBoard = {
   uuid: string // UUID
@@ -157,7 +158,7 @@ export const storeManager = (): StoreManager => {
       getGlobalKeyCount(),
       getGlobalClickCount(),
       uuid,
-      nickname ?? "あなた",
+      ensureNickname(nickname, "myself"),
       scoreBoardList
     )
 
