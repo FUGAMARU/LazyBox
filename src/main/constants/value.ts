@@ -30,3 +30,6 @@ export const UPDATE_CLICK_COUNT_EVENT = "update-click-count"
 
 /** 順位をIPCで送信する時のイベント名 */
 export const UPDATE_RANKING_EVENT = "update-ranking"
+
+/** electron-storeのデーター暗号化鍵文字列 */
+export const ELECTRON_STORE_ENCRYPTION_KEY = "ENCRYPTION_KEY"

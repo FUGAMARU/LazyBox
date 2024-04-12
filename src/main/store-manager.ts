@@ -2,6 +2,7 @@ import ElectronStore from "electron-store"
 import { generateUUID } from "./utils/generateUUID"
 import { generateRankingData } from "./utils/generateRankingData"
 import { RankCardData } from "./types/RankCardData"
+import { ELECTRON_STORE_ENCRYPTION_KEY } from "./constants/value"
 
 export type ScoreBoard = {
   uuid: string // UUID
@@ -44,7 +45,7 @@ export type StoreManager = {
 /** 永続化データーの管理 (複数箇所からこの関数を呼び出してOK) */
 export const storeManager = (): StoreManager => {
   const electronStore = new ElectronStore<Store>({
-    encryptionKey: "ENCRYPTION_KEY"
+    encryptionKey: ELECTRON_STORE_ENCRYPTION_KEY
   })
 
   if (!electronStore.has("uuid") || electronStore.get("uuid") === "") {
