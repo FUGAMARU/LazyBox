@@ -13,10 +13,10 @@ export type ScoreBoard = {
 }
 
 type Store = {
-  uuid: string | undefined // UUID
+  uuid: string // UUID
   nickname: string | undefined // ニックネーム
-  keyCount: number | undefined // キーボード打鍵数
-  clickCount: number | undefined // マウスクリック数
+  keyCount: number // キーボード打鍵数
+  clickCount: number // マウスクリック数
   udpAddresses: string[] | undefined // UDP送信先アドレス一覧
   scoreBoardList: ScoreBoard[] | undefined // スコアボード
   nextResetUnixTimestamp: number | undefined // 次回リセット時刻 (Unixタイムスタンプ)
@@ -33,8 +33,8 @@ export type StoreManager = {
   setNextResetUnixTimestamp: (unixTimestamp: number) => void
   getUUID: () => string
   getNickname: () => string | undefined
-  getStoredKeyCount: () => number | undefined
-  getStoredClickCount: () => number | undefined
+  getStoredKeyCount: () => number
+  getStoredClickCount: () => number
   getGlobalKeyCount: () => number
   getGlobalClickCount: () => number
   getUdpAddresses: () => string[] | undefined
@@ -51,6 +51,11 @@ export const storeManager = (): StoreManager => {
 
   if (!electronStore.has("uuid") || electronStore.get("uuid") === "") {
     electronStore.set("uuid", generateUUID())
+  }
+
+  if (!electronStore.has("keyCount") || !electronStore.has("clickCount")) {
+    electronStore.set("keyCount", 0)
+    electronStore.set("clickCount", 0)
   }
 
   const hasNickname = electronStore.has("nickname")
@@ -78,24 +83,24 @@ export const storeManager = (): StoreManager => {
   }
 
   const getStoredKeyCount = () => {
-    return electronStore.get("keyCount")
+    return electronStore.get("keyCount") as number
   }
   const setStoredKeyCount = (keyCount: number): void => {
     electronStore.set("keyCount", keyCount)
   }
 
   const getStoredClickCount = () => {
-    return electronStore.get("clickCount")
+    return electronStore.get("clickCount") as number
   }
   const setStoredClickCount = (clickCount: number): void => {
     electronStore.set("clickCount", clickCount)
   }
 
   const getGlobalKeyCount = (): number => {
-    return global.keyCount
+    return global.keyCount ?? 0
   }
   const getGlobalClickCount = (): number => {
-    return global.clickCount
+    return global.clickCount ?? 0
   }
 
   const getScoreBoardList = () => {
