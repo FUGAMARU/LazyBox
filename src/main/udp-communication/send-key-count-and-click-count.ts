@@ -31,8 +31,8 @@ export const startSendKeyCountAndClickCountInterval = ({
       identifier: UDP_IDENTIFIER,
       uuid,
       nickname: ensureNickname(nickname, "otherUser"),
-      keyCount: getGlobalKeyCount() ?? 0,
-      clickCount: getGlobalClickCount() ?? 0
+      keyCount: getGlobalKeyCount(),
+      clickCount: getGlobalClickCount()
     } as const satisfies UdpMessage
 
     console.log("Data to Send! ->", data, "to ->", udpAddresses, "at ->", UDP_PORT, "port.")
