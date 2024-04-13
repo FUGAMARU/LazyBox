@@ -3,19 +3,6 @@
 #include <thread>
 #include <string>
 
-void checkForShutdown()
-{
-  std::string input;
-  while (true)
-  {
-    std::getline(std::cin, input);
-    if (input == "SHUTDOWN")
-    {
-      exit(0);
-    }
-  }
-}
-
 void sendKeyboardEvent()
 {
   std::cout << "KEY_UP" << std::endl;
@@ -48,8 +35,6 @@ CGEventRef mouseCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef eve
 
 int main()
 {
-  std::thread shutdownThread(checkForShutdown);
-
   CFMachPortRef keyboardTap = CGEventTapCreate(kCGSessionEventTap, kCGHeadInsertEventTap, kCGEventTapOptionDefault, CGEventMaskBit(kCGEventKeyDown) | CGEventMaskBit(kCGEventKeyUp), keyboardCallback, NULL);
   CFRunLoopSourceRef keyboardRunLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, keyboardTap, 0);
   CFRunLoopAddSource(CFRunLoopGetCurrent(), keyboardRunLoopSource, kCFRunLoopCommonModes);
@@ -64,8 +49,6 @@ int main()
   CFRelease(keyboardTap);
   CFRelease(mouseRunLoopSource);
   CFRelease(mouseTap);
-
-  shutdownThread.join();
 
   return 0;
 }

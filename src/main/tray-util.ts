@@ -48,7 +48,6 @@ export const trayUtil = ({ showWindow, killInputMonitoringProcess }: Args): Tray
         label: "終了",
         click: (): void => {
           killInputMonitoringProcess()
-          console.log("PROCESS KILLED")
           global.canQuit = true
           app.quit()
         }

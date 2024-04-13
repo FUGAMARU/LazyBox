@@ -14,6 +14,7 @@ import {
   UPDATE_CLICK_COUNT_EVENT,
   COUNT_SAVE_INTERVAL
 } from "./constants/value"
+import psTree from "ps-tree"
 
 type Args = {
   mainWindow: BrowserWindow
@@ -75,7 +76,17 @@ export const inputMonitoringIpc = ({
 
   const killInputMonitoringProcess = (): void => {
     if (inputMonitoringProcess === undefined) return
-    inputMonitoringProcess.stdin.write(`${signals?.SHUTDOWN}\n`)
+
+    const { pid: parentProcessPid } = inputMonitoringProcess
+
+    if (parentProcessPid === undefined) return
+
+    psTree(parentProcessPid, (_, children) => {
+      children.forEach(child => {
+        process.kill(Number(child.PID))
+        console.log(`PID: ${child.PID} is killed.`)
+      })
+    })
   }
 
   return {
