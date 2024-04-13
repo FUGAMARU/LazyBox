@@ -11,6 +11,9 @@ export class CardContainer extends LitElement {
   @property()
   title: string = "Title"
 
+  @property()
+  icon?: "trophy" | "keyboard" | "mouse" | undefined = undefined
+
   /** InputCard用ここから */
   @property()
   errorText?: string | undefined = undefined
@@ -40,6 +43,7 @@ export class CardContainer extends LitElement {
         );
         border: 0.5px solid;
         border-radius: 10px;
+        position: relative;
 
         &.-green {
           border-color: var(--color-border-green);
@@ -55,6 +59,13 @@ export class CardContainer extends LitElement {
 
         &.-silver {
           border-color: var(--color-border-silver);
+        }
+
+        > .icon {
+          position: absolute;
+          top: 5px;
+          right: 10px;
+          line-height: 1;
         }
 
         > .bar {
@@ -133,8 +144,15 @@ export class CardContainer extends LitElement {
     `
   ]
 
+  private iconHTML = {
+    trophy: html`<icon-trophy width="12" height="13"></icon-trophy>`,
+    keyboard: html`<icon-keyboard width="16" height="16"></icon-keyboard>`,
+    mouse: html`<icon-mouse width="12" height="12"></icon-mouse>`
+  }
+
   render() {
     return html` <div class="card-container -${this.colorTheme}">
+      ${this.icon ? html`<div class="icon">${this.iconHTML[this.icon]}</div>` : ""}
       <div class="bar -${this.colorTheme}"></div>
       <div class="contents">
         <div class="upper">

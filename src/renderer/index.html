@@ -19,11 +19,23 @@
         <rank-card id="ranking" currentRank="0" totalUserCount="0"></rank-card>
 
         <div class="count">
-          <count-card id="key-count" colorTheme="green" title="キーボード" count="0"></count-card>
+          <count-card
+            id="key-count"
+            colorTheme="green"
+            title="キーボード"
+            count="0"
+            icon="keyboard"
+          ></count-card>
         </div>
 
         <div class="count">
-          <count-card id="click-count" colorTheme="blue" title="マウス" count="0"></count-card>
+          <count-card
+            id="click-count"
+            colorTheme="blue"
+            title="マウス"
+            count="0"
+            icon="mouse"
+          ></count-card>
         </div>
       </div>
 
@@ -40,5 +52,8 @@
     <script type="module" src="./src/components/CountCard.ts"></script>
     <script type="module" src="./src/components/RankCard.ts"></script>
     <script type="module" src="./src/components/InputCard.ts"></script>
+    <script type="module" src="./src/components/icons/IconTrophy.ts"></script>
+    <script type="module" src="./src/components/icons/IconKeyboard.ts"></script>
+    <script type="module" src="./src/components/icons/IconMouse.ts"></script>
   </body>
 </html>

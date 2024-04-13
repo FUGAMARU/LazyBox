@@ -13,6 +13,9 @@ export class CountCard extends LitElement {
   @property()
   count: string = "0"
 
+  @property()
+  icon: "keyboard" | "mouse" | undefined = undefined
+
   static styles = [
     destyle,
     css`
@@ -25,7 +28,11 @@ export class CountCard extends LitElement {
   ]
 
   render() {
-    return html`<card-container colorTheme="${this.colorTheme}" title="${this.title}">
+    return html`<card-container
+      colorTheme="${this.colorTheme}"
+      title="${this.title}"
+      icon="${this.icon}"
+    >
       <div class="count-label">${this.count}</div>
     </card-container>`
   }

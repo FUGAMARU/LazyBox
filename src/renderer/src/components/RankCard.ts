@@ -32,7 +32,7 @@ export class RankCard extends LitElement {
   ]
 
   render() {
-    return html`<card-container colorTheme="yellow" title="順位">
+    return html`<card-container colorTheme="yellow" title="順位" icon="trophy">
       <div class="rank-label">
         <span class="current">${this.currentRank}</span>
         <span class="total"> / ${this.totalUserCount}</span>
