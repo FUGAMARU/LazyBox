@@ -10,15 +10,15 @@ const RESOURCE_FOLDER_PATH = is.dev
 const INPUT_MONITORING_PROCESS_BASE_PATH = path.join(RESOURCE_FOLDER_PATH, "/input_monitoring")
 export const INPUT_MONITORING_PROCESS_PATH_WINDOWS = path.join(
   INPUT_MONITORING_PROCESS_BASE_PATH,
-  "/windows.exe"
+  "/lazybox_windows.exe"
 )
 export const INPUT_MONITORING_PROCESS_PATH_MACOS = path.join(
   INPUT_MONITORING_PROCESS_BASE_PATH,
-  "/macos"
+  "/lazybox_macos"
 )
 export const INPUT_MONITORING_PROCESS_PATH_LINUX = path.join(
   INPUT_MONITORING_PROCESS_BASE_PATH,
-  "/linux"
+  "/lazybox_linux"
 )
 
 /** キーボード・マウスイベント監視プロセスとIPCする時のシグナル定義ファイルのパス */

@@ -84,9 +84,11 @@ export const inputMonitoringIpc = ({
     psTree(parentProcessPid, (_, children) => {
       children.forEach(child => {
         process.kill(Number(child.PID))
-        console.log(`PID: ${child.PID} is killed.`)
+        console.log(`PID: ${child.PID} is killed`)
       })
     })
+
+    console.log("PROCESS KILLED")
   }
 
   return {
