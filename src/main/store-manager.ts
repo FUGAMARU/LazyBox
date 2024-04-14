@@ -49,10 +49,12 @@ export const storeManager = (): StoreManager => {
     encryptionKey: ELECTRON_STORE_ENCRYPTION_KEY
   })
 
+  // UUIDが未設定の場合は生成する
   if (!electronStore.has("uuid") || electronStore.get("uuid") === "") {
     electronStore.set("uuid", generateUUID())
   }
 
+  // キー打鍵数・クリック数が未設定の場合は初期値を設定する
   if (!electronStore.has("keyCount") || !electronStore.has("clickCount")) {
     electronStore.set("keyCount", 0)
     electronStore.set("clickCount", 0)

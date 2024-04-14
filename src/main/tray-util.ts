@@ -3,6 +3,7 @@ import { isMatchingOS } from "./utils/isMatchingOS"
 import { ScoreBoard } from "./store-manager"
 import { generateRankingData } from "./utils/generateRankingData"
 import { TRAY_ICON_WINDOWS, TRAY_ICON_MACOS_DARK, TRAY_ICON_MACOS_LIGHT } from "./constants/path"
+import { is } from "@electron-toolkit/utils"
 
 type Args = {
   showWindow: () => void
@@ -22,6 +23,7 @@ export type TrayUtil = {
 
 export const trayUtil = ({ showWindow, killInputMonitoringProcess }: Args): TrayUtil => {
   let tray: Tray | undefined = undefined
+  let currentRankingMenuItems: MenuItemConstructorOptions[] = []
 
   const initializeTrayUtil = (): void => {
     const trayIcon = isMatchingOS("windows")
@@ -36,13 +38,31 @@ export const trayUtil = ({ showWindow, killInputMonitoringProcess }: Args): Tray
     })
   }
 
+  const handleToggleOpenAtLogin = (): void => {
+    if (is.dev) return
+
+    const { openAtLogin } = app.getLoginItemSettings()
+    app.setLoginItemSettings({ openAtLogin: !openAtLogin })
+
+    updateTrayData(currentRankingMenuItems)
+  }
+
   const updateTrayData = (rankingMenuItems: MenuItemConstructorOptions[]): void => {
     const commonContextMenuFirstHalf = [
       { type: "normal", label: "LazyBoxを開く", click: () => showWindow() },
       { type: "separator" }
     ] as const satisfies MenuItemConstructorOptions[]
 
+    const { openAtLogin } = app.getLoginItemSettings()
+
     const commonContextMenuSecondHalf = [
+      { type: "separator" },
+      {
+        type: "checkbox",
+        label: "システム起動時に起動する",
+        checked: openAtLogin,
+        click: handleToggleOpenAtLogin
+      },
       { type: "separator" },
       {
         label: "終了",
@@ -100,6 +120,7 @@ export const trayUtil = ({ showWindow, killInputMonitoringProcess }: Args): Tray
         }
       ] as const satisfies MenuItemConstructorOptions[]
 
+      currentRankingMenuItems = rankingMenuItems
       updateTrayData(rankingMenuItems)
       return
     }
@@ -115,6 +136,7 @@ export const trayUtil = ({ showWindow, killInputMonitoringProcess }: Args): Tray
     /** ランキングに表示するトータルのユーザー人数が3人以下であればサブメニューを展開する必要はない */
     if (ranking.length <= 3) {
       const rankingMenuItems = generateTop3RankingMenuItems(ranking)
+      currentRankingMenuItems = rankingMenuItems
       updateTrayData(rankingMenuItems)
       return
     }
@@ -141,6 +163,7 @@ export const trayUtil = ({ showWindow, killInputMonitoringProcess }: Args): Tray
       }
     ] as const satisfies MenuItemConstructorOptions[]
 
+    currentRankingMenuItems = rankingMenuItems
     updateTrayData(rankingMenuItems)
   }
 
