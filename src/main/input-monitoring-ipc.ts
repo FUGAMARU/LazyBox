@@ -83,7 +83,7 @@ export const inputMonitoringIpc = ({
 
     psTree(parentProcessPid, (_, children) => {
       children.forEach(child => {
-        process.kill(Number(child.PID))
+        process.kill(Number(child.PID)) // TODO: Windowsでプロセスがなぜかkillできないので修正する
         console.log(`PID: ${child.PID} is killed`)
       })
     })
