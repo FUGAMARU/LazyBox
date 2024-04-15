@@ -24,6 +24,8 @@ export const startSendKeyCountAndClickCountInterval = ({
     const nickname = getNickname()
     const udpAddresses = getUdpAddresses()
 
+    console.log(`Current Udp Addresses -> ${udpAddresses}`)
+
     /** 送信先が無い場合はデーターを送信する必要がない */
     if (udpAddresses === undefined || udpAddresses.length === 0) return
 

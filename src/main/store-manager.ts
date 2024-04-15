@@ -78,7 +78,13 @@ export const storeManager = (): StoreManager => {
   }
   const addUdpAddress = (address: string): void => {
     const udpAddresses = electronStore.get("udpAddresses")
-    if (udpAddresses !== undefined && !udpAddresses.includes(address)) {
+
+    if (udpAddresses === undefined) {
+      electronStore.set("udpAddresses", [address])
+      return
+    }
+
+    if (!udpAddresses.includes(address)) {
       udpAddresses.push(address)
       electronStore.set("udpAddresses", udpAddresses)
     }
