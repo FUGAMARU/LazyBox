@@ -1,3 +1,6 @@
+/** アプリバージョン */
+export const APP_VERSION = "0.3.0"
+
 /** UDP通信に使うポート番号 */
 export const UDP_PORT = 55865
 

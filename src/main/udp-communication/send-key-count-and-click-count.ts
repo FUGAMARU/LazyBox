@@ -1,6 +1,6 @@
 import { Socket } from "node:dgram"
 import { UdpCommunicationArgs, UdpMessage } from "."
-import { UDP_IDENTIFIER, UDP_PORT, UDP_SEND_COUNT_INTERVAL } from "../constants/value"
+import { APP_VERSION, UDP_IDENTIFIER, UDP_PORT, UDP_SEND_COUNT_INTERVAL } from "../constants/value"
 import { ensureNickname } from "../utils/ensureNickname"
 
 type Args = {
@@ -34,7 +34,9 @@ export const startSendKeyCountAndClickCountInterval = ({
       uuid,
       nickname: ensureNickname(nickname, "otherUser"),
       keyCount: getGlobalKeyCount(),
-      clickCount: getGlobalClickCount()
+      clickCount: getGlobalClickCount(),
+      appVersion: APP_VERSION,
+      totalKnownClients: udpAddresses
     } as const satisfies UdpMessage
 
     console.log("Data to Send! ->", data, "to ->", udpAddresses, "at ->", UDP_PORT, "port.")

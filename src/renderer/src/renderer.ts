@@ -5,12 +5,13 @@ const init = (): void => {
 }
 
 const doAThing = async (): Promise<void> => {
-  replaceText("#uuid", window.api.getUUID() ?? "UUIDが取得できませんでした")
+  replaceText("#uuid", window.api.getUUID())
+  replaceText("#app-version", window.api.appVersion)
 
   const keyCount = await window.api.getKeyCount()
   const clickCount = await window.api.getClickCount()
-  replaceAttribute("#key-count", "count", keyCount?.toLocaleString() ?? "0")
-  replaceAttribute("#click-count", "count", clickCount?.toLocaleString() ?? "0")
+  replaceAttribute("#key-count", "count", keyCount?.toLocaleString())
+  replaceAttribute("#click-count", "count", clickCount?.toLocaleString())
 
   const ranking = window.api.getRanking()
   replaceAttribute("#ranking", "currentRank", String(ranking.current))
