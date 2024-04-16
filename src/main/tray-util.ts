@@ -17,7 +17,7 @@ export type TrayUtil = {
     myClickCount: number,
     myUUID: string,
     myNickname: string,
-    scoreBoardList: ScoreBoard[] | undefined
+    scoreBoardList: ScoreBoard[]
   ) => void
 }
 
@@ -103,12 +103,12 @@ export const trayUtil = ({ showWindow, killInputMonitoringProcess }: Args): Tray
     myClickCount: number,
     myUUID: string,
     myNickname: string,
-    scoreBoardList: ScoreBoard[] | undefined
+    scoreBoardList: ScoreBoard[]
   ): void => {
     const rankingItemFormat = "$rank$nickname   ⌨️$keyCount   🖱️$clickCount"
 
     /** 同一ネットワーク内の他のユーザーのスコアを受信していない時の表示 */
-    if (scoreBoardList === undefined || scoreBoardList.length === 0) {
+    if (scoreBoardList.length === 0) {
       const rankingMenuItems = [
         {
           type: "normal",

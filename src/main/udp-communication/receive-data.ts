@@ -58,15 +58,16 @@ export const setupReceiveData = ({
       `)
 
       if (identifier !== undefined && identifier !== UDP_IDENTIFIER) return
+
       updateScoreBoardList(scoreBoard)
 
-      const updatedScoreBoardList = getScoreBoardList()
-      const globalKeyCount = getGlobalKeyCount()
-      const globalClickCount = getGlobalClickCount()
-      const uuid = getUUID()
-      const nickname = ensureNickname(getNickname(), "myself")
-
-      updateTrayRanking(globalKeyCount, globalClickCount, uuid, nickname, updatedScoreBoardList)
+      updateTrayRanking(
+        getGlobalKeyCount(),
+        getGlobalClickCount(),
+        getUUID(),
+        ensureNickname(getNickname(), "myself"),
+        getScoreBoardList()
+      )
 
       /** メインUIの順位表示の更新 */
       const rankingData = getRanking()

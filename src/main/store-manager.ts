@@ -37,8 +37,8 @@ export type StoreManager = {
   getStoredClickCount: () => number
   getGlobalKeyCount: () => number
   getGlobalClickCount: () => number
-  getUdpAddresses: () => string[] | undefined
-  getScoreBoardList: () => ScoreBoard[] | undefined
+  getUdpAddresses: () => string[]
+  getScoreBoardList: () => ScoreBoard[]
   getNextResetUnixTimestamp: () => number | undefined
   getRanking: () => RankCardData
 }
@@ -49,15 +49,25 @@ export const storeManager = (): StoreManager => {
     encryptionKey: ELECTRON_STORE_ENCRYPTION_KEY
   })
 
-  // UUIDが未設定の場合は生成する
+  // UUIDが未定義の場合は生成する
   if (!electronStore.has("uuid") || electronStore.get("uuid") === "") {
     electronStore.set("uuid", generateUUID())
   }
 
-  // キー打鍵数・クリック数が未設定の場合は初期値を設定する
+  // キー打鍵数・クリック数が未定義の場合は初期値を設定する
   if (!electronStore.has("keyCount") || !electronStore.has("clickCount")) {
     electronStore.set("keyCount", 0)
     electronStore.set("clickCount", 0)
+  }
+
+  // udpAddressesが未定義の場合は初期値を設定する
+  if (!electronStore.has("udpAddresses")) {
+    electronStore.set("udpAddresses", [])
+  }
+
+  // scoreBoardListが未定義の場合は初期値を設定する
+  if (!electronStore.has("scoreBoardList")) {
+    electronStore.set("scoreBoardList", [])
   }
 
   const hasNickname = electronStore.has("nickname")
@@ -74,15 +84,10 @@ export const storeManager = (): StoreManager => {
   }
 
   const getUdpAddresses = () => {
-    return electronStore.get("udpAddresses")
+    return electronStore.get("udpAddresses")! // 空値チェック後なのでundefinedにはなり得ない
   }
   const addUdpAddress = (address: string): void => {
-    const udpAddresses = electronStore.get("udpAddresses")
-
-    if (udpAddresses === undefined) {
-      electronStore.set("udpAddresses", [address])
-      return
-    }
+    const udpAddresses = electronStore.get("udpAddresses")! // 空値チェック後なのでundefinedにはなり得ない
 
     if (!udpAddresses.includes(address)) {
       udpAddresses.push(address)
@@ -112,18 +117,12 @@ export const storeManager = (): StoreManager => {
   }
 
   const getScoreBoardList = () => {
-    return electronStore.get("scoreBoardList")
+    return electronStore.get("scoreBoardList")! // 空値チェック後なのでundefinedにはなり得ない
   }
   const updateScoreBoardList = (receivedScoreBoard: ScoreBoard): void => {
     const { uuid } = receivedScoreBoard
 
     const scoreBoardList = getScoreBoardList()
-
-    // ここでundefinedチェックしなくても下の処理で吸収できるが、オプショナルチェイニングを使わないために明示的にチェック
-    if (scoreBoardList === undefined) {
-      electronStore.set("scoreBoardList", [receivedScoreBoard])
-      return
-    }
 
     // scoreBoardListに既に同じUUIDのデーターが存在する場合は更新する、存在しない場合は追加する
     const newScoreBoardList = scoreBoardList.map(scoreBoard => {
@@ -161,7 +160,7 @@ export const storeManager = (): StoreManager => {
     const nickname = getNickname()
     const scoreBoardList = getScoreBoardList()
 
-    if (scoreBoardList === undefined || scoreBoardList.length === 0)
+    if (scoreBoardList.length === 0)
       return {
         current: 0,
         total: 0
