@@ -13,7 +13,7 @@ const doAThing = async (): Promise<void> => {
   replaceAttribute("#key-count", "count", keyCount?.toLocaleString())
   replaceAttribute("#click-count", "count", clickCount?.toLocaleString())
 
-  const ranking = window.api.getRanking()
+  const ranking = await window.api.getRanking()
   replaceAttribute("#ranking", "currentRank", String(ranking.current))
   replaceAttribute("#ranking", "totalUserCount", String(ranking.total))
 

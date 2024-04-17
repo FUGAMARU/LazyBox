@@ -180,4 +180,8 @@ const main = (): void => {
   ipcMain.handle("get-click-count", () => {
     return getGlobalClickCount()
   })
+
+  ipcMain.handle("get-ranking", () => {
+    return getRanking()
+  })
 }

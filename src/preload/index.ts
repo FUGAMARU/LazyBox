@@ -8,15 +8,16 @@ import {
   UPDATE_KEY_COUNT_EVENT,
   UPDATE_RANKING_EVENT
 } from "../main/constants/value"
+import { RankCardData } from "../main/types/RankCardData"
 
-const { getUUID, getNickname, setNickname, getRanking } = storeManager()
+const { getUUID, getNickname, setNickname } = storeManager()
 
 // Custom APIs for renderer
 export const api = {
   getUUID,
   getNickname,
   setNickname,
-  getRanking,
+  getRanking: (): Promise<RankCardData> => ipcRenderer.invoke("get-ranking"),
   nicknameSaveMessageDuration: NICKNAME_SAVE_MESSAGE_DURATION,
   getKeyCount: (): Promise<number> => ipcRenderer.invoke("get-key-count"),
   getClickCount: (): Promise<number> => ipcRenderer.invoke("get-click-count"),
