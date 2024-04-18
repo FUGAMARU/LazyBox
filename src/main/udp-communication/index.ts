@@ -9,7 +9,7 @@ import { BrowserWindow } from "electron"
 export type UdpMessage = {
   identifier: string
   appVersion: string // デバッグ用なので必須ではない
-  totalKnownClients: string[] // デバッグ用なので必須ではない
+  knownClients: string[] // デバッグ用なので必須ではない
 } & ScoreBoard
 
 export type UdpCommunicationArgs = { mainWindow: BrowserWindow } & Pick<

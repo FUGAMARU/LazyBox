@@ -8,6 +8,8 @@ import {
 import { UdpCommunicationArgs, UdpMessage } from "."
 import { getLocalAddresses } from "../utils/getLocalAddresses"
 import { ensureNickname } from "../utils/ensureNickname"
+import { printColoredText } from "../utils/printColoredText"
+import { is } from "@electron-toolkit/utils"
 
 type Args = Pick<
   UdpCommunicationArgs,
@@ -44,7 +46,10 @@ export const setupReceiveData = ({
     const localAddresses = getLocalAddresses()
 
     if (message === UDP_BROADCAST_MESSAGE && !localAddresses.includes(remoteInfo.address)) {
-      console.log(`Other Client Found! -> IP: ${remoteInfo.address}`)
+      if (is.dev) {
+        printColoredText("magenta", "Other Client Found!")
+        console.log(remoteInfo.address)
+      }
       addUdpAddress(remoteInfo.address)
       return
     }
@@ -52,10 +57,10 @@ export const setupReceiveData = ({
     try {
       const { identifier, ...scoreBoard } = JSON.parse(message) as UdpMessage
 
-      console.log(`
-        Received Data! -> ${JSON.stringify(scoreBoard)}
-        from -> ${remoteInfo.address}
-      `)
+      if (is.dev) {
+        printColoredText("green", "Received Data!")
+        console.log(scoreBoard)
+      }
 
       if (identifier !== undefined && identifier !== UDP_IDENTIFIER) return
 
@@ -79,6 +84,4 @@ export const setupReceiveData = ({
   })
 
   server.bind(UDP_PORT)
-
-  console.log("UDP Server is running!")
 }
