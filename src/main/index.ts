@@ -8,7 +8,6 @@ import { trayUtil } from "./tray-util"
 import { udpCommunication } from "./udp-communication"
 import { scheduler } from "./scheduler"
 import { isMatchingOS } from "./utils/isMatchingOS"
-import { ensureNickname } from "./utils/ensureNickname"
 
 const createWindow = (): BrowserWindow => {
   const mainWindow = new BrowserWindow({
@@ -124,7 +123,12 @@ const main = (): void => {
 
   const { initializeTrayUtil, updateTrayRanking } = trayUtil({
     showWindow: () => mainWindow.show(),
-    killInputMonitoringProcess
+    killInputMonitoringProcess,
+    getUUID,
+    getNickname,
+    getGlobalKeyCount,
+    getGlobalClickCount,
+    getScoreBoardList
   })
 
   const { initializeScheduler } = scheduler({
@@ -138,14 +142,6 @@ const main = (): void => {
   })
 
   initializeTrayUtil()
-  updateTrayRanking(
-    getGlobalKeyCount(),
-    getGlobalClickCount(),
-    getUUID(),
-    ensureNickname(getNickname(), "myself"),
-    getScoreBoardList()
-  ) // ここでupdateTrayRankingを呼ばないと、データーを受信するまでトレイアイコンをクリックしても無反応になる
-  // TODO: カッコよくないのでこれ書かなくても良い方法を考える
 
   const { initializeUdpCommunication } = udpCommunication({
     mainWindow,

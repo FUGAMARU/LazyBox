@@ -1,14 +1,18 @@
 import { Tray, Menu, app, MenuItemConstructorOptions, nativeImage } from "electron"
 import { isMatchingOS } from "./utils/isMatchingOS"
-import { ScoreBoard } from "./store-manager"
+import { ScoreBoard, StoreManager } from "./store-manager"
 import { generateRankingData } from "./utils/generateRankingData"
 import { TRAY_ICON_WINDOWS, TRAY_ICON_MACOS } from "./constants/path"
 import { is } from "@electron-toolkit/utils"
+import { ensureNickname } from "./utils/ensureNickname"
 
 type Args = {
   showWindow: () => void
   killInputMonitoringProcess: () => void
-}
+} & Pick<
+  StoreManager,
+  "getUUID" | "getNickname" | "getGlobalKeyCount" | "getGlobalClickCount" | "getScoreBoardList"
+>
 
 export type TrayUtil = {
   initializeTrayUtil: () => void
@@ -21,7 +25,15 @@ export type TrayUtil = {
   ) => void
 }
 
-export const trayUtil = ({ showWindow, killInputMonitoringProcess }: Args): TrayUtil => {
+export const trayUtil = ({
+  showWindow,
+  killInputMonitoringProcess,
+  getUUID,
+  getNickname,
+  getGlobalKeyCount,
+  getGlobalClickCount,
+  getScoreBoardList
+}: Args): TrayUtil => {
   let tray: Tray | undefined = undefined
   let currentRankingMenuItems: MenuItemConstructorOptions[] = []
 
@@ -36,6 +48,15 @@ export const trayUtil = ({ showWindow, killInputMonitoringProcess }: Args): Tray
     tray.on("click", () => {
       if (isMatchingOS("windows")) showWindow()
     })
+
+    /** 初期化段階でTrayにランキングデーターを流し込んでおく必要がある */
+    updateTrayRanking(
+      getGlobalKeyCount(),
+      getGlobalClickCount(),
+      getUUID(),
+      ensureNickname(getNickname(), "myself"),
+      getScoreBoardList()
+    )
   }
 
   const handleToggleOpenAtLogin = (): void => {
