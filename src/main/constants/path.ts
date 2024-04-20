@@ -30,5 +30,4 @@ export const INPUT_MONITORING_PROCESS_SIGNALS_PATH = path.join(
 /** トレイアイコン */
 const ICON_BASE_PATH = path.join(RESOURCE_FOLDER_PATH, "/icons")
 export const TRAY_ICON_WINDOWS = path.join(ICON_BASE_PATH, "/tray.ico")
-export const TRAY_ICON_MACOS_LIGHT = path.join(ICON_BASE_PATH, "/tray-for-light.png")
-export const TRAY_ICON_MACOS_DARK = path.join(ICON_BASE_PATH, "/tray-for-dark.png")
+export const TRAY_ICON_MACOS = path.join(ICON_BASE_PATH, "/tray.png")

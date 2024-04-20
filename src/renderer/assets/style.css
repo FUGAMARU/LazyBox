@@ -32,6 +32,7 @@
   --color-gradient-silver: linear-gradient(180deg, #eaeaea 0%, #868686 100%);
   --color-error: #ff7ef2;
   --color-success: #4fd64f;
+  --color-light-mode-background: rgba(0, 0, 0, 0.3);
 }
 
 html {
@@ -51,6 +52,12 @@ body {
   color: var(--color-text-white);
   font-family: "NotoSansJP", sans-serif;
   overflow: hidden;
+}
+
+@media (prefers-color-scheme: light) {
+  body {
+    background-color: var(--color-light-mode-background);
+  }
 }
 
 * {

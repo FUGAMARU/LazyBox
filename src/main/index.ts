@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, nativeTheme, ipcMain } from "electron"
+import { app, shell, BrowserWindow, ipcMain } from "electron"
 import { electronApp, optimizer, is } from "@electron-toolkit/utils"
 import path from "node:path"
 import icon from "../../resources/icons/icon.png?asset"
@@ -24,8 +24,6 @@ const createWindow = (): BrowserWindow => {
       sandbox: false
     }
   })
-
-  nativeTheme.themeSource = "dark"
 
   mainWindow.on("close", event => {
     // preventDefaultを呼ぶとapp.quit()できなくなるので、完全終了したい場合はcanQuitを事前にtrueにしておく
@@ -172,7 +170,7 @@ const main = (): void => {
   initializeInputMonitoringIpc()
   initializeUdpCommunication()
 
-  /** レンダラープロセスから最新のカウントを取得するリクエストに反応するためのハンドラー */
+  /** mainWindowを立ち上げる時に最新の値を渡すためのハンドラー */
   ipcMain.handle("get-key-count", () => {
     return getGlobalKeyCount()
   })

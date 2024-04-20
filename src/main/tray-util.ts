@@ -1,8 +1,8 @@
-import { Tray, Menu, app, MenuItemConstructorOptions, nativeTheme } from "electron"
+import { Tray, Menu, app, MenuItemConstructorOptions, nativeImage } from "electron"
 import { isMatchingOS } from "./utils/isMatchingOS"
 import { ScoreBoard } from "./store-manager"
 import { generateRankingData } from "./utils/generateRankingData"
-import { TRAY_ICON_WINDOWS, TRAY_ICON_MACOS_DARK, TRAY_ICON_MACOS_LIGHT } from "./constants/path"
+import { TRAY_ICON_WINDOWS, TRAY_ICON_MACOS } from "./constants/path"
 import { is } from "@electron-toolkit/utils"
 
 type Args = {
@@ -26,11 +26,11 @@ export const trayUtil = ({ showWindow, killInputMonitoringProcess }: Args): Tray
   let currentRankingMenuItems: MenuItemConstructorOptions[] = []
 
   const initializeTrayUtil = (): void => {
-    const trayIcon = isMatchingOS("windows")
-      ? TRAY_ICON_WINDOWS
-      : nativeTheme.shouldUseDarkColors
-        ? TRAY_ICON_MACOS_DARK
-        : TRAY_ICON_MACOS_LIGHT
+    const trayIconPath = isMatchingOS("windows") ? TRAY_ICON_WINDOWS : TRAY_ICON_MACOS
+
+    const trayIcon = nativeImage.createFromPath(trayIconPath)
+    trayIcon.setTemplateImage(true)
+
     tray = new Tray(trayIcon)
     tray.setToolTip("LazyBox")
     tray.on("click", () => {
