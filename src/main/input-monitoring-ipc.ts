@@ -1,4 +1,4 @@
-import { ChildProcessWithoutNullStreams, spawn } from "node:child_process"
+import { ChildProcessWithoutNullStreams, execSync, spawn } from "node:child_process"
 import {
   INPUT_MONITORING_PROCESS_PATH_LINUX,
   INPUT_MONITORING_PROCESS_PATH_MACOS,
@@ -14,7 +14,6 @@ import {
   UPDATE_CLICK_COUNT_EVENT,
   COUNT_SAVE_INTERVAL
 } from "./constants/value"
-import psTree from "ps-tree"
 
 type Args = {
   mainWindow: BrowserWindow
@@ -47,11 +46,12 @@ export const inputMonitoringIpc = ({
       : isMatchingOS("macos")
         ? INPUT_MONITORING_PROCESS_PATH_MACOS
         : INPUT_MONITORING_PROCESS_PATH_LINUX
-    inputMonitoringProcess = spawn(inputMonitoringProcessPath, [], {
-      shell: true
-    })
+    inputMonitoringProcess = spawn(inputMonitoringProcessPath, [], { shell: true })
 
-    inputMonitoringProcess.stdout.on("data", data => {
+    const stdout = inputMonitoringProcess.stdout
+    if (stdout === null) return
+
+    stdout.on("data", data => {
       const message = data.toString().trim()
       switch (message) {
         case signals?.KEY_UP:
@@ -74,19 +74,20 @@ export const inputMonitoringIpc = ({
     }, COUNT_SAVE_INTERVAL * 1000)
   }
 
-  const killInputMonitoringProcess = (): void => {
+  const killInputMonitoringProcess = async (): Promise<void> => {
     if (inputMonitoringProcess === undefined) return
 
     const { pid: parentProcessPid } = inputMonitoringProcess
 
     if (parentProcessPid === undefined) return
 
-    psTree(parentProcessPid, (_, children) => {
-      children.forEach(child => {
-        process.kill(Number(child.PID)) // TODO: Windowsでプロセスがなぜかkillできないので修正する
-        console.log(`PID: ${child.PID} is killed`)
-      })
-    })
+    if (isMatchingOS("windows")) {
+      execSync(`taskkill /pid ${parentProcessPid} /f /t`, {
+        shell: "powershell.exe"
+      }).toString()
+    } else {
+      process.kill(parentProcessPid)
+    }
 
     console.log("PROCESS KILLED")
   }
