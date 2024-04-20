@@ -74,19 +74,19 @@ export const inputMonitoringIpc = ({
     }, COUNT_SAVE_INTERVAL * 1000)
   }
 
-  const killInputMonitoringProcess = async (): Promise<void> => {
+  const killInputMonitoringProcess = (): void => {
     if (inputMonitoringProcess === undefined) return
 
-    const { pid: parentProcessPid } = inputMonitoringProcess
+    const { pid } = inputMonitoringProcess
 
-    if (parentProcessPid === undefined) return
+    if (pid === undefined) return
 
     if (isMatchingOS("windows")) {
-      execSync(`taskkill /pid ${parentProcessPid} /f /t`, {
+      execSync(`taskkill /pid ${pid} /f /t`, {
         shell: "powershell.exe"
       }).toString()
     } else {
-      process.kill(parentProcessPid)
+      process.kill(pid)
     }
 
     console.log("PROCESS KILLED")
