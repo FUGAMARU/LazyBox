@@ -42,3 +42,14 @@ export const INPUT_MONITORING_PROCESS_SIGNAL_KEY_UP = "KEY_UP"
 
 /** 入力監視のIPCで使うマウスアップのシグナル */
 export const INPUT_MONITORING_PROCESS_SIGNAL_MOUSE_UP = "MOUSE_UP"
+
+/** electron-storeのキー */
+export const ELECTRON_STORE_KEY = {
+  UUID: "uuid",
+  KEY_COUNT: "keyCount",
+  CLICK_COUNT: "clickCount",
+  UDP_ADDRESSES: "udpAddresses",
+  SCORE_BOARD_LIST: "scoreBoardList",
+  NICKNAME: "nickname",
+  NEXT_RESET_UNIX_TIMESTAMP: "nextResetUnixTimestamp"
+} as const

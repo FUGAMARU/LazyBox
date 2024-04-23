@@ -2,7 +2,7 @@ import ElectronStore from "electron-store"
 import { generateUUID } from "./utils/generateUUID"
 import { generateRankingData } from "./utils/generateRankingData"
 import { RankCardData } from "./types/RankCardData"
-import { ELECTRON_STORE_ENCRYPTION_KEY } from "./constants/value"
+import { ELECTRON_STORE_ENCRYPTION_KEY, ELECTRON_STORE_KEY } from "./constants/value"
 import { ensureNickname } from "./utils/ensureNickname"
 
 export type ScoreBoard = {
@@ -50,63 +50,69 @@ export const storeManager = (): StoreManager => {
   })
 
   // UUIDが未定義の場合は生成する
-  if (!electronStore.has("uuid") || electronStore.get("uuid") === "") {
-    electronStore.set("uuid", generateUUID())
+  if (
+    !electronStore.has(ELECTRON_STORE_KEY.UUID) ||
+    electronStore.get(ELECTRON_STORE_KEY.UUID) === ""
+  ) {
+    electronStore.set(ELECTRON_STORE_KEY.UUID, generateUUID())
   }
 
   // キー打鍵数・クリック数が未定義の場合は初期値を設定する
-  if (!electronStore.has("keyCount") || !electronStore.has("clickCount")) {
-    electronStore.set("keyCount", 0)
-    electronStore.set("clickCount", 0)
+  if (
+    !electronStore.has(ELECTRON_STORE_KEY.KEY_COUNT) ||
+    !electronStore.has(ELECTRON_STORE_KEY.CLICK_COUNT)
+  ) {
+    electronStore.set(ELECTRON_STORE_KEY.KEY_COUNT, 0)
+    electronStore.set(ELECTRON_STORE_KEY.CLICK_COUNT, 0)
   }
 
   // udpAddressesが未定義の場合は初期値を設定する
-  if (!electronStore.has("udpAddresses")) {
-    electronStore.set("udpAddresses", [])
+  if (!electronStore.has(ELECTRON_STORE_KEY.UDP_ADDRESSES)) {
+    electronStore.set(ELECTRON_STORE_KEY.UDP_ADDRESSES, [])
   }
 
   // scoreBoardListが未定義の場合は初期値を設定する
-  if (!electronStore.has("scoreBoardList")) {
-    electronStore.set("scoreBoardList", [])
+  if (!electronStore.has(ELECTRON_STORE_KEY.SCORE_BOARD_LIST)) {
+    electronStore.set(ELECTRON_STORE_KEY.SCORE_BOARD_LIST, [])
   }
 
-  const hasNickname = electronStore.has("nickname")
+  const hasNickname = electronStore.has(ELECTRON_STORE_KEY.NICKNAME)
 
   const getUUID = () => {
-    return electronStore.get("uuid") as string // 空値チェック後なのでundefinedにはなり得ない
+    return electronStore.get(ELECTRON_STORE_KEY.UUID) as string // 空値チェック後なのでundefinedにはなり得ない
   }
 
   const getNickname = () => {
-    return electronStore.get("nickname")
+    return electronStore.get(ELECTRON_STORE_KEY.NICKNAME)
   }
   const setNickname = (nickname: string): void => {
-    electronStore.set("nickname", nickname)
+    electronStore.set(ELECTRON_STORE_KEY.NICKNAME, nickname)
   }
 
   const getUdpAddresses = () => {
-    return electronStore.get("udpAddresses")! // 空値チェック後なのでundefinedにはなり得ない
+    return electronStore.get(ELECTRON_STORE_KEY.UDP_ADDRESSES)! // 空値チェック後なのでundefinedにはなり得ない
   }
   const addUdpAddress = (address: string): void => {
-    const udpAddresses = electronStore.get("udpAddresses")! // 空値チェック後なのでundefinedにはなり得ない
+    const udpAddresses = electronStore.get(ELECTRON_STORE_KEY.UDP_ADDRESSES)! // 空値チェック後なのでundefinedにはなり得ない
 
     if (!udpAddresses.includes(address)) {
       udpAddresses.push(address)
-      electronStore.set("udpAddresses", udpAddresses)
+      electronStore.set(ELECTRON_STORE_KEY.UDP_ADDRESSES, udpAddresses)
     }
   }
 
   const getStoredKeyCount = () => {
-    return electronStore.get("keyCount") as number
+    return electronStore.get(ELECTRON_STORE_KEY.KEY_COUNT) as number
   }
   const setStoredKeyCount = (keyCount: number): void => {
-    electronStore.set("keyCount", keyCount)
+    electronStore.set(ELECTRON_STORE_KEY.KEY_COUNT, keyCount)
   }
 
   const getStoredClickCount = () => {
-    return electronStore.get("clickCount") as number
+    return electronStore.get(ELECTRON_STORE_KEY.CLICK_COUNT) as number
   }
   const setStoredClickCount = (clickCount: number): void => {
-    electronStore.set("clickCount", clickCount)
+    electronStore.set(ELECTRON_STORE_KEY.CLICK_COUNT, clickCount)
   }
 
   const getGlobalKeyCount = (): number => {
@@ -117,7 +123,7 @@ export const storeManager = (): StoreManager => {
   }
 
   const getScoreBoardList = () => {
-    return electronStore.get("scoreBoardList")! // 空値チェック後なのでundefinedにはなり得ない
+    return electronStore.get(ELECTRON_STORE_KEY.SCORE_BOARD_LIST)! // 空値チェック後なのでundefinedにはなり得ない
   }
   const updateScoreBoardList = (receivedScoreBoard: ScoreBoard): void => {
     const { uuid } = receivedScoreBoard
@@ -136,23 +142,23 @@ export const storeManager = (): StoreManager => {
       newScoreBoardList.push(receivedScoreBoard)
     }
 
-    electronStore.set("scoreBoardList", newScoreBoardList)
+    electronStore.set(ELECTRON_STORE_KEY.SCORE_BOARD_LIST, newScoreBoardList)
   }
 
   const resetDynamicData = (): void => {
-    electronStore.set("keyCount", 0)
-    electronStore.set("clickCount", 0)
-    electronStore.set("udpAddresses", [])
-    electronStore.set("scoreBoardList", [])
+    electronStore.set(ELECTRON_STORE_KEY.KEY_COUNT, 0)
+    electronStore.set(ELECTRON_STORE_KEY.CLICK_COUNT, 0)
+    electronStore.set(ELECTRON_STORE_KEY.UDP_ADDRESSES, [])
+    electronStore.set(ELECTRON_STORE_KEY.SCORE_BOARD_LIST, [])
     global.keyCount = 0
     global.clickCount = 0
   }
 
   const getNextResetUnixTimestamp = () => {
-    return electronStore.get("nextResetUnixTimestamp")
+    return electronStore.get(ELECTRON_STORE_KEY.NEXT_RESET_UNIX_TIMESTAMP)
   }
   const setNextResetUnixTimestamp = (unixTimestamp: number): void => {
-    electronStore.set("nextResetUnixTimestamp", unixTimestamp)
+    electronStore.set(ELECTRON_STORE_KEY.NEXT_RESET_UNIX_TIMESTAMP, unixTimestamp)
   }
 
   const getRanking = (): RankCardData => {
