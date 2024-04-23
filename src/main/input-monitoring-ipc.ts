@@ -2,17 +2,17 @@ import { ChildProcessWithoutNullStreams, execSync, spawn } from "node:child_proc
 import {
   INPUT_MONITORING_PROCESS_PATH_LINUX,
   INPUT_MONITORING_PROCESS_PATH_MACOS,
-  INPUT_MONITORING_PROCESS_PATH_WINDOWS,
-  INPUT_MONITORING_PROCESS_SIGNALS_PATH
+  INPUT_MONITORING_PROCESS_PATH_WINDOWS
 } from "./constants/path"
-import { readFileSync } from "node:fs"
 import { BrowserWindow } from "electron"
 import { isMatchingOS } from "./utils/isMatchingOS"
 import { StoreManager } from "./store-manager"
 import {
   UPDATE_KEY_COUNT_EVENT,
   UPDATE_CLICK_COUNT_EVENT,
-  COUNT_SAVE_INTERVAL
+  COUNT_SAVE_INTERVAL,
+  INPUT_MONITORING_PROCESS_SIGNAL_KEY_UP,
+  INPUT_MONITORING_PROCESS_SIGNAL_MOUSE_UP
 } from "./constants/value"
 
 type Args = {
@@ -36,11 +36,8 @@ export const inputMonitoringIpc = ({
   getGlobalClickCount
 }: Args): InputMonitoringIpc => {
   let inputMonitoringProcess: ChildProcessWithoutNullStreams | undefined = undefined
-  let signals: { KEY_UP: string; MOUSE_UP: string; SHUTDOWN: string } | undefined = undefined
 
   const initializeInputMonitoringIpc = (): void => {
-    signals = JSON.parse(readFileSync(INPUT_MONITORING_PROCESS_SIGNALS_PATH, "utf-8"))
-
     const inputMonitoringProcessPath = isMatchingOS("windows")
       ? INPUT_MONITORING_PROCESS_PATH_WINDOWS
       : isMatchingOS("macos")
@@ -54,12 +51,12 @@ export const inputMonitoringIpc = ({
     stdout.on("data", data => {
       const message = data.toString().trim()
       switch (message) {
-        case signals?.KEY_UP:
+        case INPUT_MONITORING_PROCESS_SIGNAL_KEY_UP:
           const newKeyCount = getGlobalKeyCount() + 1
           global.keyCount = newKeyCount
           mainWindow.webContents.send(UPDATE_KEY_COUNT_EVENT, newKeyCount)
           break
-        case signals?.MOUSE_UP:
+        case INPUT_MONITORING_PROCESS_SIGNAL_MOUSE_UP:
           const newClickCount = getGlobalClickCount() + 1
           global.clickCount = newClickCount
           mainWindow.webContents.send(UPDATE_CLICK_COUNT_EVENT, newClickCount)

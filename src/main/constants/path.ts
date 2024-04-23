@@ -21,12 +21,6 @@ export const INPUT_MONITORING_PROCESS_PATH_LINUX = path.join(
   "/lazybox_linux"
 )
 
-/** キーボード・マウスイベント監視プロセスとIPCする時のシグナル定義ファイルのパス */
-export const INPUT_MONITORING_PROCESS_SIGNALS_PATH = path.join(
-  INPUT_MONITORING_PROCESS_BASE_PATH,
-  "/signals.json"
-)
-
 /** トレイアイコン */
 const ICON_BASE_PATH = path.join(RESOURCE_FOLDER_PATH, "/icons")
 export const TRAY_ICON_WINDOWS = path.join(ICON_BASE_PATH, "/tray.ico")

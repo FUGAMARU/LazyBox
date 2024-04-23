@@ -36,3 +36,9 @@ export const UPDATE_RANKING_EVENT = "update-ranking"
 
 /** electron-storeのデーター暗号化鍵文字列 */
 export const ELECTRON_STORE_ENCRYPTION_KEY = "ENCRYPTION_KEY"
+
+/** 入力監視のIPCで使うキーアップのシグナル */
+export const INPUT_MONITORING_PROCESS_SIGNAL_KEY_UP = "KEY_UP"
+
+/** 入力監視のIPCで使うマウスアップのシグナル */
+export const INPUT_MONITORING_PROCESS_SIGNAL_MOUSE_UP = "MOUSE_UP"
