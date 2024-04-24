@@ -1,20 +1,22 @@
 # LazyBox
 
-A minimal Electron application with TypeScript
+LazyBox is an Electron application that allows users to compete with other LazyBox users on a LAN in key counts and mouse click counts.
 
-## Recommended IDE Setup
+(Linux operation will be supported in the future.)
 
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+## How to Install & Use
 
-## Project Setup
+See my blog post. [Here](https://dagashi.pw/introducing-lazybox) is the link. (Japanese)
 
-### Install
+## Development
+
+### Project Setup
 
 ```bash
 $ npm install
 ```
 
-### Development
+### Starting Development
 
 ```bash
 $ npm run dev
@@ -32,3 +34,11 @@ $ npm run build:mac
 # For Linux
 $ npm run build:linux
 ```
+
+## License
+
+This project is released under the MIT License, see LICENSE file.
+
+### App Icon
+
+[This icon](https://www.flaticon.com/free-icon/box_1376786) is used for the LazyBox app icon.
